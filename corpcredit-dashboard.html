@@ -1,0 +1,1734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CorpCredit · Powered by Juspay</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800&family=DM+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --sidebar:#0f1629;
+  --sidebar-hover:rgba(255,255,255,.07);
+  --sidebar-active:rgba(59,130,246,.2);
+  --bg:#f0f2f7;
+  --card:#fff;
+  --accent:#2563eb;
+  --accent-l:#dbeafe;
+  --red:#ef4444;--green:#22c55e;--orange:#f59e0b;--purple:#8b5cf6;--teal:#14b8a6;
+  --t1:#111827;--t2:#6b7280;--t3:#9ca3af;
+  --border:#e5e7eb;--border2:#f3f4f6;
+  --sh:0 1px 4px rgba(0,0,0,.07),0 1px 2px rgba(0,0,0,.04);
+  --sh2:0 4px 16px rgba(0,0,0,.09);
+  --r:10px;--r2:6px;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--t1);height:100vh;overflow:hidden;font-size:14px;line-height:1.5}
+
+/* ── LAYOUT ── */
+.layout{display:flex;height:100vh}
+
+/* ── SIDEBAR ── */
+.sidebar{width:208px;background:var(--sidebar);display:flex;flex-direction:column;flex-shrink:0;overflow:hidden}
+.logo-area{padding:18px 16px 14px;border-bottom:1px solid rgba(255,255,255,.06)}
+.logo-row{display:flex;align-items:center;gap:10px}
+.logo-icon{width:34px;height:34px;background:var(--accent);border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-name{font-size:15px;font-weight:800;color:#fff;letter-spacing:-.4px;display:block}
+.logo-sub{font-size:9.5px;color:rgba(255,255,255,.35);letter-spacing:.7px;text-transform:uppercase}
+.nav-section{padding:14px 10px 6px}
+.nav-label{font-size:9.5px;font-weight:700;color:rgba(255,255,255,.28);letter-spacing:1px;text-transform:uppercase;padding:0 8px;margin-bottom:3px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:7px;cursor:pointer;color:rgba(255,255,255,.5);font-size:13.5px;font-weight:500;transition:all .15s;margin-bottom:1px;position:relative;text-decoration:none}
+.nav-item:hover{background:var(--sidebar-hover);color:rgba(255,255,255,.85)}
+.nav-item.active{background:var(--sidebar-active);color:#93c5fd}
+.nav-ico{width:15px;height:15px;flex-shrink:0;opacity:.85}
+.nav-badge{background:#ef4444;color:#fff;font-size:10px;font-weight:700;width:17px;height:17px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-left:auto}
+.sb-spacer{flex:1}
+.sb-bottom{padding:10px;border-top:1px solid rgba(255,255,255,.06)}
+.bank-card{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:7px;background:rgba(255,255,255,.05);margin-bottom:5px}
+.bank-av{width:28px;height:28px;background:#1d4ed8;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;flex-shrink:0}
+.bank-name{font-size:12px;font-weight:600;color:rgba(255,255,255,.8)}
+.bank-sub{font-size:10px;color:rgba(255,255,255,.3)}
+.user-card{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:7px;cursor:pointer;transition:background .15s}
+.user-card:hover{background:rgba(255,255,255,.05)}
+.user-av{width:28px;height:28px;background:#7c3aed;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;flex-shrink:0}
+.user-name{font-size:12px;font-weight:600;color:rgba(255,255,255,.8)}
+.user-role{font-size:10px;color:rgba(255,255,255,.3)}
+
+/* ── MAIN ── */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+
+/* ── TOPBAR ── */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;background:#fff;border-bottom:1px solid var(--border);flex-shrink:0}
+.pg-title{font-size:17px;font-weight:800;color:var(--t1);letter-spacing:-.4px}
+.pg-sub{font-size:12px;color:var(--t2);margin-top:1px}
+.tb-right{display:flex;align-items:center;gap:10px}
+.due-badge{display:flex;align-items:center;gap:5px;font-size:12.5px;color:var(--t2);font-weight:500}
+.btn-primary{background:var(--accent);color:#fff;border:none;padding:8px 16px;border-radius:var(--r2);font-size:13px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .15s}
+.btn-primary:hover{background:#1d4ed8}
+
+/* ── CONTENT ── */
+.content-area{flex:1;overflow-y:auto;padding:22px 28px}
+.content-area::-webkit-scrollbar{width:4px}
+.content-area::-webkit-scrollbar-thumb{background:#d1d5db;border-radius:2px}
+.view{display:none}
+.view.active{display:block;animation:fadeUp .18s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── CARDS ── */
+.card{background:var(--card);border-radius:var(--r);border:1px solid var(--border);box-shadow:var(--sh)}
+.card-hdr{display:flex;align-items:center;justify-content:space-between;padding:15px 20px 12px;border-bottom:1px solid var(--border)}
+.card-title{font-size:14px;font-weight:700;color:var(--t1)}
+.card-sub{font-size:11.5px;color:var(--t2);margin-top:1px}
+.view-all{font-size:12.5px;color:var(--accent);font-weight:600;cursor:pointer;border:none;background:none;font-family:'DM Sans',sans-serif}
+
+/* ── TOOLBAR ── */
+.toolbar{display:flex;align-items:center;gap:8px;margin-bottom:14px}
+.search-box{flex:1;position:relative}
+.search-inp{width:100%;padding:8px 12px 8px 34px;border:1px solid var(--border);border-radius:var(--r2);font-size:13.5px;font-family:'DM Sans',sans-serif;color:var(--t1);background:#fff;outline:none;transition:border-color .15s}
+.search-inp:focus{border-color:var(--accent)}
+.search-ico{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--t3);pointer-events:none}
+.flt-sel{padding:8px 12px;border:1px solid var(--border);border-radius:var(--r2);font-size:13px;font-family:'DM Sans',sans-serif;color:var(--t2);background:#fff;outline:none;cursor:pointer}
+
+/* ── TABLE ── */
+.data-table{background:#fff;border-radius:var(--r);border:1px solid var(--border);overflow:hidden}
+.tbl-hdr,.tbl-row{display:grid;padding:11px 20px;align-items:center}
+.tbl-hdr{background:#f9fafb;border-bottom:1px solid var(--border);font-size:10.5px;font-weight:700;color:var(--t3);letter-spacing:.4px;text-transform:uppercase}
+.tbl-row{border-bottom:1px solid var(--border2);transition:background .1s}
+.tbl-row:hover{background:#fafbfd}
+.tbl-row:last-child{border-bottom:none}
+.gc-emp{grid-template-columns:200px 110px 160px 150px 220px 100px 120px}
+.gc-txn{grid-template-columns:2fr 1.5fr 1.2fr 1.4fr 1.3fr 1fr 1fr 0.8fr}
+.gc-bill{grid-template-columns:220px 110px 90px 130px 115px 1fr}
+
+/* ── EMPLOYEE AVATAR ── */
+.emp-av{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:700;color:#fff;flex-shrink:0}
+.emp-av-sm{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;flex-shrink:0}
+.emp-info{display:flex;align-items:center;gap:9px}
+.emp-name{font-size:13.5px;font-weight:600;color:var(--t1)}
+.emp-email{font-size:11px;color:var(--t3)}
+.dept-txt{font-size:13px;color:var(--t2)}
+.limit-wrap{display:flex;align-items:center;gap:7px}
+.mono{font-family:'DM Mono',monospace}
+.limit-txt{font-size:13px;color:var(--t1);font-weight:500}
+.edit-lnk{font-size:11px;color:var(--accent);cursor:pointer;font-weight:500}
+.spent-txt{font-size:13.5px;font-weight:700;color:var(--t1)}
+.util-wrap{display:flex;align-items:center;gap:7px}
+.util-bg{flex:1;height:5px;background:#f1f5f9;border-radius:3px;overflow:hidden;max-width:120px}
+.util-fill{height:100%;border-radius:3px}
+.util-fill.hi{background:var(--red)}.util-fill.md{background:var(--orange)}.util-fill.lo{background:var(--green)}
+.util-pct{font-size:11.5px;color:var(--t2);font-weight:500;width:32px}
+
+/* ── STATUS ── */
+.badge{display:inline-flex;align-items:center;padding:3px 9px;border-radius:20px;font-size:11.5px;font-weight:600}
+.badge.active{background:#dcfce7;color:#16a34a}
+.badge.frozen{background:#dbeafe;color:#2563eb}
+.badge.pending{background:#fef3c7;color:#b45309}
+.badge.approved{background:#dcfce7;color:#16a34a}
+.badge.declined{background:#fee2e2;color:var(--red)}
+
+/* ── BUTTONS ── */
+.btn-sm{padding:4px 10px;border-radius:5px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid;font-family:'DM Sans',sans-serif;transition:all .15s}
+.btn-frz{border-color:var(--border);color:var(--t2);background:#fff}.btn-frz:hover{background:#f9fafb}
+.btn-ext{border-color:#fecaca;color:var(--red);background:#fff}.btn-ext:hover{background:#fee2e2}
+.btn-ufz{border-color:#bfdbfe;color:var(--accent);background:#fff}.btn-ufz:hover{background:#eff6ff}
+.btn-exp{padding:7px 13px;border:1px solid var(--border);border-radius:var(--r2);background:#fff;font-size:12.5px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;color:var(--t2)}
+.act-btns{display:flex;gap:5px}
+
+.ef-err{font-size:11px;color:var(--red);font-weight:500;margin-top:4px;min-height:16px}
+
+/* ── MCC CHIPS ── */
+.mcc-chips{display:flex;flex-wrap:wrap;gap:4px}
+.mcc-chip{font-size:10.5px;font-weight:600;padding:2px 7px;border-radius:4px;white-space:nowrap;border:1px solid}
+.mcc-chip.Travel{background:#dbeafe;color:#1d4ed8;border-color:#bfdbfe}
+.mcc-chip.Hotels{background:#ede9fe;color:#7c3aed;border-color:#ddd6fe}
+.mcc-chip.Food{background:#fef3c7;color:#b45309;border-color:#fde68a}
+.mcc-chip.Fuel{background:#dcfce7;color:#15803d;border-color:#bbf7d0}
+.mcc-chip.Taxi{background:#ecfdf5;color:#065f46;border-color:#a7f3d0}
+.mcc-chip.Grocery{background:#fff7ed;color:#c2410c;border-color:#fed7aa}
+.mcc-chip.Electronics{background:#f0f9ff;color:#0369a1;border-color:#bae6fd}
+.mcc-chip.Liquor{background:#fdf4ff;color:#7e22ce;border-color:#e9d5ff}
+.mcc-chip.Entertainment{background:#fff1f2;color:#be123c;border-color:#fecdd3}
+.mcc-chip.Jewellery{background:#fefce8;color:#854d0e;border-color:#fef08a}
+.mcc-chip.Cash{background:#f1f5f9;color:#475569;border-color:#cbd5e1}
+.mcc-chip.Gaming{background:#f0fdf4;color:#166534;border-color:#bbf7d0}
+
+/* ── CATEGORY BADGE ── */
+.cat{display:inline-flex;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600}
+.cat.travel{background:#dbeafe;color:#1d4ed8}
+.cat.hotels{background:#ede9fe;color:#7c3aed}
+.cat.food{background:#fef3c7;color:#b45309}
+.cat.fuel{background:#dcfce7;color:#059669}
+.cat.general{background:#f3f4f6;color:#4b5563}
+
+/* ── OVERVIEW ── */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}
+.kpi{background:#fff;border-radius:var(--r);border:1px solid var(--border);padding:16px 18px;position:relative;overflow:hidden}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.kpi.bl::before{background:var(--accent)}.kpi.gr::before{background:var(--green)}.kpi.or::before{background:var(--orange)}.kpi.re::before{background:var(--red)}
+.kpi-lbl{font-size:10.5px;font-weight:700;color:var(--t3);letter-spacing:.5px;text-transform:uppercase;margin-bottom:7px}
+.kpi-val{font-size:21px;font-weight:800;color:var(--t1);letter-spacing:-.5px;margin-bottom:3px;font-family:'DM Mono',monospace}
+.kpi-sub{font-size:12px;color:var(--t2);font-weight:500}
+.kpi-sub.g{color:var(--green)}.kpi-sub.o{color:var(--orange)}.kpi-sub.r{color:var(--red)}
+.ov-grid{display:grid;grid-template-columns:1fr 290px;gap:14px;margin-bottom:18px}
+.spenders{padding:14px 18px}
+.sp-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.sp-row:last-child{margin-bottom:0}
+.sp-name{font-size:13px;color:var(--t1);font-weight:500;width:64px;flex-shrink:0}
+.sp-bg{flex:1;height:6px;background:#f1f5f9;border-radius:3px;overflow:hidden}
+.sp-fill{height:100%;border-radius:3px;transition:width .6s ease}
+.sp-amt{font-size:12px;color:var(--t2);font-weight:600;width:38px;text-align:right;flex-shrink:0;font-family:'DM Mono',monospace}
+.util-card-body{padding:14px 18px;display:flex;flex-direction:column;align-items:center}
+.donut-wrap{position:relative;width:120px;height:120px;margin:8px auto 14px}
+.donut-lbl{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
+.donut-pct{font-size:20px;font-weight:800;color:var(--t1);letter-spacing:-1px;font-family:'DM Mono',monospace;display:block}
+.donut-used{font-size:11px;color:var(--t3);font-weight:500}
+.leg{width:100%}
+.leg-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px}
+.leg-row:last-child{margin-bottom:0}
+.leg-l{display:flex;align-items:center;gap:7px}
+.leg-dot{width:8px;height:8px;border-radius:50%}
+.leg-lbl{font-size:12.5px;color:var(--t2)}
+.leg-val{font-size:12.5px;font-weight:700;color:var(--t1);font-family:'DM Mono',monospace}
+.txn-item{display:flex;align-items:center;gap:12px;padding:11px 18px;border-bottom:1px solid var(--border2);transition:background .1s}
+.txn-item:hover{background:#fafbfd}
+.txn-item:last-child{border-bottom:none}
+.txn-ico{width:36px;height:36px;border-radius:8px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.txn-mer{font-size:13.5px;font-weight:600;color:var(--t1)}
+.txn-meta{font-size:12px;color:var(--t2);margin-top:1px}
+.txn-r{margin-left:auto;text-align:right}
+.txn-amt{font-size:13.5px;font-weight:700;color:var(--t1);font-family:'DM Mono',monospace}
+.txn-st{font-size:11px;font-weight:600;margin-top:1px}
+.txn-st.approved{color:var(--green)}.txn-st.declined{color:var(--red)}
+
+/* ── BILLING ── */
+.bill-banner{background:linear-gradient(135deg,#0a1224 0%,#1a3a8a 60%,#1e40af 100%);border-radius:var(--r);padding:26px 30px;margin-bottom:18px;position:relative;overflow:hidden}
+.bill-banner::after{content:'';position:absolute;right:-60px;top:-60px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.04)}
+.bill-banner::before{content:'';position:absolute;right:60px;bottom:-80px;width:250px;height:250px;border-radius:50%;background:rgba(255,255,255,.03)}
+.banner-lbl{font-size:10.5px;font-weight:700;color:rgba(255,255,255,.45);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+.banner-amt{font-size:36px;font-weight:800;color:#fff;letter-spacing:-1.5px;font-family:'DM Mono',monospace;margin-bottom:5px}
+.banner-meta{font-size:13px;color:rgba(255,255,255,.5);margin-bottom:14px}
+.due-pill{display:inline-flex;align-items:center;gap:5px;background:rgba(251,191,36,.15);border:1px solid rgba(251,191,36,.3);color:#fbbf24;font-size:12px;font-weight:600;padding:5px 12px;border-radius:20px}
+.bill-2col{display:grid;grid-template-columns:1fr 310px;gap:14px;margin-bottom:18px}
+/* Timeline */
+.timeline{display:flex;padding:18px 22px 0;position:relative}
+.tl-step{flex:1;display:flex;flex-direction:column;align-items:center;position:relative}
+.tl-step:not(:last-child)::after{content:'';position:absolute;top:13px;left:50%;width:100%;height:2px;background:var(--border);z-index:0}
+.tl-step.done:not(:last-child)::after{background:var(--green)}
+.tl-step.cur:not(:last-child)::after{background:var(--accent)}
+.tl-dot{width:27px;height:27px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;position:relative;z-index:1}
+.tl-dot.done{background:var(--green);color:#fff}.tl-dot.cur{background:var(--accent);color:#fff}.tl-dot.pend{background:#fff;border:2px solid #fca5a5;color:var(--red)}
+.tl-lbl{font-size:11px;color:var(--t3);margin-top:5px;text-align:center}
+.tl-date{font-size:11.5px;font-weight:600;text-align:center;margin-top:1px}
+.tl-date.g{color:var(--green)}.tl-date.b{color:var(--accent)}
+.bill-amts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:18px 20px}
+.ba-box{background:#f9fafb;border-radius:8px;padding:11px 13px}
+.ba-lbl{font-size:10.5px;color:var(--t3);font-weight:600;margin-bottom:3px;text-transform:uppercase;letter-spacing:.3px}
+.ba-val{font-size:16px;font-weight:800;color:var(--t1);font-family:'DM Mono',monospace}
+.ba-val.o{color:var(--orange)}.ba-val.b{color:var(--accent)}
+.bill-acts{display:flex;gap:9px;padding:14px 20px 18px}
+.btn-pay-full{flex:1;background:var(--accent);color:#fff;border:none;padding:11px;border-radius:7px;font-size:13.5px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .15s}
+.btn-pay-full:hover{background:#1d4ed8}
+.btn-pay-min{padding:11px 16px;background:#fff;color:var(--t2);border:1px solid var(--border);border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif}
+/* Dept bars */
+.dept-list{padding:14px 18px}
+.dept-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.dept-row:last-child{margin-bottom:0}
+.dept-name{font-size:13px;color:var(--t2);width:76px;flex-shrink:0}
+.dept-bg{flex:1;height:6px;background:#f1f5f9;border-radius:3px;overflow:hidden}
+.dept-fill{height:100%;border-radius:3px}
+.dept-amt{font-size:12.5px;font-weight:600;color:var(--t2);font-family:'DM Mono',monospace;width:36px;text-align:right;flex-shrink:0}
+
+/* ── SPEND CONTROLS ── */
+.sc-2col{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
+.sc-item{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border2)}
+.sc-item:last-child{border-bottom:none}
+.sc-lbl{font-size:13.5px;font-weight:600;color:var(--t1);margin-bottom:3px}
+.sc-sub{font-size:11.5px;color:var(--t3)}
+/* Toggle */
+.tgl{position:relative;width:40px;height:22px;flex-shrink:0}
+.tgl input{opacity:0;width:0;height:0;position:absolute}
+.tgl-sl{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:#d1d5db;border-radius:22px;transition:.2s}
+.tgl-sl::before{content:'';position:absolute;height:16px;width:16px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.tgl input:checked+.tgl-sl{background:var(--green)}
+.tgl input:checked+.tgl-sl::before{transform:translateX(18px)}
+/* PT limits */
+.pt-inp-wrap{display:flex;align-items:center;gap:5px;background:#f9fafb;border:1px solid var(--border);border-radius:6px;padding:6px 10px}
+.pt-sym{font-size:13px;color:var(--t3)}
+.pt-inp{border:none;background:transparent;font-size:13.5px;font-weight:700;color:var(--t1);font-family:'DM Mono',monospace;outline:none;text-align:right;width:72px}
+/* MCC */
+.mcc-hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 18px 12px;border-bottom:1px solid var(--border)}
+.mcc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:14px 18px}
+.mcc-item{display:flex;align-items:center;justify-content:space-between;padding:11px 13px;border-radius:8px;border:1px solid var(--border);background:#fff}
+.mcc-item.blocked{background:#fff8f8;border-color:#fecaca}
+.mcc-name{font-size:12.5px;font-weight:600;color:var(--t1);margin-bottom:2px}
+.mcc-code{font-size:10px;color:var(--t3)}
+.btn-save{padding:6px 14px;background:#fff;border:1px solid var(--border);border-radius:6px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;color:var(--t2)}
+</style>
+</head>
+<body>
+<div class="layout">
+
+<!-- ── SIDEBAR ── -->
+<aside class="sidebar">
+  <div class="logo-area">
+    <div class="logo-row">
+      <div class="logo-icon">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <rect x="1" y="1" width="7" height="7" rx="2" fill="white" opacity=".9"/>
+          <rect x="10" y="1" width="7" height="7" rx="2" fill="white" opacity=".55"/>
+          <rect x="1" y="10" width="7" height="7" rx="2" fill="white" opacity=".55"/>
+          <rect x="10" y="10" width="7" height="7" rx="2" fill="white" opacity=".25"/>
+        </svg>
+      </div>
+      <div>
+        <span class="logo-name">CorpCredit</span>
+        <span class="logo-sub">by Juspay</span>
+      </div>
+    </div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-label">Main</div>
+    <a class="nav-item" data-view="overview">
+      <svg class="nav-ico" viewBox="0 0 16 16" fill="currentColor"><path d="M1 1h6v6H1V1zm8 0h6v6H9V1zM1 9h6v6H1V9zm8 0h6v6H9V9z" opacity=".8"/></svg>
+      Overview
+    </a>
+    <a class="nav-item" data-view="employees">
+      <svg class="nav-ico" viewBox="0 0 16 16" fill="currentColor"><path d="M8 9a3.5 3.5 0 100-7 3.5 3.5 0 000 7zm-5.5 6a5.5 5.5 0 0111 0H2.5z" opacity=".8"/></svg>
+      Employees
+      <span class="nav-badge" id="pending-kyc-badge">0</span>
+    </a>
+    <a class="nav-item" data-view="transactions">
+      <svg class="nav-ico" viewBox="0 0 16 16" fill="currentColor"><path d="M2 4h12v1.5H2V4zm0 3.5h12V9H2V7.5zm0 3.5h8v1.5H2V11z" opacity=".8"/></svg>
+      Transactions
+    </a>
+    <a class="nav-item" data-view="billing">
+      <svg class="nav-ico" viewBox="0 0 16 16" fill="currentColor"><path d="M2 2h12a1 1 0 011 1v10a1 1 0 01-1 1H2a1 1 0 01-1-1V3a1 1 0 011-1zm1 3v7h10V5H3zm1 1.5h8v1H4v-1zm0 2.5h5v1H4V9z" opacity=".8"/></svg>
+      Billing
+    </a>
+    <a class="nav-item" data-view="departments">
+      <svg class="nav-ico" viewBox="0 0 16 16" fill="currentColor"><path d="M7 1h2v3H7V1zM1 6h14v2H1V6zM3 9h2v6H3V9zm4 0h2v6H7V9zm4 0h2v6h-2V9z" opacity=".8"/></svg>
+      Departments
+    </a>
+    <div class="nav-label" style="margin-top:12px">Settings</div>
+    <a class="nav-item" data-view="spend-controls">
+      <svg class="nav-ico" viewBox="0 0 16 16" fill="currentColor"><path d="M2 4.5h1.5V3H5v1.5h9V6H5v1.5H3.5V6H2V4.5zm5.5 5h7v1.5h-7V9.5zm-4-1.5H2V9.5h1.5V11H5V9.5H3.5V8z" opacity=".8"/></svg>
+      Spend Controls
+    </a>
+  </div>
+  <div class="sb-spacer"></div>
+  <div class="sb-bottom">
+    <div class="bank-card">
+      <div class="bank-av">AX</div>
+      <div><div class="bank-name">Axis Bank</div><div class="bank-sub">Issuer bank</div></div>
+    </div>
+    <div class="user-card">
+      <div class="user-av">RM</div>
+      <div><div class="user-name">Ravi Menon</div><div class="user-role">CFO, TechNova Pvt Ltd</div></div>
+    </div>
+  </div>
+</aside>
+
+<!-- ── MAIN ── -->
+<div class="main">
+  <div class="topbar">
+    <div>
+      <div class="pg-title" id="pg-title">Overview</div>
+      <div class="pg-sub" id="pg-sub">TechNova Pvt Ltd · Billing cycle: Apr 1 – Apr 30, 2025</div>
+    </div>
+    <div class="tb-right">
+      <span class="due-badge">
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#f59e0b" stroke-width="1.6"><circle cx="8" cy="8" r="6.5"/><path d="M8 4.5v4l2.5 2"/></svg>
+        Due in 12 days
+      </span>
+      <button class="btn-primary" onclick="openAddEmpModal()">+ Add Employees</button>
+    </div>
+  </div>
+
+  <div class="content-area">
+
+    <!-- ══════════ OVERVIEW ══════════ -->
+    <div class="view active" id="view-overview">
+      <div class="kpi-grid">
+        <div class="kpi bl">
+          <div class="kpi-lbl">Total Credit Limit</div>
+          <div class="kpi-val mono" id="kpi-total-limit"></div>
+          <div class="kpi-sub">Secured · FD-backed · Axis Bank</div>
+        </div>
+        <div class="kpi gr">
+          <div class="kpi-lbl">Available Limit</div>
+          <div class="kpi-val mono" id="kpi-avail-limit"></div>
+          <div class="kpi-sub g" id="kpi-avail-pct"></div>
+        </div>
+        <div class="kpi or">
+          <div class="kpi-lbl">This Cycle Spend</div>
+          <div class="kpi-val mono" id="kpi-cycle-spend"></div>
+          <div class="kpi-sub o" id="kpi-active-emp"></div>
+        </div>
+        <div class="kpi re">
+          <div class="kpi-lbl">Bill Due (May 12)</div>
+          <div class="kpi-val mono" id="kpi-bill-due"></div>
+          <div class="kpi-sub r">⚠ 12 days remaining</div>
+        </div>
+      </div>
+
+      <div class="ov-grid">
+        <!-- Top spenders — rendered by JS from EMP data -->
+        <div class="card">
+          <div class="card-hdr">
+            <div><div class="card-title">Top spenders this cycle</div><div class="card-sub">Apr 1 – Apr 30, 2025</div></div>
+            <button class="view-all" onclick="switchView('transactions')">View all →</button>
+          </div>
+          <div class="spenders" id="spenders-list"></div>
+        </div>
+        <!-- Limit utilisation donut — rendered by JS -->
+        <div class="card">
+          <div class="card-hdr">
+            <div><div class="card-title">Limit utilisation</div><div class="card-sub" id="donut-sub"></div></div>
+          </div>
+          <div class="util-card-body">
+            <div class="donut-wrap">
+              <svg width="120" height="120" viewBox="0 0 120 120">
+                <circle cx="60" cy="60" r="46" fill="none" stroke="#f1f5f9" stroke-width="12"/>
+                <circle id="donut-arc" cx="60" cy="60" r="46" fill="none" stroke="#2563eb" stroke-width="12"
+                  stroke-linecap="round" transform="rotate(-90 60 60)"/>
+              </svg>
+              <div class="donut-lbl">
+                <span class="donut-pct" id="donut-pct"></span>
+                <span class="donut-used">used</span>
+              </div>
+            </div>
+            <div class="leg">
+              <div class="leg-row"><div class="leg-l"><div class="leg-dot" style="background:#2563eb"></div><span class="leg-lbl">Utilised</span></div><span class="leg-val" id="leg-utilised"></span></div>
+              <div class="leg-row"><div class="leg-l"><div class="leg-dot" style="background:#e2e8f0"></div><span class="leg-lbl">Available</span></div><span class="leg-val" id="leg-available"></span></div>
+              <div class="leg-row"><div class="leg-l"><div class="leg-dot" style="background:#22c55e"></div><span class="leg-lbl">Total limit</span></div><span class="leg-val" id="leg-total"></span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent transactions -->
+      <div class="card">
+        <div class="card-hdr">
+          <div><div class="card-title">Recent transactions</div><div class="card-sub">Last 24 hours</div></div>
+          <button class="view-all" onclick="switchView('transactions')">View all →</button>
+        </div>
+        <div class="txn-item"><div class="txn-ico">✈️</div><div><div class="txn-mer">IndiGo Airlines</div><div class="txn-meta">Priya Sharma · Travel</div></div><div class="txn-r"><div class="txn-amt mono">₹12,400</div><div class="txn-st approved">Approved</div></div></div>
+        <div class="txn-item"><div class="txn-ico">🏨</div><div><div class="txn-mer">Taj Hotels, Bangalore</div><div class="txn-meta">Rahul Verma · Hotels</div></div><div class="txn-r"><div class="txn-amt mono">₹8,600</div><div class="txn-st approved">Approved</div></div></div>
+        <div class="txn-item"><div class="txn-ico">🍔</div><div><div class="txn-mer">McDonald's, MG Road</div><div class="txn-meta">Anika Patel · Food & Dining</div></div><div class="txn-r"><div class="txn-amt mono">₹640</div><div class="txn-st approved">Approved</div></div></div>
+        <div class="txn-item"><div class="txn-ico">⛽</div><div><div class="txn-mer">HPCL Fuel Station</div><div class="txn-meta">Karan Singh · Fuel</div></div><div class="txn-r"><div class="txn-amt mono">₹2,800</div><div class="txn-st approved">Approved</div></div></div>
+        <div class="txn-item"><div class="txn-ico">✈️</div><div><div class="txn-mer">Air India, BLR–HYD</div><div class="txn-meta">Divya Nair · Travel</div></div><div class="txn-r"><div class="txn-amt mono">₹5,400</div><div class="txn-st approved">Approved</div></div></div>
+      </div>
+    </div>
+
+    <!-- ══════════ EMPLOYEES ══════════ -->
+    <div class="view" id="view-employees">
+      <div class="toolbar">
+        <div class="search-box">
+          <svg class="search-ico" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="7" cy="7" r="5"/><path d="M11 11l2.5 2.5"/></svg>
+          <input class="search-inp" id="emp-search" type="text" placeholder="Search employees…">
+        </div>
+        <select class="flt-sel" id="emp-status">
+          <option value="">All status</option>
+          <option value="active">Active</option>
+          <option value="frozen">Frozen</option>
+          <option value="pending">Pending KYC</option>
+        </select>
+        <select class="flt-sel" id="emp-dept">
+          <option value="">All departments</option>
+          <option>Sales</option><option>Engineering</option><option>Operations</option><option>Marketing</option><option>Finance</option>
+        </select>
+      </div>
+      <div class="data-table">
+        <div class="tbl-hdr gc-emp">
+          <span>Employee</span><span>Department</span><span>Monthly Limit</span><span>Spent This Cycle</span><span>Utilisation</span><span>Status</span><span>Actions</span>
+        </div>
+        <div id="emp-tbody"></div>
+      </div>
+    </div>
+
+    <!-- ══════════ TRANSACTIONS ══════════ -->
+    <div class="view" id="view-transactions">
+      <div class="toolbar">
+        <div class="search-box">
+          <svg class="search-ico" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="7" cy="7" r="5"/><path d="M11 11l2.5 2.5"/></svg>
+          <input class="search-inp" id="txn-search" type="text" placeholder="Search merchant or employee…">
+        </div>
+        <select class="flt-sel" id="txn-cat"><option value="">All categories</option><option>Travel</option><option>Hotels</option><option>Food & Dining</option><option>Fuel</option><option>General</option></select>
+        <select class="flt-sel" id="txn-month"><option>Apr 2025</option><option>Mar 2025</option><option>Feb 2025</option></select>
+        <button class="btn-exp">Export ↓</button>
+      </div>
+      <div class="data-table">
+        <div class="tbl-hdr gc-txn">
+          <span>Merchant</span><span>Employee</span><span>Category</span><span>Date & Time</span><span>UPI Ref</span><span>Amount</span><span>Status</span><span>Receipt</span>
+        </div>
+        <div id="txn-tbody"></div>
+      </div>
+    </div>
+
+    <!-- ══════════ BILLING ══════════ -->
+    <div class="view" id="view-billing">
+      <div class="bill-banner">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between">
+          <div>
+            <div class="banner-lbl">Total Outstanding · Apr 2025 Statement</div>
+            <div class="banner-amt">₹7,44,200</div>
+            <div class="banner-meta">Generated on Apr 30, 2025 · 47 transactions · 12 employees</div>
+            <div class="due-pill">⚠ Due on May 12, 2025 · 12 days remaining</div>
+          </div>
+          <button onclick="downloadBillStatement()" style="display:flex;align-items:center;gap:7px;padding:9px 16px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:8px;color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .15s;flex-shrink:0;margin-top:4px" onmouseover="this.style.background='rgba(255,255,255,.2)'" onmouseout="this.style.background='rgba(255,255,255,.12)'">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 2v8M5 7l3 3 3-3M2 12v1a1 1 0 001 1h10a1 1 0 001-1v-1"/></svg>
+            Download Statement
+          </button>
+        </div>
+      </div>
+      <div class="bill-2col">
+        <!-- Timeline -->
+        <div class="card">
+          <div class="card-hdr"><div class="card-title">Billing timeline</div></div>
+          <div class="timeline">
+            <div class="tl-step done">
+              <div class="tl-dot done">✓</div>
+              <div class="tl-lbl">Cycle start</div><div class="tl-date g">Apr 1</div>
+            </div>
+            <div class="tl-step done">
+              <div class="tl-dot done">✓</div>
+              <div class="tl-lbl">Statement</div><div class="tl-date g">Apr 30</div>
+            </div>
+            <div class="tl-step cur">
+              <div class="tl-dot cur">→</div>
+              <div class="tl-lbl">Due date</div><div class="tl-date b">May 12</div>
+            </div>
+            <div class="tl-step">
+              <div class="tl-dot pend">!</div>
+              <div class="tl-lbl">Late fee</div><div class="tl-date">May 13+</div>
+            </div>
+          </div>
+          <div class="bill-amts">
+            <div class="ba-box"><div class="ba-lbl">Total due</div><div class="ba-val mono">₹7,44,200</div></div>
+            <div class="ba-box"><div class="ba-lbl">Minimum due</div><div class="ba-val o mono">₹1,48,840</div></div>
+            <div class="ba-box"><div class="ba-lbl">Int-free till</div><div class="ba-val b">May 12</div></div>
+          </div>
+          <div class="bill-acts">
+            <button class="btn-pay-full">Pay full amount ₹7,44,200</button>
+            <button class="btn-pay-min">Pay minimum</button>
+          </div>
+        </div>
+        <!-- Dept breakup -->
+        <div class="card">
+          <div class="card-hdr"><div class="card-title">Department-wise breakup</div></div>
+          <div class="dept-list">
+            <div class="dept-row"><div class="dept-name">Sales</div><div class="dept-bg"><div class="dept-fill" style="width:100%;background:#3b82f6"></div></div><div class="dept-amt">₹1.7L</div></div>
+            <div class="dept-row"><div class="dept-name">Engineering</div><div class="dept-bg"><div class="dept-fill" style="width:49%;background:#22c55e"></div></div><div class="dept-amt">₹84K</div></div>
+            <div class="dept-row"><div class="dept-name">Operations</div><div class="dept-bg"><div class="dept-fill" style="width:34%;background:#f59e0b"></div></div><div class="dept-amt">₹58K</div></div>
+            <div class="dept-row"><div class="dept-name">Marketing</div><div class="dept-bg"><div class="dept-fill" style="width:21%;background:#8b5cf6"></div></div><div class="dept-amt">₹36K</div></div>
+            <div class="dept-row"><div class="dept-name">Finance</div><div class="dept-bg"><div class="dept-fill" style="width:16%;background:#14b8a6"></div></div><div class="dept-amt">₹27K</div></div>
+          </div>
+        </div>
+      </div>
+      <!-- Employee-wise statement -->
+      <div class="card">
+        <div class="card-hdr">
+          <div><div class="card-title">Employee-wise statement</div></div>
+          <button class="btn-exp">Download PDF ↓</button>
+        </div>
+        <div class="tbl-hdr gc-bill" style="padding:10px 18px">
+          <span>Employee</span><span>Department</span><span>Transactions</span><span>Spend This Cycle</span><span>Limit</span><span>% of Bill</span>
+        </div>
+        <div id="bill-tbody"></div>
+      </div>
+    </div>
+
+    <!-- ══════════ DEPARTMENTS ══════════ -->
+    <div class="view" id="view-departments">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
+        <div>
+          <div style="font-size:13px;color:var(--t2)" id="dept-count-sub"></div>
+        </div>
+        <button onclick="openAddDeptModal()" class="btn-primary" style="padding:8px 16px;font-size:13px">+ Add Department</button>
+      </div>
+      <div id="dept-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px"></div>
+    </div>
+
+    <!-- ══════════ SPEND CONTROLS ══════════ -->
+    <div class="view" id="view-spend-controls">
+      <div class="sc-2col">
+        <!-- Global controls -->
+        <div class="card">
+          <div class="card-hdr"><div><div class="card-title">Global spend controls</div><div class="card-sub">Applied to all employees by default</div></div><button class="btn-save">Save policy</button></div>
+          <div class="sc-item"><div><div class="sc-lbl">International UPI payments</div><div class="sc-sub">Allow spend at Singapore, UAE, Bhutan, Nepal UPI merchants</div></div><label class="tgl"><input type="checkbox"><span class="tgl-sl"></span></label></div>
+          <div class="sc-item"><div><div class="sc-lbl">Weekend spending</div><div class="sc-sub">Allow transactions on Saturday and Sunday</div></div><label class="tgl"><input type="checkbox" checked><span class="tgl-sl"></span></label></div>
+          <div class="sc-item"><div><div class="sc-lbl">GST invoice reminder</div><div class="sc-sub">Notify employee to upload invoice after each transaction</div></div><label class="tgl"><input type="checkbox" checked><span class="tgl-sl"></span></label></div>
+          <div class="sc-item"><div><div class="sc-lbl">Real-time spend alerts to admin</div><div class="sc-sub">Webhook + email on every transaction above ₹5,000</div></div><label class="tgl"><input type="checkbox" checked><span class="tgl-sl"></span></label></div>
+        </div>
+        <!-- Per-transaction -->
+        <div class="card">
+          <div class="card-hdr"><div><div class="card-title">Per-transaction limits</div><div class="card-sub">Enforced by Juspay issuer switch at auth</div></div><button class="btn-save">Save policy</button></div>
+          <div class="sc-item"><div><div class="sc-lbl">Max transaction amount</div><div class="sc-sub">Single UPI transaction cap for all employees</div></div><div class="pt-inp-wrap"><span class="pt-sym">₹</span><input class="pt-inp" value="25,000"></div></div>
+          <div class="sc-item"><div><div class="sc-lbl">Daily spend cap</div><div class="sc-sub">Max an employee can spend per calendar day</div></div><div class="pt-inp-wrap"><span class="pt-sym">₹</span><input class="pt-inp" value="50,000"></div></div>
+          <div class="sc-item"><div><div class="sc-lbl">Admin alert threshold</div><div class="sc-sub">Notify when employee utilisation exceeds %</div></div><div class="pt-inp-wrap"><input class="pt-inp" value="80" style="width:36px"><span class="pt-sym">%</span></div></div>
+        </div>
+      </div>
+      <!-- MCC -->
+      <div class="card">
+        <div class="mcc-hdr">
+          <div><div class="card-title">Merchant category controls</div><div class="card-sub">Toggle to allow or block merchant categories (MCC). Enforced by Juspay issuer switch at auth time.</div></div>
+          <button class="btn-save">Save policy</button>
+        </div>
+        <div class="mcc-grid">
+          <div class="mcc-item"><div><div class="mcc-name">Airlines & Travel</div><div class="mcc-code">MCC 3000-3299</div></div><label class="tgl"><input type="checkbox" checked><span class="tgl-sl"></span></label></div>
+          <div class="mcc-item"><div><div class="mcc-name">Hotels & Lodging</div><div class="mcc-code">MCC 7011</div></div><label class="tgl"><input type="checkbox" checked><span class="tgl-sl"></span></label></div>
+          <div class="mcc-item"><div><div class="mcc-name">Food & Restaurants</div><div class="mcc-code">MCC 5812</div></div><label class="tgl"><input type="checkbox" checked><span class="tgl-sl"></span></label></div>
+          <div class="mcc-item"><div><div class="mcc-name">Fuel & Petrol</div><div class="mcc-code">MCC 5541</div></div><label class="tgl"><input type="checkbox" checked><span class="tgl-sl"></span></label></div>
+          <div class="mcc-item"><div><div class="mcc-name">Ride-hailing / Taxi</div><div class="mcc-code">MCC 4121</div></div><label class="tgl"><input type="checkbox" checked><span class="tgl-sl"></span></label></div>
+          <div class="mcc-item"><div><div class="mcc-name">Supermarkets</div><div class="mcc-code">MCC 5411</div></div><label class="tgl"><input type="checkbox" checked><span class="tgl-sl"></span></label></div>
+          <div class="mcc-item blocked"><div><div class="mcc-name">Electronics</div><div class="mcc-code">MCC 5734</div></div><label class="tgl"><input type="checkbox"><span class="tgl-sl"></span></label></div>
+          <div class="mcc-item blocked"><div><div class="mcc-name">Liquor stores</div><div class="mcc-code">MCC 5921</div></div><label class="tgl"><input type="checkbox"><span class="tgl-sl"></span></label></div>
+          <div class="mcc-item blocked"><div><div class="mcc-name">Entertainment</div><div class="mcc-code">MCC 7922</div></div><label class="tgl"><input type="checkbox"><span class="tgl-sl"></span></label></div>
+          <div class="mcc-item blocked"><div><div class="mcc-name">Jewellery</div><div class="mcc-code">MCC 5944</div></div><label class="tgl"><input type="checkbox"><span class="tgl-sl"></span></label></div>
+          <div class="mcc-item blocked"><div><div class="mcc-name">Cash withdrawal</div><div class="mcc-code">MCC 6010</div></div><label class="tgl"><input type="checkbox"><span class="tgl-sl"></span></label></div>
+          <div class="mcc-item blocked"><div><div class="mcc-name">Online gaming</div><div class="mcc-code">MCC 7993</div></div><label class="tgl"><input type="checkbox"><span class="tgl-sl"></span></label></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content-area -->
+</div><!-- /main -->
+</div><!-- /layout -->
+
+<!-- ADD EMPLOYEE MODAL -->
+<div id="add-emp-backdrop" onclick="closeAddEmpModal()" style="display:none;position:fixed;inset:0;background:rgba(15,22,41,.45);z-index:1100;backdrop-filter:blur(2px)"></div>
+<div id="add-emp-modal" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:1101;width:480px;background:#fff;border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.18);overflow:hidden">
+  <!-- Modal header -->
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 22px 16px;border-bottom:1px solid var(--border)">
+    <div>
+      <div style="font-size:16px;font-weight:800;color:var(--t1);letter-spacing:-.3px">Add Employees</div>
+      <div style="font-size:12px;color:var(--t2);margin-top:2px">Choose how you'd like to add employees</div>
+    </div>
+    <button onclick="closeAddEmpModal()" style="background:none;border:none;cursor:pointer;color:var(--t3);width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:20px;transition:background .15s" onmouseover="this.style.background='#f3f4f6'" onmouseout="this.style.background='none'">×</button>
+  </div>
+
+  <!-- Mode selector — shown first -->
+  <div id="add-emp-mode-select" style="padding:20px 22px 24px;display:flex;flex-direction:column;gap:12px">
+    <!-- Option 1: Upload CSV -->
+    <div onclick="showAddEmpPanel('csv')" style="display:flex;align-items:center;gap:16px;padding:16px 18px;border:1.5px solid var(--border);border-radius:10px;cursor:pointer;transition:all .15s" onmouseover="this.style.borderColor='var(--accent)';this.style.background='#f8fbff'" onmouseout="this.style.borderColor='var(--border)';this.style.background='#fff'">
+      <div style="width:42px;height:42px;background:#dbeafe;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#2563eb" stroke-width="1.7"><path d="M4 14v2a1 1 0 001 1h10a1 1 0 001-1v-2M10 3v9M7 9l3 3 3-3"/></svg>
+      </div>
+      <div style="flex:1">
+        <div style="font-size:14px;font-weight:700;color:var(--t1);margin-bottom:2px">Upload CSV</div>
+        <div style="font-size:12px;color:var(--t2)">Bulk add employees from a spreadsheet file</div>
+      </div>
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#9ca3af" stroke-width="1.6"><path d="M6 3l5 5-5 5"/></svg>
+    </div>
+    <!-- Option 2: Add manually -->
+    <div onclick="showAddEmpPanel('manual')" style="display:flex;align-items:center;gap:16px;padding:16px 18px;border:1.5px solid var(--border);border-radius:10px;cursor:pointer;transition:all .15s" onmouseover="this.style.borderColor='var(--accent)';this.style.background='#f8fbff'" onmouseout="this.style.borderColor='var(--border)';this.style.background='#fff'">
+      <div style="width:42px;height:42px;background:#dcfce7;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#16a34a" stroke-width="1.7"><path d="M10 4v12M4 10h12"/></svg>
+      </div>
+      <div style="flex:1">
+        <div style="font-size:14px;font-weight:700;color:var(--t1);margin-bottom:2px">Add an Employee</div>
+        <div style="font-size:12px;color:var(--t2)">Fill in details to onboard a single employee</div>
+      </div>
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#9ca3af" stroke-width="1.6"><path d="M6 3l5 5-5 5"/></svg>
+    </div>
+  </div>
+
+  <!-- CSV Panel -->
+  <div id="add-emp-csv" style="display:none;padding:20px 22px 24px">
+    <button onclick="showAddEmpPanel('select')" style="display:flex;align-items:center;gap:5px;background:none;border:none;cursor:pointer;color:var(--t2);font-size:12.5px;font-weight:600;font-family:'DM Sans',sans-serif;margin-bottom:16px;padding:0">
+      <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 3L5 8l5 5"/></svg> Back
+    </button>
+    <div id="csv-drop-zone" style="border:2px dashed var(--border);border-radius:10px;padding:32px 20px;text-align:center;cursor:pointer;transition:all .15s;background:#fafbfd"
+      onclick="document.getElementById('csv-file-input').click()"
+      ondragover="event.preventDefault();this.style.borderColor='var(--accent)';this.style.background='#f0f6ff'"
+      ondragleave="this.style.borderColor='var(--border)';this.style.background='#fafbfd'"
+      ondrop="handleCsvDrop(event)">
+      <div style="width:44px;height:44px;background:#dbeafe;border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px">
+        <svg width="22" height="22" viewBox="0 0 20 20" fill="none" stroke="#2563eb" stroke-width="1.6"><path d="M4 14v2a1 1 0 001 1h10a1 1 0 001-1v-2M10 3v9M7 9l3 3 3-3"/></svg>
+      </div>
+      <div style="font-size:13.5px;font-weight:700;color:var(--t1);margin-bottom:4px">Drop your CSV here</div>
+      <div style="font-size:12px;color:var(--t2)">or <span style="color:var(--accent);font-weight:600">browse to upload</span></div>
+      <div id="csv-file-name" style="margin-top:10px;font-size:12px;color:var(--green);font-weight:600"></div>
+    </div>
+    <input type="file" id="csv-file-input" accept=".csv" style="display:none" onchange="handleCsvSelect(this)">
+    <div style="margin-top:10px;font-size:11.5px;color:var(--t3)">Accepted format: .csv · Columns: Name, Email, Department, Monthly Limit</div>
+    <div style="display:flex;gap:8px;margin-top:18px">
+      <button onclick="closeAddEmpModal()" class="btn-exp" style="flex:1;padding:10px">Cancel</button>
+      <button class="btn-primary" style="flex:2;padding:10px">Upload & Add</button>
+    </div>
+  </div>
+
+  <!-- Manual Add Panel — launches detailed form modal -->
+  <div id="add-emp-manual" style="display:none;padding:20px 22px 24px">
+    <button onclick="showAddEmpPanel('select')" style="display:flex;align-items:center;gap:5px;background:none;border:none;cursor:pointer;color:var(--t2);font-size:12.5px;font-weight:600;font-family:'DM Sans',sans-serif;margin-bottom:16px;padding:0">
+      <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 3L5 8l5 5"/></svg> Back
+    </button>
+    <div style="display:flex;align-items:center;gap:16px;padding:18px;background:#f8faff;border:1.5px solid #dbeafe;border-radius:10px;margin-bottom:20px">
+      <div style="width:42px;height:42px;background:#dbeafe;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#2563eb" stroke-width="1.7"><path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"/></svg>
+      </div>
+      <div>
+        <div style="font-size:13.5px;font-weight:700;color:var(--t1);margin-bottom:2px">Employee Details Form</div>
+        <div style="font-size:12px;color:var(--t2)">Fill in KYC and employment details. All fields are mandatory.</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button onclick="closeAddEmpModal()" class="btn-exp" style="flex:1;padding:10px">Cancel</button>
+      <button onclick="openEmpDetailModal()" class="btn-primary" style="flex:2;padding:10px">Continue →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── EMPLOYEE DETAIL FORM MODAL ── -->
+<div id="emp-detail-backdrop" onclick="closeEmpDetailModal()" style="display:none;position:fixed;inset:0;background:rgba(15,22,41,.5);z-index:1200;backdrop-filter:blur(2px)"></div>
+<div id="emp-detail-modal" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:1201;width:580px;max-height:88vh;background:#fff;border-radius:14px;box-shadow:0 24px 64px rgba(0,0,0,.2);overflow:hidden;display:none;flex-direction:column">
+  <!-- Header -->
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 24px 16px;border-bottom:1px solid var(--border);flex-shrink:0">
+    <div>
+      <div style="font-size:16px;font-weight:800;color:var(--t1);letter-spacing:-.3px">Add Employee</div>
+      <div style="font-size:12px;color:var(--t2);margin-top:2px">All fields are mandatory <span style="color:var(--red)">*</span></div>
+    </div>
+    <button onclick="closeEmpDetailModal()" style="background:none;border:none;cursor:pointer;color:var(--t3);width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:20px;transition:background .15s" onmouseover="this.style.background='#f3f4f6'" onmouseout="this.style.background='none'">×</button>
+  </div>
+
+  <!-- Scrollable body -->
+  <div style="overflow-y:auto;padding:22px 24px;flex:1">
+
+    <!-- Section: KYC -->
+    <div style="font-size:10.5px;font-weight:800;color:var(--t3);letter-spacing:1px;text-transform:uppercase;margin-bottom:12px">KYC Information</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px">
+
+      <div>
+        <label style="font-size:11.5px;font-weight:700;color:var(--t2);display:block;margin-bottom:5px">Full Legal Name <span style="color:var(--red)">*</span></label>
+        <input id="ef-name" placeholder="As per PAN / Aadhaar" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:7px;font-size:13.5px;font-family:'DM Sans',sans-serif;color:var(--t1);outline:none;transition:border .15s" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+        <div class="ef-err" id="ef-name-err"></div>
+      </div>
+
+      <div>
+        <label style="font-size:11.5px;font-weight:700;color:var(--t2);display:block;margin-bottom:5px">Date of Birth <span style="color:var(--red)">*</span></label>
+        <input id="ef-dob" type="date" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:7px;font-size:13.5px;font-family:'DM Sans',sans-serif;color:var(--t1);outline:none;transition:border .15s" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+        <div class="ef-err" id="ef-dob-err"></div>
+      </div>
+
+      <div>
+        <label style="font-size:11.5px;font-weight:700;color:var(--t2);display:block;margin-bottom:5px">PAN Number <span style="color:var(--red)">*</span></label>
+        <input id="ef-pan" placeholder="e.g. ABCDE1234F" maxlength="10" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:7px;font-size:13.5px;font-family:'DM Mono',monospace;color:var(--t1);outline:none;transition:border .15s;text-transform:uppercase" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)';this.value=this.value.toUpperCase()">
+        <div class="ef-err" id="ef-pan-err"></div>
+      </div>
+
+      <div>
+        <label style="font-size:11.5px;font-weight:700;color:var(--t2);display:block;margin-bottom:5px">Aadhaar Number <span style="color:var(--red)">*</span></label>
+        <input id="ef-aadhaar" placeholder="12-digit Aadhaar" maxlength="12" type="tel" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:7px;font-size:13.5px;font-family:'DM Mono',monospace;color:var(--t1);outline:none;transition:border .15s" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+        <div class="ef-err" id="ef-aadhaar-err"></div>
+      </div>
+
+      <div style="grid-column:1/-1">
+        <label style="font-size:11.5px;font-weight:700;color:var(--t2);display:block;margin-bottom:5px">Mobile Number (Aadhaar-linked) <span style="color:var(--red)">*</span></label>
+        <input id="ef-mobile" placeholder="10-digit mobile number linked to Aadhaar" maxlength="10" type="tel" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:7px;font-size:13.5px;font-family:'DM Sans',sans-serif;color:var(--t1);outline:none;transition:border .15s" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+        <div class="ef-err" id="ef-mobile-err"></div>
+      </div>
+
+    </div>
+
+    <!-- Section: Employment -->
+    <div style="font-size:10.5px;font-weight:800;color:var(--t3);letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;padding-top:4px;border-top:1px solid var(--border2)">Employment Details</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+
+      <div>
+        <label style="font-size:11.5px;font-weight:700;color:var(--t2);display:block;margin-bottom:5px">Employee ID <span style="color:var(--red)">*</span></label>
+        <input id="ef-empid" placeholder="e.g. EMP-1042" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:7px;font-size:13.5px;font-family:'DM Mono',monospace;color:var(--t1);outline:none;transition:border .15s" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+        <div class="ef-err" id="ef-empid-err"></div>
+      </div>
+
+      <div>
+        <label style="font-size:11.5px;font-weight:700;color:var(--t2);display:block;margin-bottom:5px">Email Address <span style="color:var(--red)">*</span></label>
+        <input id="ef-email" type="email" placeholder="name@company.in" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:7px;font-size:13.5px;font-family:'DM Sans',sans-serif;color:var(--t1);outline:none;transition:border .15s" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+        <div class="ef-err" id="ef-email-err"></div>
+      </div>
+
+      <div>
+        <label style="font-size:11.5px;font-weight:700;color:var(--t2);display:block;margin-bottom:5px">Department / Team <span style="color:var(--red)">*</span></label>
+        <select id="ef-dept" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:7px;font-size:13.5px;font-family:'DM Sans',sans-serif;color:var(--t1);outline:none;background:#fff;transition:border .15s" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+          <option value="">Select department</option>
+          <option>Sales</option><option>Engineering</option><option>Operations</option><option>Marketing</option><option>Finance</option>
+        </select>
+        <div class="ef-err" id="ef-dept-err"></div>
+      </div>
+
+      <div>
+        <label style="font-size:11.5px;font-weight:700;color:var(--t2);display:block;margin-bottom:5px">Designation <span style="color:var(--red)">*</span></label>
+        <input id="ef-desig" placeholder="e.g. Senior Manager" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:7px;font-size:13.5px;font-family:'DM Sans',sans-serif;color:var(--t1);outline:none;transition:border .15s" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+        <div class="ef-err" id="ef-desig-err"></div>
+      </div>
+
+      <div style="grid-column:1/-1">
+        <label style="font-size:11.5px;font-weight:700;color:var(--t2);display:block;margin-bottom:5px">Employment Type <span style="color:var(--red)">*</span></label>
+        <div style="display:flex;gap:10px" id="ef-emptype">
+          <label style="flex:1;display:flex;align-items:center;gap:8px;padding:9px 13px;border:1.5px solid var(--border);border-radius:7px;cursor:pointer;transition:all .15s;font-size:13px;font-weight:500;color:var(--t2)" id="et-full">
+            <input type="radio" name="emptype" value="Full-time" onchange="selectEmpType(this)" style="accent-color:var(--accent)"> Full-time
+          </label>
+          <label style="flex:1;display:flex;align-items:center;gap:8px;padding:9px 13px;border:1.5px solid var(--border);border-radius:7px;cursor:pointer;transition:all .15s;font-size:13px;font-weight:500;color:var(--t2)" id="et-part">
+            <input type="radio" name="emptype" value="Part-time" onchange="selectEmpType(this)" style="accent-color:var(--accent)"> Part-time
+          </label>
+          <label style="flex:1;display:flex;align-items:center;gap:8px;padding:9px 13px;border:1.5px solid var(--border);border-radius:7px;cursor:pointer;transition:all .15s;font-size:13px;font-weight:500;color:var(--t2)" id="et-cont">
+            <input type="radio" name="emptype" value="Contractor" onchange="selectEmpType(this)" style="accent-color:var(--accent)"> Contractor
+          </label>
+        </div>
+        <div class="ef-err" id="ef-emptype-err"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div style="padding:16px 24px;border-top:1px solid var(--border);display:flex;gap:10px;flex-shrink:0;background:#fff">
+    <button onclick="closeEmpDetailModal()" class="btn-exp" style="flex:1;padding:11px;font-size:13.5px">Cancel</button>
+    <button onclick="submitEmpForm()" class="btn-primary" style="flex:2;padding:11px;font-size:13.5px">Submit & Send Invite</button>
+  </div>
+</div>
+
+<!-- ADD DEPARTMENT MODAL -->
+<div id="add-dept-backdrop" onclick="closeAddDeptModal()" style="display:none;position:fixed;inset:0;background:rgba(15,22,41,.45);z-index:1100;backdrop-filter:blur(2px)"></div>
+<div id="add-dept-modal" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:1101;width:400px;background:#fff;border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.18);overflow:hidden">
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 22px 16px;border-bottom:1px solid var(--border)">
+    <div style="font-size:15px;font-weight:800;color:var(--t1);letter-spacing:-.3px">Add Department</div>
+    <button onclick="closeAddDeptModal()" style="background:none;border:none;cursor:pointer;color:var(--t3);font-size:20px;width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;transition:background .15s" onmouseover="this.style.background='#f3f4f6'" onmouseout="this.style.background='none'">×</button>
+  </div>
+  <div style="padding:20px 22px 24px;display:flex;flex-direction:column;gap:14px">
+    <div>
+      <label style="font-size:11.5px;font-weight:700;color:var(--t2);display:block;margin-bottom:5px">Department Name <span style="color:var(--red)">*</span></label>
+      <input id="new-dept-name" placeholder="e.g. Product, Legal, HR…" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:7px;font-size:13.5px;font-family:'DM Sans',sans-serif;color:var(--t1);outline:none;transition:border .15s" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'" onkeydown="if(event.key==='Enter')saveNewDept()">
+      <div id="new-dept-err" style="font-size:11px;color:var(--red);font-weight:500;margin-top:4px;min-height:16px"></div>
+    </div>
+    <div>
+      <label style="font-size:11.5px;font-weight:700;color:var(--t2);display:block;margin-bottom:8px">Colour</label>
+      <div style="display:flex;gap:8px;flex-wrap:wrap" id="dept-color-picker">
+        <div onclick="selectDeptColor(this,'#3b82f6')" data-color="#3b82f6" style="width:26px;height:26px;border-radius:50%;background:#3b82f6;cursor:pointer;border:3px solid transparent;transition:border .15s"></div>
+        <div onclick="selectDeptColor(this,'#22c55e')" data-color="#22c55e" style="width:26px;height:26px;border-radius:50%;background:#22c55e;cursor:pointer;border:3px solid transparent;transition:border .15s"></div>
+        <div onclick="selectDeptColor(this,'#f59e0b')" data-color="#f59e0b" style="width:26px;height:26px;border-radius:50%;background:#f59e0b;cursor:pointer;border:3px solid transparent;transition:border .15s"></div>
+        <div onclick="selectDeptColor(this,'#8b5cf6')" data-color="#8b5cf6" style="width:26px;height:26px;border-radius:50%;background:#8b5cf6;cursor:pointer;border:3px solid transparent;transition:border .15s"></div>
+        <div onclick="selectDeptColor(this,'#14b8a6')" data-color="#14b8a6" style="width:26px;height:26px;border-radius:50%;background:#14b8a6;cursor:pointer;border:3px solid transparent;transition:border .15s"></div>
+        <div onclick="selectDeptColor(this,'#ef4444')" data-color="#ef4444" style="width:26px;height:26px;border-radius:50%;background:#ef4444;cursor:pointer;border:3px solid transparent;transition:border .15s"></div>
+        <div onclick="selectDeptColor(this,'#ec4899')" data-color="#ec4899" style="width:26px;height:26px;border-radius:50%;background:#ec4899;cursor:pointer;border:3px solid transparent;transition:border .15s"></div>
+        <div onclick="selectDeptColor(this,'#0ea5e9')" data-color="#0ea5e9" style="width:26px;height:26px;border-radius:50%;background:#0ea5e9;cursor:pointer;border:3px solid transparent;transition:border .15s"></div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:4px">
+      <button onclick="closeAddDeptModal()" class="btn-exp" style="flex:1;padding:10px">Cancel</button>
+      <button onclick="saveNewDept()" class="btn-primary" style="flex:2;padding:10px">Add Department</button>
+    </div>
+  </div>
+</div>
+
+<!-- DEPARTMENT CONTROLS MODAL -->
+<div id="dept-ctrl-backdrop" onclick="closeDeptControls()" style="display:none;position:fixed;inset:0;background:rgba(15,22,41,.5);z-index:1200;backdrop-filter:blur(2px)"></div>
+<div id="dept-ctrl-modal" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:1201;width:540px;max-height:88vh;background:#fff;border-radius:14px;box-shadow:0 24px 64px rgba(0,0,0,.2);overflow:hidden;flex-direction:column">
+
+  <!-- Header -->
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 24px 16px;border-bottom:1px solid var(--border);flex-shrink:0">
+    <div>
+      <div style="font-size:15px;font-weight:800;color:var(--t1);letter-spacing:-.3px" id="dctrl-title">Department Controls</div>
+      <div style="font-size:12px;color:var(--t2);margin-top:2px">Override global spend controls for this department</div>
+    </div>
+    <button onclick="closeDeptControls()" style="background:none;border:none;cursor:pointer;color:var(--t3);font-size:20px;width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center" onmouseover="this.style.background='#f3f4f6'" onmouseout="this.style.background='none'">×</button>
+  </div>
+
+  <!-- Enforce toggle banner -->
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 24px;background:#f8faff;border-bottom:1px solid var(--border)">
+    <div>
+      <div style="font-size:13.5px;font-weight:700;color:var(--t1)">Enforce department-level controls</div>
+      <div style="font-size:12px;color:var(--t2);margin-top:2px">When off, global defaults apply to all employees in this department</div>
+    </div>
+    <label class="tgl"><input type="checkbox" id="dctrl-enforce" onchange="toggleDeptEnforce(this)"><span class="tgl-sl"></span></label>
+  </div>
+
+  <!-- Scrollable body -->
+  <div id="dctrl-body" style="overflow-y:auto;padding:20px 24px;flex:1;opacity:.4;pointer-events:none;transition:opacity .2s">
+
+    <!-- Spend Limits -->
+    <div style="font-size:10.5px;font-weight:800;color:var(--t3);letter-spacing:1px;text-transform:uppercase;margin-bottom:12px">Spend Limits</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:22px">
+      <div>
+        <label style="font-size:11.5px;font-weight:700;color:var(--t2);display:block;margin-bottom:5px">Monthly Limit (₹)</label>
+        <div style="display:flex;align-items:center;gap:4px;border:1.5px solid var(--border);border-radius:7px;padding:8px 10px;transition:border .15s" onfocusin="this.style.borderColor='var(--accent)'" onfocusout="this.style.borderColor='var(--border)'">
+          <span style="font-size:12px;color:var(--t3)">₹</span>
+          <input id="dctrl-monthly" type="number" placeholder="e.g. 100000" style="border:none;outline:none;font-size:13px;font-family:'DM Mono',monospace;font-weight:700;color:var(--t1);width:100%;background:transparent">
+        </div>
+      </div>
+      <div>
+        <label style="font-size:11.5px;font-weight:700;color:var(--t2);display:block;margin-bottom:5px">Daily Cap (₹)</label>
+        <div style="display:flex;align-items:center;gap:4px;border:1.5px solid var(--border);border-radius:7px;padding:8px 10px;transition:border .15s" onfocusin="this.style.borderColor='var(--accent)'" onfocusout="this.style.borderColor='var(--border)'">
+          <span style="font-size:12px;color:var(--t3)">₹</span>
+          <input id="dctrl-daily" type="number" placeholder="e.g. 10000" style="border:none;outline:none;font-size:13px;font-family:'DM Mono',monospace;font-weight:700;color:var(--t1);width:100%;background:transparent">
+        </div>
+      </div>
+      <div>
+        <label style="font-size:11.5px;font-weight:700;color:var(--t2);display:block;margin-bottom:5px">Max per Transaction (₹)</label>
+        <div style="display:flex;align-items:center;gap:4px;border:1.5px solid var(--border);border-radius:7px;padding:8px 10px;transition:border .15s" onfocusin="this.style.borderColor='var(--accent)'" onfocusout="this.style.borderColor='var(--border)'">
+          <span style="font-size:12px;color:var(--t3)">₹</span>
+          <input id="dctrl-maxtxn" type="number" placeholder="e.g. 25000" style="border:none;outline:none;font-size:13px;font-family:'DM Mono',monospace;font-weight:700;color:var(--t1);width:100%;background:transparent">
+        </div>
+      </div>
+    </div>
+
+    <!-- MCC Controls -->
+    <div style="font-size:10.5px;font-weight:800;color:var(--t3);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px">MCC Permissions</div>
+    <div style="font-size:12px;color:var(--t2);margin-bottom:12px">Toggle which merchant categories employees in this department can spend at</div>
+    <div id="dctrl-mcc-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:8px"></div>
+
+  </div>
+
+  <!-- Footer -->
+  <div style="padding:16px 24px;border-top:1px solid var(--border);display:flex;gap:10px;flex-shrink:0;background:#fff">
+    <button onclick="closeDeptControls()" class="btn-exp" style="flex:1;padding:10px">Cancel</button>
+    <button onclick="saveDeptControls()" class="btn-primary" style="flex:2;padding:10px">Save Controls</button>
+  </div>
+</div>
+
+<!-- RECEIPT VIEWER MODAL -->
+<div id="receipt-backdrop" onclick="closeReceipt()" style="display:none;position:fixed;inset:0;background:rgba(15,22,41,.5);z-index:1200;backdrop-filter:blur(2px)"></div>
+<div id="receipt-modal" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:1201;width:380px;background:#fff;border-radius:14px;box-shadow:0 24px 64px rgba(0,0,0,.2);overflow:hidden">
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border)">
+    <div style="font-size:14px;font-weight:800;color:var(--t1)">GST Tax Invoice</div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <button onclick="downloadReceipt()" style="display:flex;align-items:center;gap:5px;padding:5px 10px;border:1px solid var(--border);border-radius:6px;background:#fff;font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;color:var(--t2)">
+        <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 2v8M5 7l3 3 3-3M2 12v1a1 1 0 001 1h10a1 1 0 001-1v-1"/></svg>
+        Download
+      </button>
+      <button onclick="closeReceipt()" style="background:none;border:none;cursor:pointer;color:var(--t3);font-size:20px;width:26px;height:26px;display:flex;align-items:center;justify-content:center;border-radius:5px" onmouseover="this.style.background='#f3f4f6'" onmouseout="this.style.background='none'">×</button>
+    </div>
+  </div>
+  <div id="receipt-body" style="padding:20px 22px 24px;font-family:'DM Sans',sans-serif"></div>
+</div>
+
+<!-- MCC EDITOR POPOVER -->
+<div id="mcc-popover" style="display:none;position:fixed;z-index:1000;background:#fff;border:1px solid var(--border);border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,.14);width:280px;padding:16px;">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+    <div>
+      <div style="font-size:13.5px;font-weight:700;color:var(--t1)" id="mcc-pop-name"></div>
+      <div style="font-size:11px;color:var(--t3);margin-top:1px">Toggle categories on or off</div>
+    </div>
+    <button onclick="closeMccEditor()" style="background:none;border:none;cursor:pointer;color:var(--t3);font-size:18px;line-height:1;padding:2px 4px">×</button>
+  </div>
+  <div id="mcc-pop-options" style="display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px"></div>
+  <div style="display:flex;gap:8px">
+    <button onclick="saveMccEditor()" class="btn-primary" style="flex:1;padding:8px;font-size:13px">Save</button>
+    <button onclick="closeMccEditor()" class="btn-exp" style="padding:8px 14px;font-size:13px">Cancel</button>
+  </div>
+</div>
+<div id="mcc-overlay" onclick="closeMccEditor()" style="display:none;position:fixed;inset:0;z-index:999;pointer-events:none"></div>
+
+<script>
+const DEFAULT_MCC = ['Travel','Hotels','Food','Fuel','Taxi','Grocery']; // matches enabled MCCs in Spend Controls
+
+// pct is computed: Math.round(sp / lim * 100)
+const EMP=[
+  // Additional MCCs granted (above default)
+  {i:'PS',c:'#f97316',n:'Priya Sharma',e:'priya.s@technova.in',d:'Sales',lim:75000,sp:68420,s:'active',mcc:['Travel','Hotels','Food','Fuel','Taxi','Grocery','Entertainment']},
+  // Default MCCs
+  {i:'RV',c:'#22c55e',n:'Rahul Verma',e:'rahul.v@technova.in',d:'Sales',lim:75000,sp:54300,s:'active',mcc:[...DEFAULT_MCC]},
+  {i:'AP',c:'#14b8a6',n:'Anika Patel',e:'anika.p@technova.in',d:'Engineering',lim:50000,sp:41200,s:'active',mcc:[...DEFAULT_MCC]},
+  {i:'KS',c:'#8b5cf6',n:'Karan Singh',e:'karan.s@technova.in',d:'Operations',lim:60000,sp:38900,s:'active',mcc:[...DEFAULT_MCC]},
+  {i:'DN',c:'#f97316',n:'Divya Nair',e:'divya.n@technova.in',d:'Marketing',lim:50000,sp:35600,s:'active',mcc:[...DEFAULT_MCC]},
+  {i:'AM',c:'#14b8a6',n:'Arjun Mehta',e:'arjun.m@technova.in',d:'Sales',lim:75000,sp:29800,s:'active',mcc:[...DEFAULT_MCC]},
+  // Reduced MCCs (finance team — no travel or hotels)
+  {i:'SI',c:'#8b5cf6',n:'Sneha Iyer',e:'sneha.i@technova.in',d:'Finance',lim:40000,sp:27100,s:'active',mcc:['Food','Fuel','Taxi','Grocery']},
+  {i:'VJ',c:'#f59e0b',n:'Vikram Joshi',e:'vikram.j@technova.in',d:'Engineering',lim:50000,sp:22400,s:'active',mcc:[...DEFAULT_MCC]},
+  {i:'MR',c:'#14b8a6',n:'Meera Reddy',e:'meera.r@technova.in',d:'Operations',lim:45000,sp:18900,s:'active',mcc:[...DEFAULT_MCC]},
+  // Reduced MCCs (frozen — restricted to essentials)
+  {i:'RG',c:'#22c55e',n:'Rohit Gupta',e:'rohit.g@technova.in',d:'Sales',lim:75000,sp:14600,s:'frozen',mcc:['Fuel','Grocery']},
+  // Default MCCs for pending employees
+  {i:'TS',c:'#ec4899',n:'Tanvi Shah',e:'tanvi.s@technova.in',d:'Marketing',lim:35000,sp:0,s:'pending',mcc:[...DEFAULT_MCC]},
+  {i:'ND',c:'#3b82f6',n:'Nikhil Desai',e:'nikhil.d@technova.in',d:'Engineering',lim:50000,sp:0,s:'pending',mcc:[...DEFAULT_MCC]},
+].map(e=>({...e, pct: e.lim > 0 ? Math.round(e.sp / e.lim * 100) : 0}));
+
+const TXN=[
+  {mer:'IndiGo Airlines',dep:'Sales',emp:'Priya Sharma',ei:'PS',ec:'#f97316',cat:'Travel',date:'Apr 28, 10:42 AM',upi:'UPI28041234',amt:12400,st:'approved',receipt:true,gst:'GST24IN123456',vendor:'IndiGo Airlines Pvt Ltd',gstin:'27AABCI3123L1ZX'},
+  {mer:'Taj Hotels, Bangalore',dep:'Sales',emp:'Rahul Verma',ei:'RV',ec:'#22c55e',cat:'Hotels',date:'Apr 28, 09:15 AM',upi:'UPI28040922',amt:8600,st:'approved',receipt:true,gst:'GST24IN654321',vendor:'Indian Hotels Co. Ltd',gstin:'29AAACI1234M1ZY'},
+  {mer:"McDonald's, MG Road",dep:'Engineering',emp:'Anika Patel',ei:'AP',ec:'#14b8a6',cat:'Food & Dining',date:'Apr 27, 01:33 PM',upi:'UPI27041832',amt:640,st:'approved',receipt:true,gst:'GST24IN789012',vendor:"McDonald's India Pvt Ltd",gstin:'29AABCM5678N1ZZ'},
+  {mer:'HPCL Fuel Station',dep:'Operations',emp:'Karan Singh',ei:'KS',ec:'#8b5cf6',cat:'Fuel',date:'Apr 27, 08:55 AM',upi:'UPI27040712',amt:2800,st:'approved',receipt:true,gst:'GST24IN345678',vendor:'HPCL Retail Outlet',gstin:'27AAACH4567P1ZW'},
+  {mer:'Air India, BLR–HYD',dep:'Marketing',emp:'Divya Nair',ei:'DN',ec:'#f97316',cat:'Travel',date:'Apr 26, 06:30 PM',upi:'UPI26041143',amt:5400,st:'approved',receipt:true,gst:'GST24IN901234',vendor:'Air India Ltd',gstin:'07AABCA1234Q1ZV'},
+  {mer:'Novotel, Hyderabad',dep:'Sales',emp:'Priya Sharma',ei:'PS',ec:'#f97316',cat:'Hotels',date:'Apr 26, 02:14 PM',upi:'UPI26040988',amt:7200,st:'approved',receipt:false},
+  {mer:'Swiggy Office Order',dep:'Sales',emp:'Arjun Mehta',ei:'AM',ec:'#14b8a6',cat:'Food & Dining',date:'Apr 26, 12:45 PM',upi:'UPI26040756',amt:1240,st:'approved',receipt:true,gst:'GST24IN567890',vendor:'Bundl Technologies Pvt Ltd',gstin:'29AABCB2345R1ZU'},
+  {mer:'OLA Cabs',dep:'Finance',emp:'Sneha Iyer',ei:'SI',ec:'#8b5cf6',cat:'Travel',date:'Apr 25, 09:00 AM',upi:'UPI25041112',amt:480,st:'approved',receipt:false},
+  {mer:'Hotel Leela, Chennai',dep:'Sales',emp:'Rahul Verma',ei:'RV',ec:'#22c55e',cat:'Hotels',date:'Apr 25, 07:30 AM',upi:'UPI25040601',amt:9800,st:'approved',receipt:true,gst:'GST24IN234567',vendor:'The Leela Palaces Hotels',gstin:'33AAACL3456S1ZT'},
+  {mer:'Amazon Business',dep:'Engineering',emp:'Vikram Joshi',ei:'VJ',ec:'#f59e0b',cat:'General',date:'Apr 24, 04:15 PM',upi:'UPI24041765',amt:3200,st:'approved',receipt:true,gst:'GST24IN678901',vendor:'Amazon Seller Services Pvt Ltd',gstin:'29AABCA4567T1ZS'},
+  {mer:'Deccan Travels',dep:'Sales',emp:'Rohit Gupta',ei:'RG',ec:'#22c55e',cat:'Travel',date:'Apr 23, 11:00 AM',upi:'UPI23041034',amt:14600,st:'declined',receipt:false,reason:'Limit exceeded — transaction amount ₹14,600 exceeds per-transaction cap of ₹25,000 on a frozen account'},
+  {mer:'Zomato',dep:'Operations',emp:'Meera Reddy',ei:'MR',ec:'#14b8a6',cat:'Food & Dining',date:'Apr 23, 01:22 PM',upi:'UPI23040877',amt:520,st:'approved',receipt:true,gst:'GST24IN890123',vendor:'Zomato Pvt Ltd',gstin:'27AABCZ5678U1ZR'},
+];
+
+// pct = Math.round(sp / totalBillSpend * 100)
+const BILL_RAW=[
+  {i:'PS',c:'#f97316',n:'Priya Sharma',e:'priya.s@technova.in',d:'Sales',txns:14,sp:68420,lim:75000},
+  {i:'RV',c:'#22c55e',n:'Rahul Verma',e:'rahul.v@technova.in',d:'Sales',txns:11,sp:54300,lim:75000},
+  {i:'AP',c:'#14b8a6',n:'Anika Patel',e:'anika.p@technova.in',d:'Engineering',txns:9,sp:41200,lim:50000},
+  {i:'KS',c:'#8b5cf6',n:'Karan Singh',e:'karan.s@technova.in',d:'Operations',txns:7,sp:38900,lim:60000},
+  {i:'DN',c:'#f97316',n:'Divya Nair',e:'divya.n@technova.in',d:'Marketing',txns:6,sp:35600,lim:50000},
+  {i:'AM',c:'#14b8a6',n:'Arjun Mehta',e:'arjun.m@technova.in',d:'Sales',txns:5,sp:29800,lim:75000},
+];
+const BILL_TOTAL = BILL_RAW.reduce((s,b)=>s+b.sp, 0);
+const BILL = BILL_RAW.map(b=>({...b, pct: Math.round(b.sp / BILL_TOTAL * 100)}));
+
+// ── Computed constants ──────────────────────────────────────────
+const TOTAL_LIMIT   = 2500000;
+const BILL_DUE      = 744200;                                 // hardcoded outstanding bill
+const CYCLE_SPEND   = EMP.reduce((s,e)=>s+e.sp, 0);          // sum of all employee spends
+const AVAIL_LIMIT   = TOTAL_LIMIT - CYCLE_SPEND - BILL_DUE;  // available = total - cycle spend - bill due
+const UTIL_PCT      = CYCLE_SPEND / TOTAL_LIMIT * 100;
+const AVAIL_PCT     = AVAIL_LIMIT / TOTAL_LIMIT * 100;
+const ACTIVE_COUNT  = EMP.filter(e=>e.s==='active').length;
+
+function fmt(n){if(!n)return'₹0';return'₹'+n.toLocaleString('en-IN')}
+function fmtK(n){if(!n)return'₹0';return n>=100000?'₹'+(n/100000).toFixed(1)+'L':'₹'+Math.round(n/1000)+'K'}
+function uc(p){return p>=80?'hi':p>=55?'md':'lo'}
+function catCls(c){const m={'Travel':'travel','Hotels':'hotels','Food & Dining':'food','Fuel':'fuel','General':'general'};return m[c]||'general'}
+
+function renderOverview(){
+  document.getElementById('kpi-total-limit').textContent  = fmt(TOTAL_LIMIT);
+  document.getElementById('kpi-avail-limit').textContent  = fmt(AVAIL_LIMIT);
+  document.getElementById('kpi-avail-pct').textContent    = `▲ ${AVAIL_PCT.toFixed(1)}% unused`;
+  document.getElementById('kpi-cycle-spend').textContent  = fmt(CYCLE_SPEND);
+  document.getElementById('kpi-active-emp').textContent   = `${ACTIVE_COUNT} employees active`;
+  document.getElementById('kpi-bill-due').textContent     = fmt(BILL_DUE);
+
+  // Donut: circumference = 2πr, dashoffset hides unused portion
+  const DONUT_USED = BILL_DUE + CYCLE_SPEND;                   // bill due + this cycle spend
+  const DONUT_PCT  = DONUT_USED / TOTAL_LIMIT * 100;
+  const r = 46, circ = 2 * Math.PI * r;
+  const offset = circ - (DONUT_PCT / 100) * circ;
+  const arc = document.getElementById('donut-arc');
+  arc.setAttribute('stroke-dasharray', circ.toFixed(2));
+  arc.setAttribute('stroke-dashoffset', offset.toFixed(2));
+  document.getElementById('donut-pct').textContent  = `${DONUT_PCT.toFixed(1)}%`;
+  document.getElementById('donut-sub').textContent  = `${fmt(DONUT_USED)} of ₹${(TOTAL_LIMIT/100000).toFixed(0)}L used`;
+  document.getElementById('leg-utilised').textContent  = fmt(DONUT_USED);
+  document.getElementById('leg-available').textContent = fmt(AVAIL_LIMIT);
+  document.getElementById('leg-total').textContent     = fmt(TOTAL_LIMIT);
+
+  // Top spenders: bar width = spend / maxSpend * 100 (relative to top spender)
+  const COLORS = ['#3b82f6','#22c55e','#8b5cf6','#f59e0b','#14b8a6','#ef4444'];
+  const sorted = [...EMP].filter(e=>e.sp>0).sort((a,b)=>b.sp-a.sp).slice(0,6);
+  const maxSpend = sorted[0].sp;
+  document.getElementById('spenders-list').innerHTML = sorted.map((e,i)=>{
+    const barW = Math.round(e.sp / maxSpend * 100);
+    return `<div class="sp-row">
+      <div class="sp-name">${e.n.split(' ')[0]} ${e.n.split(' ')[1][0]}.</div>
+      <div class="sp-bg"><div class="sp-fill" style="width:${barW}%;background:${COLORS[i]}"></div></div>
+      <div class="sp-amt">${fmtK(e.sp)}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderEmp(list){
+  document.getElementById('emp-tbody').innerHTML=list.map(e=>`
+  <div class="tbl-row gc-emp">
+    <div class="emp-info">
+      <div class="emp-av" style="background:${e.c}">${e.i}</div>
+      <div>
+        <div class="emp-name">${e.n}</div>
+        <div class="emp-email">${e.e}</div>
+      </div>
+    </div>
+    <div class="dept-txt">${e.d}</div>
+    <div>
+      <div style="display:flex;align-items:center;gap:6px">
+        <span class="limit-txt mono" id="lim-val-${e.i}">${fmt(e.lim)}</span>
+        <button onclick="startEditLimit('${e.i}',${e.lim})" id="lim-edit-btn-${e.i}" title="Edit limit" style="background:none;border:none;cursor:pointer;color:var(--t3);padding:1px 3px;border-radius:4px;transition:color .15s;display:flex;align-items:center" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--t3)'">
+          <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M11 2l3 3-9 9H2v-3L11 2z"/></svg>
+        </button>
+      </div>
+      <div id="lim-edit-${e.i}" style="display:none;align-items:center;gap:4px">
+        <span style="font-size:12px;color:var(--t3)">₹</span>
+        <input id="lim-inp-${e.i}" type="number" style="width:80px;padding:4px 6px;border:1.5px solid var(--accent);border-radius:5px;font-size:12.5px;font-family:'DM Mono',monospace;font-weight:700;color:var(--t1);outline:none" onkeydown="if(event.key==='Enter')saveLimit('${e.i}');if(event.key==='Escape')cancelEditLimit('${e.i}')">
+        <button onclick="saveLimit('${e.i}')" style="background:var(--accent);color:#fff;border:none;border-radius:4px;padding:3px 7px;font-size:11px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif">✓</button>
+        <button onclick="cancelEditLimit('${e.i}')" style="background:#f3f4f6;color:var(--t2);border:none;border-radius:4px;padding:3px 7px;font-size:11px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif">✕</button>
+      </div>
+    </div>
+    <div class="spent-txt mono">${fmt(e.sp)}</div>
+    <div class="util-wrap">
+      <div style="flex:1">
+        <div class="util-bg" style="max-width:100%;margin-bottom:4px"><div class="util-fill ${uc(e.pct)}" style="width:${e.pct}%"></div></div>
+        <div class="util-pct" style="width:auto;font-size:11px">${e.pct}% used</div>
+      </div>
+    </div>
+    <div><span class="badge ${e.s==='active'?'active':e.s==='frozen'?'frozen':'pending'}">${e.s==='active'?'Active':e.s==='frozen'?'Frozen':'Pending KYC'}</span></div>
+    <div class="act-btns">
+      ${e.s==='active'?`<button class="btn-sm btn-frz">Freeze</button><button class="btn-sm btn-ext">Exit</button>`:''}
+      ${e.s==='frozen'?`<button class="btn-sm btn-ufz">Unfreeze</button><button class="btn-sm btn-ext">Exit</button>`:''}
+      ${e.s==='pending'?`<button class="btn-sm btn-frz" disabled style="opacity:.4;cursor:not-allowed">Freeze</button><button class="btn-sm btn-ext" disabled style="opacity:.4;cursor:not-allowed">Exit</button>`:''}
+    </div>
+  </div>`).join('');
+}
+
+function renderTxn(list){
+  list = list || TXN;
+  document.getElementById('txn-tbody').innerHTML = list.length
+    ? list.map(t=>`
+  <div class="tbl-row gc-txn">
+    <div><div class="emp-name">${t.mer}</div><div class="emp-email">${t.dep}</div></div>
+    <div style="display:flex;align-items:center;gap:7px">
+      <div class="emp-av-sm" style="background:${t.ec}">${t.ei}</div>
+      <span style="font-size:13px">${t.emp}</span>
+    </div>
+    <div><span class="cat ${catCls(t.cat)}">${t.cat}</span></div>
+    <div style="font-size:12.5px;color:var(--t2)">${t.date}</div>
+    <div style="font-size:11.5px;color:var(--t3);font-family:'DM Mono',monospace">${t.upi}</div>
+    <div class="mono" style="font-size:13.5px;font-weight:700;color:${t.st==='declined'?'var(--red)':'var(--t1)'}">${fmt(t.amt)}</div>
+    <div>
+      <span class="badge ${t.st}" ${t.reason?`title="${t.reason}"`:''}>${t.st.charAt(0).toUpperCase()+t.st.slice(1)}</span>
+      ${t.reason?`<div style="font-size:10.5px;color:var(--red);margin-top:3px;line-height:1.3;max-width:120px">${t.reason.split('—')[0].trim()}</div>`:''}
+    </div>
+    <div>
+      ${t.receipt
+        ? `<button onclick="viewReceipt(${TXN.indexOf(t)})" style="display:inline-flex;align-items:center;gap:4px;padding:4px 9px;border:1px solid #bfdbfe;border-radius:5px;background:#eff6ff;color:var(--accent);font-size:11.5px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s" onmouseover="this.style.background='#dbeafe'" onmouseout="this.style.background='#eff6ff'">
+            <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="1" width="12" height="14" rx="1.5"/><path d="M5 5h6M5 8h6M5 11h3"/></svg>
+            View
+          </button>`
+        : `<span style="font-size:11.5px;color:var(--t3)">—</span>`
+      }
+    </div>
+  </div>`).join('')
+    : `<div style="text-align:center;padding:32px;color:var(--t3);font-size:13px">No transactions match your search</div>`;
+}
+
+function applyTxnFilters(){
+  const q   = document.getElementById('txn-search').value.toLowerCase();
+  const cat = document.getElementById('txn-cat').value;
+  renderTxn(TXN.filter(t =>
+    (!q  || t.mer.toLowerCase().includes(q) || t.emp.toLowerCase().includes(q)) &&
+    (!cat || t.cat === cat)
+  ));
+}
+
+function renderBill(){
+  document.getElementById('bill-tbody').innerHTML=BILL.map(b=>`
+  <div class="tbl-row gc-bill">
+    <div class="emp-info">
+      <div class="emp-av" style="background:${b.c}">${b.i}</div>
+      <div><div class="emp-name">${b.n}</div><div class="emp-email">${b.e}</div></div>
+    </div>
+    <div class="dept-txt">${b.d}</div>
+    <div style="font-size:13px;color:var(--t2)">${b.txns}</div>
+    <div class="spent-txt mono">${fmt(b.sp)}</div>
+    <div style="font-size:13px;color:var(--t2);font-family:'DM Mono',monospace">${fmt(b.lim)}</div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <div style="flex:1;height:4px;background:#f1f5f9;border-radius:2px;overflow:hidden">
+        <div style="height:100%;width:${b.pct}%;background:var(--accent);border-radius:2px"></div>
+      </div>
+      <span style="font-size:11.5px;color:var(--t3);font-family:'DM Mono',monospace">${b.pct}%</span>
+    </div>
+  </div>`).join('');
+}
+
+// View switching
+const PAGE_INFO={
+  overview:{t:'Overview',s:'TechNova Pvt Ltd · Billing cycle: Apr 1 – Apr 30, 2025'},
+  employees:{t:'Employees',s:'Manage credit accounts and limits'},
+  transactions:{t:'Transactions',s:'All UPI spends · Apr 2025'},
+  billing:{t:'Billing & Repayment',s:'Apr 2025 statement · Due May 12, 2025'},
+  departments:{t:'Departments',s:'Manage teams and departments'},
+  'spend-controls':{t:'Spend Controls',s:'MCC policies and limits · Applied at Juspay issuer switch'},
+};
+
+function switchView(v){
+  document.querySelectorAll('.view').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(el=>el.classList.remove('active'));
+  document.getElementById('view-'+v).classList.add('active');
+  const ni=document.querySelector(`[data-view="${v}"]`);
+  if(ni)ni.classList.add('active');
+  document.getElementById('pg-title').textContent=PAGE_INFO[v].t;
+  document.getElementById('pg-sub').textContent=PAGE_INFO[v].s;
+  if(v==='departments') renderDepts();
+}
+
+document.querySelectorAll('.nav-item').forEach(el=>{
+  el.addEventListener('click',e=>{e.preventDefault();switchView(el.dataset.view)});
+});
+
+// Filters
+function applyEmpFilters(){
+  const q=document.getElementById('emp-search').value.toLowerCase();
+  const st=document.getElementById('emp-status').value;
+  const dp=document.getElementById('emp-dept').value;
+  renderEmp(EMP.filter(e=>{
+    return(!q||e.n.toLowerCase().includes(q)||e.e.toLowerCase().includes(q))
+      &&(!st||e.s===st)&&(!dp||e.d===dp);
+  }));
+}
+document.getElementById('emp-search').addEventListener('input',applyEmpFilters);
+document.getElementById('emp-status').addEventListener('change',applyEmpFilters);
+document.getElementById('emp-dept').addEventListener('change',applyEmpFilters);
+document.getElementById('txn-search').addEventListener('input',applyTxnFilters);
+document.getElementById('txn-cat').addEventListener('change',applyTxnFilters);
+
+// Init
+renderOverview();renderEmp(EMP);renderTxn();renderBill();
+document.querySelector('[data-view="overview"]').classList.add('active');
+document.getElementById('pending-kyc-badge').textContent = EMP.filter(e=>e.s==='pending').length;
+// ── MCC EDITOR ─────────────────────────────────────────────────
+const ALL_MCC = [
+  'Travel','Hotels','Food','Fuel','Taxi','Grocery',
+  'Electronics','Liquor','Entertainment','Jewellery','Cash','Gaming'
+];
+let mccEditIdx = null;
+let mccDraft   = [];
+
+function openMccEditor(idx, btn){
+  mccEditIdx = idx;
+  mccDraft   = [...EMP[idx].mcc];
+
+  // Position popover near the button
+  const pop = document.getElementById('mcc-popover');
+  const rect = btn.getBoundingClientRect();
+  pop.style.display = 'block';
+  const ov = document.getElementById('mcc-overlay');
+  ov.style.display = 'block';
+  ov.style.pointerEvents = 'auto';
+
+  // Flip up if too close to bottom
+  const popH = 220;
+  const top = rect.bottom + 6 + popH > window.innerHeight
+    ? rect.top - popH - 6
+    : rect.bottom + 6;
+  pop.style.top  = `${top}px`;
+  pop.style.left = `${Math.min(rect.left, window.innerWidth - 292)}px`;
+
+  document.getElementById('mcc-pop-name').textContent = EMP[idx].n;
+  renderMccOptions();
+}
+
+function renderMccOptions(){
+  document.getElementById('mcc-pop-options').innerHTML = ALL_MCC.map(m => {
+    const on = mccDraft.includes(m);
+    return `<button
+      onclick="toggleMccOption('${m}')"
+      class="mcc-chip ${on ? m : ''}"
+      style="padding:5px 11px;font-size:12px;cursor:pointer;border-radius:6px;border:1.5px solid;
+        transition:all .15s;font-family:'DM Sans',sans-serif;font-weight:600;
+        ${on ? '' : 'background:#f8fafc;color:#94a3b8;border-color:#e2e8f0;'}"
+    >${m}</button>`;
+  }).join('');
+}
+
+function toggleMccOption(m){
+  const idx = mccDraft.indexOf(m);
+  if(idx > -1) mccDraft.splice(idx, 1);
+  else mccDraft.push(m);
+  renderMccOptions();
+}
+
+function saveMccEditor(){
+  if(mccEditIdx === null) return;
+  EMP[mccEditIdx].mcc = [...mccDraft];
+  closeMccEditor();
+  applyEmpFilters(); // re-render table
+}
+
+function closeMccEditor(){
+  document.getElementById('mcc-popover').style.display  = 'none';
+  const ov = document.getElementById('mcc-overlay');
+  ov.style.display = 'none';
+  ov.style.pointerEvents = 'none';
+  mccEditIdx = null;
+}
+// ── ADD EMPLOYEE MODAL ─────────────────────────────────────────
+function openAddEmpModal(){
+  document.getElementById('add-emp-backdrop').style.display = 'block';
+  document.getElementById('add-emp-modal').style.display    = 'block';
+  showAddEmpPanel('select');
+}
+
+function closeAddEmpModal(){
+  document.getElementById('add-emp-backdrop').style.display = 'none';
+  document.getElementById('add-emp-modal').style.display    = 'none';
+}
+
+function showAddEmpPanel(panel){
+  document.getElementById('add-emp-mode-select').style.display = panel==='select' ? 'flex'  : 'none';
+  document.getElementById('add-emp-csv').style.display         = panel==='csv'    ? 'block' : 'none';
+  document.getElementById('add-emp-manual').style.display      = panel==='manual' ? 'block' : 'none';
+}
+
+function handleCsvSelect(input){
+  if(input.files && input.files[0]){
+    document.getElementById('csv-file-name').textContent = '✓ ' + input.files[0].name;
+    document.getElementById('csv-drop-zone').style.borderColor = 'var(--green)';
+  }
+}
+
+function handleCsvDrop(e){
+  e.preventDefault();
+  const file = e.dataTransfer.files[0];
+  if(file){
+    document.getElementById('csv-file-name').textContent = '✓ ' + file.name;
+    document.getElementById('csv-drop-zone').style.borderColor = 'var(--green)';
+    document.getElementById('csv-drop-zone').style.background  = '#f0fdf4';
+  }
+} // handleCsvDrop
+
+// ── EMPLOYEE DETAIL MODAL ───────────────────────────────────────
+function openEmpDetailModal(){
+  closeAddEmpModal();
+  clearEmpForm();
+  const m = document.getElementById('emp-detail-modal');
+  m.style.display = 'flex';
+  document.getElementById('emp-detail-backdrop').style.display = 'block';
+}
+
+function closeEmpDetailModal(){
+  document.getElementById('emp-detail-modal').style.display = 'none';
+  document.getElementById('emp-detail-backdrop').style.display = 'none';
+}
+
+function clearEmpForm(){
+  ['ef-name','ef-dob','ef-pan','ef-aadhaar','ef-mobile','ef-empid','ef-email','ef-desig'].forEach(id=>{
+    const el = document.getElementById(id);
+    if(el) el.value = '';
+  });
+  document.getElementById('ef-dept').value = '';
+  document.querySelectorAll('input[name="emptype"]').forEach(r=>r.checked=false);
+  ['et-full','et-part','et-cont'].forEach(id=>{
+    const el = document.getElementById(id);
+    if(el){ el.style.borderColor='var(--border)'; el.style.background='#fff'; el.style.color='var(--t2)'; }
+  });
+  document.querySelectorAll('.ef-err').forEach(el=>el.textContent='');
+}
+
+function selectEmpType(radio){
+  ['et-full','et-part','et-cont'].forEach(id=>{
+    const el = document.getElementById(id);
+    if(el){ el.style.borderColor='var(--border)'; el.style.background='#fff'; el.style.color='var(--t2)'; }
+  });
+  const map = {'Full-time':'et-full','Part-time':'et-part','Contractor':'et-cont'};
+  const lbl = document.getElementById(map[radio.value]);
+  if(lbl){ lbl.style.borderColor='var(--accent)'; lbl.style.background='#eff6ff'; lbl.style.color='var(--accent)'; }
+  document.getElementById('ef-emptype-err').textContent = '';
+}
+
+function setErr(id, msg){
+  const el = document.getElementById(id+'-err');
+  if(el) el.textContent = msg;
+  const inp = document.getElementById(id);
+  if(inp) inp.style.borderColor = msg ? 'var(--red)' : 'var(--border)';
+}
+
+function submitEmpForm(){
+  let valid = true;
+
+  const fields = [
+    {id:'ef-name',   label:'Full Legal Name',   check: v => v.trim().length >= 2},
+    {id:'ef-dob',    label:'Date of Birth',      check: v => !!v},
+    {id:'ef-pan',    label:'PAN Number',         check: v => /^[A-Z]{5}[0-9]{4}[A-Z]$/.test(v.trim())},
+    {id:'ef-aadhaar',label:'Aadhaar Number',     check: v => /^\d{12}$/.test(v.trim())},
+    {id:'ef-mobile', label:'Mobile Number',      check: v => /^\d{10}$/.test(v.trim())},
+    {id:'ef-empid',  label:'Employee ID',        check: v => v.trim().length >= 1},
+    {id:'ef-email',  label:'Email Address',      check: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim())},
+    {id:'ef-dept',   label:'Department',         check: v => v !== ''},
+    {id:'ef-desig',  label:'Designation',        check: v => v.trim().length >= 2},
+  ];
+
+  fields.forEach(({id, label, check}) => {
+    const el = document.getElementById(id);
+    const v  = el ? el.value : '';
+    if(!check(v)){
+      setErr(id, `${label} is required${id==='ef-pan'?' (format: ABCDE1234F)':id==='ef-aadhaar'?' (12 digits)':id==='ef-mobile'?' (10 digits)':''}`);
+      valid = false;
+    } else {
+      setErr(id, '');
+    }
+  });
+
+  // Employment type radio
+  const emptype = document.querySelector('input[name="emptype"]:checked');
+  if(!emptype){
+    document.getElementById('ef-emptype-err').textContent = 'Employment Type is required';
+    valid = false;
+  } else {
+    document.getElementById('ef-emptype-err').textContent = '';
+  }
+
+  if(valid){
+    closeEmpDetailModal();
+    // Success — in a real app this would POST to API
+    alert('Employee invite sent successfully!');
+  }
+}
+
+// ── DEPARTMENTS ────────────────────────────────────────────────
+const DEPT_COLORS = ['#3b82f6','#22c55e','#f59e0b','#8b5cf6','#14b8a6'];
+let DEPARTMENTS = [
+  {name:'Sales',       color:'#3b82f6', controls:{enforced:false, mcc:[...ALL_MCC.slice(0,6)], maxTxn:'', dailyCap:'', monthlyLimit:''}},
+  {name:'Engineering', color:'#22c55e', controls:{enforced:false, mcc:[...ALL_MCC.slice(0,6)], maxTxn:'', dailyCap:'', monthlyLimit:''}},
+  {name:'Operations',  color:'#f59e0b', controls:{enforced:false, mcc:[...ALL_MCC.slice(0,6)], maxTxn:'', dailyCap:'', monthlyLimit:''}},
+  {name:'Marketing',   color:'#8b5cf6', controls:{enforced:false, mcc:[...ALL_MCC.slice(0,6)], maxTxn:'', dailyCap:'', monthlyLimit:''}},
+  {name:'Finance',     color:'#14b8a6', controls:{enforced:false, mcc:[...ALL_MCC.slice(0,6)], maxTxn:'', dailyCap:'', monthlyLimit:''}},
+];
+let selectedDeptColor = '#3b82f6';
+
+function deptEmpCount(name){ return EMP.filter(e=>e.d===name).length; }
+function deptSpend(name){ return EMP.filter(e=>e.d===name).reduce((s,e)=>s+e.sp,0); }
+function deptEmpLimitSum(name){ return EMP.filter(e=>e.d===name).reduce((s,e)=>s+e.lim,0); }
+function deptEffectiveLimit(d){
+  const empLimitSum = deptEmpLimitSum(d.name);
+  // If dept-level monthly limit is explicitly set and enforced, use min(deptLimit, empLimitSum)
+  const deptLimit = d.controls.enforced && d.controls.monthlyLimit
+    ? parseFloat(d.controls.monthlyLimit)
+    : null;
+  return deptLimit !== null ? Math.min(deptLimit, empLimitSum) : empLimitSum;
+}
+
+function renderDepts(){
+  const grid = document.getElementById('dept-grid');
+  if(!grid) return;
+  document.getElementById('dept-count-sub').textContent =
+    `${DEPARTMENTS.length} department${DEPARTMENTS.length!==1?'s':''} · ${EMP.length} total employees`;
+
+  grid.innerHTML = DEPARTMENTS.map((d,i)=>{
+    const count      = deptEmpCount(d.name);
+    const spend      = deptSpend(d.name);
+    const effLimit   = deptEffectiveLimit(d);
+    const pct        = effLimit > 0 ? Math.round(spend / effLimit * 100) : 0;
+    const deptHasCap = d.controls.enforced && d.controls.monthlyLimit;
+    const limitLabel = deptHasCap
+      ? `${fmt(spend)} of ${fmt(Math.min(parseFloat(d.controls.monthlyLimit), deptEmpLimitSum(d.name)))} dept limit`
+      : `${fmt(spend)} of ${fmt(effLimit)} emp limits`;
+    const canDel = count === 0; // only allow delete if no employees assigned
+    return `<div style="background:#fff;border-radius:12px;border:1px solid var(--border);padding:20px;box-shadow:var(--sh);transition:box-shadow .15s" onmouseover="this.style.boxShadow='var(--sh2)'" onmouseout="this.style.boxShadow='var(--sh)'">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:38px;height:38px;border-radius:10px;background:${d.color}22;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <div style="width:14px;height:14px;border-radius:50%;background:${d.color}"></div>
+          </div>
+          <div>
+            <div style="font-size:14px;font-weight:800;color:var(--t1);letter-spacing:-.2px">${d.name}</div>
+            <div style="font-size:11.5px;color:var(--t3);margin-top:1px">${count} employee${count!==1?'s':''}</div>
+          </div>
+        </div>
+        <button onclick="deleteDept(${i})" title="${canDel?'Delete department':'Cannot delete — has employees'}"
+          style="background:none;border:none;cursor:${canDel?'pointer':'not-allowed'};color:${canDel?'#fca5a5':'#d1d5db'};padding:4px;border-radius:6px;transition:all .15s;display:flex;align-items:center"
+          ${canDel?`onmouseover="this.style.background='#fee2e2';this.style.color='var(--red)'" onmouseout="this.style.background='none';this.style.color='#fca5a5'"`:''}>
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 4h12M5 4V2h6v2M6 7v5M10 7v5M3 4l1 10h8L13 4"/></svg>
+        </button>
+      </div>
+      <div style="margin-bottom:8px">
+        <div style="display:flex;justify-content:space-between;margin-bottom:5px">
+          <span style="font-size:11px;color:var(--t3);font-weight:600">CYCLE SPEND</span>
+          <span style="font-size:12px;font-weight:700;color:var(--t1);font-family:'DM Mono',monospace">${fmt(spend)}</span>
+        </div>
+        <div style="height:5px;background:#f1f5f9;border-radius:3px;overflow:hidden">
+          <div style="height:100%;width:${Math.min(pct,100)}%;background:${d.color};border-radius:3px;transition:width .4s"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:4px">
+          <span style="font-size:10.5px;color:var(--t3)">${limitLabel}</span>
+          <span style="font-size:10.5px;font-weight:700;color:${pct>=80?'var(--red)':pct>=55?'var(--orange)':'var(--t3)'}">${pct}%</span>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px solid var(--border2)">
+        <div style="display:flex;align-items:center;gap:6px">
+          ${d.controls.enforced
+            ? `<span style="display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:700;color:#16a34a;background:#dcfce7;border:1px solid #bbf7d0;padding:2px 7px;border-radius:20px">
+                <svg width="9" height="9" viewBox="0 0 10 10" fill="#16a34a"><circle cx="5" cy="5" r="4"/></svg> Controls active
+               </span>`
+            : `<span style="font-size:11px;color:var(--t3)">No custom controls</span>`
+          }
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <button onclick="openDeptControls(${i})" style="font-size:12px;color:var(--accent);font-weight:600;background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif">
+            ⚙ Manage controls
+          </button>
+          <button onclick="switchView('employees');document.getElementById('emp-dept').value='${d.name}';applyEmpFilters()" style="font-size:12px;color:var(--t2);font-weight:600;background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif">View →</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function deleteDept(i){
+  const d = DEPARTMENTS[i];
+  if(deptEmpCount(d.name) > 0){
+    alert(`Cannot delete "${d.name}" — ${deptEmpCount(d.name)} employee(s) are assigned to it.`);
+    return;
+  }
+  if(confirm(`Delete department "${d.name}"?`)){
+    DEPARTMENTS.splice(i,1);
+    renderDepts();
+    syncDeptDropdowns();
+  }
+}
+
+function syncDeptDropdowns(){
+  // Keep department dropdowns in filters and forms in sync
+  const opts = ['<option value="">All departments</option>',
+    ...DEPARTMENTS.map(d=>`<option>${d.name}</option>`)].join('');
+  const empDept = document.getElementById('emp-dept');
+  if(empDept) empDept.innerHTML = opts.replace('All departments','').replace('<option value=""></option>','<option value="">All departments</option>');
+  const formDept = document.getElementById('ef-dept');
+  if(formDept) formDept.innerHTML = '<option value="">Select department</option>' + DEPARTMENTS.map(d=>`<option>${d.name}</option>`).join('');
+}
+
+function openAddDeptModal(){
+  selectedDeptColor = '#3b82f6';
+  document.getElementById('new-dept-name').value = '';
+  document.getElementById('new-dept-err').textContent = '';
+  // Reset color picker — highlight first swatch
+  document.querySelectorAll('#dept-color-picker div').forEach(sw=>{
+    sw.style.border = sw.dataset.color === selectedDeptColor ? `3px solid ${sw.dataset.color}` : '3px solid transparent';
+  });
+  document.getElementById('add-dept-backdrop').style.display = 'block';
+  document.getElementById('add-dept-modal').style.display    = 'block';
+  setTimeout(()=>document.getElementById('new-dept-name').focus(), 50);
+}
+
+function closeAddDeptModal(){
+  document.getElementById('add-dept-backdrop').style.display = 'none';
+  document.getElementById('add-dept-modal').style.display    = 'none';
+}
+
+function selectDeptColor(el, color){
+  selectedDeptColor = color;
+  document.querySelectorAll('#dept-color-picker div').forEach(sw=>{
+    sw.style.border = sw.dataset.color === color ? `3px solid ${color}` : '3px solid transparent';
+  });
+}
+
+function saveNewDept(){
+  const name = document.getElementById('new-dept-name').value.trim();
+  const errEl = document.getElementById('new-dept-err');
+  if(!name){ errEl.textContent = 'Department name is required'; return; }
+  if(DEPARTMENTS.find(d=>d.name.toLowerCase()===name.toLowerCase())){
+    errEl.textContent = 'A department with this name already exists'; return;
+  }
+  errEl.textContent = '';
+  DEPARTMENTS.push({name, color: selectedDeptColor, controls:{enforced:false, mcc:[...ALL_MCC.slice(0,6)], maxTxn:'', dailyCap:'', monthlyLimit:''}});
+  closeAddDeptModal();
+  renderDepts();
+  syncDeptDropdowns();
+}
+
+// ── DEPARTMENT CONTROLS MODAL ──────────────────────────────────
+let dctrlIdx = null;
+
+function openDeptControls(i){
+  dctrlIdx = i;
+  const d = DEPARTMENTS[i];
+  const c = d.controls;
+
+  document.getElementById('dctrl-title').textContent = `${d.name} — Controls`;
+  document.getElementById('dctrl-enforce').checked   = c.enforced;
+  document.getElementById('dctrl-monthly').value     = c.monthlyLimit;
+  document.getElementById('dctrl-daily').value       = c.dailyCap;
+  document.getElementById('dctrl-maxtxn').value      = c.maxTxn;
+
+  // Render MCC toggles
+  document.getElementById('dctrl-mcc-grid').innerHTML = ALL_MCC.map(m => {
+    const on = c.mcc.includes(m);
+    return `<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 13px;border-radius:8px;border:1px solid var(--border);background:${on?'#fff':'#fff8f8'}">
+      <div>
+        <div style="font-size:12.5px;font-weight:600;color:var(--t1)">${m}</div>
+      </div>
+      <label class="tgl" style="flex-shrink:0">
+        <input type="checkbox" data-mcc="${m}" ${on?'checked':''} onchange="toggleDctrlMcc(this)">
+        <span class="tgl-sl"></span>
+      </label>
+    </div>`;
+  }).join('');
+
+  // Show/hide body based on enforced state
+  setDctrlBodyState(c.enforced);
+
+  const modal = document.getElementById('dept-ctrl-modal');
+  modal.style.display = 'flex';
+  document.getElementById('dept-ctrl-backdrop').style.display = 'block';
+}
+
+function setDctrlBodyState(enforced){
+  const body = document.getElementById('dctrl-body');
+  body.style.opacity         = enforced ? '1'    : '0.4';
+  body.style.pointerEvents   = enforced ? 'auto' : 'none';
+}
+
+function toggleDeptEnforce(chk){
+  setDctrlBodyState(chk.checked);
+}
+
+function toggleDctrlMcc(chk){
+  const row = chk.closest('div[style*="border-radius:8px"]');
+  if(row) row.style.background = chk.checked ? '#fff' : '#fff8f8';
+}
+
+function saveDeptControls(){
+  if(dctrlIdx === null) return;
+  const enforced = document.getElementById('dctrl-enforce').checked;
+  const mcc      = [...document.querySelectorAll('#dctrl-mcc-grid input[type="checkbox"]:checked')]
+                     .map(el => el.dataset.mcc);
+  DEPARTMENTS[dctrlIdx].controls = {
+    enforced,
+    mcc,
+    monthlyLimit : document.getElementById('dctrl-monthly').value,
+    dailyCap     : document.getElementById('dctrl-daily').value,
+    maxTxn       : document.getElementById('dctrl-maxtxn').value,
+  };
+  closeDeptControls();
+  renderDepts();
+}
+
+function closeDeptControls(){
+  document.getElementById('dept-ctrl-modal').style.display   = 'none';
+  document.getElementById('dept-ctrl-backdrop').style.display = 'none';
+  dctrlIdx = null;
+}
+
+// ── BILL STATEMENT DOWNLOAD ────────────────────────────────────
+function downloadBillStatement(){
+  const rows = [
+    ['CorpCredit — Apr 2025 Bill Statement'],
+    ['Generated on: Apr 30, 2025'],
+    ['Due Date: May 12, 2025'],
+    [''],
+    ['SUMMARY'],
+    ['Total Outstanding', '₹7,44,200'],
+    ['Minimum Due',       '₹1,48,840'],
+    ['Total Transactions','47'],
+    ['Active Employees',  '12'],
+    [''],
+    ['EMPLOYEE-WISE BREAKDOWN'],
+    ['Employee', 'Department', 'Transactions', 'Spend This Cycle', 'Limit', '% of Bill'],
+    ...BILL.map(b=>[b.n, b.d, b.txns, b.sp, b.lim, b.pct+'%']),
+    [''],
+    ['TRANSACTION DETAILS'],
+    ['Merchant', 'Employee', 'Category', 'Date & Time', 'UPI Ref', 'Amount', 'Status'],
+    ...TXN.map(t=>[t.mer, t.emp, t.cat, t.date, t.upi, '₹'+t.amt.toLocaleString('en-IN'), t.st]),
+  ];
+
+  const csv = rows.map(r => r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = 'CorpCredit_Apr2025_Statement.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ── INLINE LIMIT EDIT ──────────────────────────────────────────
+function startEditLimit(initials, currentLim){
+  document.getElementById(`lim-val-${initials}`).style.display      = 'none';
+  document.getElementById(`lim-edit-btn-${initials}`).style.display = 'none';
+  const editRow = document.getElementById(`lim-edit-${initials}`);
+  editRow.style.display = 'flex';
+  const inp = document.getElementById(`lim-inp-${initials}`);
+  inp.value = currentLim;
+  inp.focus();
+  inp.select();
+}
+
+function saveLimit(initials){
+  const inp = document.getElementById(`lim-inp-${initials}`);
+  const val = parseInt(inp.value);
+  if(!val || val <= 0){ inp.style.borderColor='var(--red)'; return; }
+  const emp = EMP.find(e=>e.i===initials);
+  if(emp){
+    emp.lim = val;
+    emp.pct = emp.lim > 0 ? Math.round(emp.sp / emp.lim * 100) : 0;
+  }
+  applyEmpFilters(); // re-render with updated value
+}
+
+function cancelEditLimit(initials){
+  document.getElementById(`lim-edit-${initials}`).style.display     = 'none';
+  document.getElementById(`lim-val-${initials}`).style.display      = 'inline';
+  document.getElementById(`lim-edit-btn-${initials}`).style.display = 'flex';
+}
+
+// ── RECEIPT VIEWER ─────────────────────────────────────────────
+let activeReceiptIdx = null;
+
+function viewReceipt(idx){
+  activeReceiptIdx = idx;
+  const t   = TXN[idx];
+  const tax = Math.round(t.amt * 18 / 118);   // back-calculate 18% GST
+  const base= t.amt - tax;
+  document.getElementById('receipt-body').innerHTML = `
+    <!-- Vendor header -->
+    <div style="text-align:center;padding-bottom:14px;border-bottom:1px dashed #e5e7eb;margin-bottom:14px">
+      <div style="font-size:15px;font-weight:800;color:var(--t1);margin-bottom:2px">${t.vendor}</div>
+      <div style="font-size:11px;color:var(--t3)">GSTIN: ${t.gstin}</div>
+      <div style="font-size:10.5px;color:var(--t3);margin-top:2px">Tax Invoice · ${t.gst}</div>
+    </div>
+    <!-- Bill to -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;font-size:12px">
+      <div>
+        <div style="font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">Bill To</div>
+        <div style="font-weight:600;color:var(--t1)">TechNova Pvt Ltd</div>
+        <div style="color:var(--t2)">GSTIN: 29AABCT1234K1ZA</div>
+        <div style="color:var(--t2)">Bangalore, Karnataka</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">Invoice Details</div>
+        <div style="color:var(--t2)">Date: ${t.date}</div>
+        <div style="color:var(--t2)">UPI Ref: ${t.upi}</div>
+        <div style="font-weight:600;color:var(--t1);margin-top:3px">${t.emp}</div>
+      </div>
+    </div>
+    <!-- Line items -->
+    <div style="background:#f9fafb;border-radius:8px;overflow:hidden;margin-bottom:14px">
+      <div style="display:grid;grid-template-columns:1fr auto auto;gap:0;padding:8px 12px;background:#f1f5f9;font-size:10.5px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.4px">
+        <span>Description</span><span style="text-align:right">Rate</span><span style="text-align:right">Amount</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr auto auto;gap:0;padding:10px 12px;font-size:12.5px;border-bottom:1px solid var(--border)">
+        <span style="color:var(--t1);font-weight:500">${t.mer} — ${t.cat}</span>
+        <span style="text-align:right;color:var(--t2);padding:0 16px">1</span>
+        <span style="text-align:right;font-family:'DM Mono',monospace;color:var(--t1)">₹${base.toLocaleString('en-IN')}</span>
+      </div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--t2);display:flex;justify-content:space-between;border-bottom:1px solid var(--border)">
+        <span>CGST @ 9%</span><span style="font-family:'DM Mono',monospace">₹${Math.round(tax/2).toLocaleString('en-IN')}</span>
+      </div>
+      <div style="padding:8px 12px;font-size:12px;color:var(--t2);display:flex;justify-content:space-between">
+        <span>SGST @ 9%</span><span style="font-family:'DM Mono',monospace">₹${Math.round(tax/2).toLocaleString('en-IN')}</span>
+      </div>
+    </div>
+    <!-- Total -->
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 14px;background:#0f1629;border-radius:8px;margin-bottom:14px">
+      <span style="font-size:13px;font-weight:700;color:rgba(255,255,255,.7)">Total Paid</span>
+      <span style="font-size:18px;font-weight:800;color:#fff;font-family:'DM Mono',monospace">₹${t.amt.toLocaleString('en-IN')}</span>
+    </div>
+    <!-- Payment -->
+    <div style="text-align:center;font-size:11px;color:var(--t3)">
+      Paid via UPI · <span style="font-family:'DM Mono',monospace">${t.upi}</span> · ${t.date}
+    </div>`;
+  document.getElementById('receipt-modal').style.display   = 'block';
+  document.getElementById('receipt-backdrop').style.display = 'block';
+}
+
+function closeReceipt(){
+  document.getElementById('receipt-modal').style.display   = 'none';
+  document.getElementById('receipt-backdrop').style.display = 'none';
+  activeReceiptIdx = null;
+}
+
+function downloadReceipt(){
+  if(activeReceiptIdx === null) return;
+  const t    = TXN[activeReceiptIdx];
+  const tax  = Math.round(t.amt * 18 / 118);
+  const base = t.amt - tax;
+  const csv  = [
+    ['GST Tax Invoice'],
+    ['Vendor', t.vendor],['GSTIN', t.gstin],['Invoice No', t.gst],
+    ['Date', t.date],['UPI Ref', t.upi],['Employee', t.emp],
+    [''],
+    ['Description', 'Amount'],
+    [`${t.mer} — ${t.cat}`, base],
+    ['CGST @ 9%', Math.round(tax/2)],
+    ['SGST @ 9%', Math.round(tax/2)],
+    ['Total', t.amt],
+  ].map(r=>r.map(v=>`"${v}"`).join(',')).join('\n');
+  const blob = new Blob([csv],{type:'text/csv'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `Receipt_${t.upi}.csv`;
+  a.click();
+}
+
+// ████ END OF ALL SCRIPTS — DO NOT EDIT OR REMOVE THE CLOSING TAG BELOW ████
+</script>
+</body>
+</html>
