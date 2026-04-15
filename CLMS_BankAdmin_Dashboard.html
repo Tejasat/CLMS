@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CLMS Corporate — Bank Admin Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EEF2F7;--sf:#FFF;--sf2:#F5F7FA;--bd:#DDE3ED;--bds:#B8C4D8;
+  --tx:#0F1C2E;--tx2:#4A5B72;--tx3:#8899AE;
+  --ac:#1A56DB;--acl:#EBF0FD;--acm:#2563EB;
+  --gn:#065F46;--gnb:#D1FAE5;--am:#78350F;--amb:#FEF3C7;
+  --rd:#7F1D1D;--rdb:#FEE2E2;--bl:#1E40AF;--blb:#DBEAFE;
+  --mo:'IBM Plex Mono',monospace;--fn:'IBM Plex Sans',sans-serif;
+  --r:6px;--rl:12px;
+  --sb:#0F1C2E;--sbt:#94A8C2;--sba:rgba(99,153,255,.13);--sbat:#7EB0FF;--sbb:rgba(255,255,255,.07);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--fn);background:var(--bg);color:var(--tx);font-size:13px;line-height:1.5;height:100vh;overflow:hidden;display:flex}
+.sb{width:220px;flex-shrink:0;background:var(--sb);display:flex;flex-direction:column;height:100vh;overflow-y:auto}
+.sb-logo{padding:18px 16px 14px;border-bottom:1px solid var(--sbb)}
+.sb-logo .pr{font-size:13px;font-weight:600;color:#fff;letter-spacing:-.01em}
+.sb-logo .su{font-size:10px;color:#5B7A9C;margin-top:2px;text-transform:uppercase;letter-spacing:.06em}
+.sb-bank{margin:10px 10px 0;background:rgba(99,153,255,.1);border:1px solid rgba(99,153,255,.2);border-radius:var(--r);padding:8px 10px}
+.sb-bank .bn{font-size:11px;font-weight:600;color:#7EB0FF}
+.sb-bank .br{font-size:10px;color:#5B7A9C}
+.nv-s{font-size:9px;color:#3D5A75;padding:14px 16px 4px;text-transform:uppercase;letter-spacing:.1em;font-weight:600}
+.nv{display:flex;align-items:center;gap:9px;padding:8px 14px;font-size:12px;color:var(--sbt);cursor:pointer;border-radius:var(--r);margin:1px 6px;transition:background .12s,color .12s;user-select:none}
+.nv:hover{background:rgba(255,255,255,.06);color:#C8D8EE}
+.nv.on{background:var(--sba);color:var(--sbat);font-weight:500;border-left:2px solid #4D8DFF;padding-left:12px}
+.nv svg{width:14px;height:14px;flex-shrink:0;opacity:.75}
+.nv.on svg{opacity:1}
+.nbg{margin-left:auto;font-size:9px;background:#EF4444;color:#fff;border-radius:8px;padding:1px 5px;font-weight:600}
+.sb-ft{margin-top:auto;padding:14px 12px;border-top:1px solid var(--sbb);display:flex;align-items:center;gap:8px}
+.av{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#4D8DFF,#7C3AED);color:#fff;font-size:10px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.main{flex:1;display:flex;flex-direction:column;height:100vh;overflow:hidden}
+.tpb{background:var(--sf);border-bottom:1px solid var(--bd);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:52px;flex-shrink:0;box-shadow:0 1px 3px rgba(15,28,46,.06)}
+.tpl{display:flex;align-items:center;gap:10px}
+.tpt{font-size:15px;font-weight:600}
+.tps{font-size:11px;color:var(--tx3)}
+.bkb{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--tx2);cursor:pointer;padding:5px 10px;border-radius:var(--r);border:1px solid var(--bd);background:var(--sf)}
+.bkb:hover{background:var(--sf2)}
+.tpr{display:flex;align-items:center;gap:8px}
+.chip{font-size:11px;color:var(--ac);background:var(--acl);border:1px solid #BDD0FA;padding:4px 11px;border-radius:20px;font-weight:500}
+.cnt{flex:1;overflow-y:auto;padding:20px 24px;display:flex;flex-direction:column;gap:16px}
+.vw{display:none;flex-direction:column;gap:16px}
+.vw.on{display:flex}
+.mts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.mt{background:var(--sf);border:1px solid var(--bd);border-radius:var(--rl);padding:16px 18px;position:relative;overflow:hidden}
+.mt::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.mb::before{background:linear-gradient(90deg,#2563EB,#60A5FA)}
+.mp::before{background:linear-gradient(90deg,#7C3AED,#A78BFA)}
+.mt2::before{background:linear-gradient(90deg,#0D9488,#5EEAD4)}
+.me::before{background:linear-gradient(90deg,#059669,#6EE7B7)}
+.ma::before{background:linear-gradient(90deg,#D97706,#FBBF24)}
+.mi{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:10px}
+.ibl{background:#DBEAFE}.ipu{background:#EDE9FE}.itl{background:#CCFBF1}.iem{background:#D1FAE5}.iam{background:#FEF3C7}
+.mi svg{width:16px;height:16px}
+.ml{font-size:10px;color:var(--tx3);text-transform:uppercase;letter-spacing:.07em;font-weight:600;margin-bottom:4px}
+.mv{font-size:22px;font-weight:600;font-family:var(--mo);line-height:1.1}
+.mv.sm{font-size:19px}
+.mf{font-size:11px;color:var(--tx3);margin-top:5px}
+.mf.wn{color:#B45309;font-weight:500}
+.mf.dn{color:#B91C1C;font-weight:500}
+.mf.gd{color:#047857;font-weight:500}
+.cd{background:var(--sf);border:1px solid var(--bd);border-radius:var(--rl);overflow:hidden;box-shadow:0 1px 3px rgba(15,28,46,.04)}
+.ch{padding:13px 16px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;gap:12px}
+.ct{font-size:13px;font-weight:600}
+.ca{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.btn{font-size:11px;padding:5px 11px;border:1px solid var(--bd);border-radius:var(--r);background:var(--sf);color:var(--tx2);cursor:pointer;font-family:var(--fn);transition:background .1s}
+.btn:hover{background:var(--sf2);color:var(--tx)}
+.bp{background:var(--ac);color:#fff;border-color:var(--ac)}
+.bp:hover{background:var(--acm)}
+.bd2{background:var(--rdb);color:#B91C1C;border-color:#FECACA}
+.bs{background:var(--gnb);color:#065F46;border-color:#A7F3D0}
+.bap{background:#D1FAE5;color:#065F46;border-color:#6EE7B7;font-weight:600}
+.brj{background:#FEE2E2;color:#B91C1C;border-color:#FECACA;font-weight:600}
+input[type=text],select{font-size:11px;padding:5px 10px;border:1px solid var(--bd);border-radius:var(--r);background:var(--sf);color:var(--tx);font-family:var(--fn)}
+input[type=text]:focus,select:focus{outline:none;border-color:var(--acm)}
+input[type=text]{width:160px}
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+thead th{font-size:10px;color:var(--tx3);font-weight:600;text-transform:uppercase;letter-spacing:.06em;padding:10px 14px;border-bottom:1px solid var(--bd);text-align:left;white-space:nowrap;background:#F8FAFD}
+thead th.r{text-align:right}
+tbody td{font-size:12px;padding:11px 14px;border-bottom:1px solid var(--bd);vertical-align:middle}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:#F5F8FF}
+tbody td.r{text-align:right}
+tbody td.mn{font-family:var(--mo);font-size:11px}
+.pl{font-size:10px;font-weight:600;padding:3px 8px;border-radius:20px;display:inline-block;white-space:nowrap}
+.pg{background:var(--gnb);color:var(--gn)}
+.pa{background:var(--amb);color:var(--am)}
+.pr2{background:var(--rdb);color:var(--rd)}
+.pb{background:var(--blb);color:var(--bl)}
+.pgr{background:var(--sf2);color:var(--tx2);border:1px solid var(--bd)}
+.tg{font-size:10px;padding:2px 7px;border-radius:4px;background:#EFF3FB;color:#2D4A7A;border:1px solid #C8D8F0;font-weight:500}
+.uw{display:flex;align-items:center;gap:8px}
+.ut{width:80px;height:6px;background:var(--bd);border-radius:3px;flex-shrink:0}
+.uf{height:6px;border-radius:3px}
+.ug{background:linear-gradient(90deg,#059669,#34D399)}
+.ua{background:linear-gradient(90deg,#D97706,#FBBF24)}
+.ur{background:linear-gradient(90deg,#DC2626,#F87171)}
+.ul{font-family:var(--mo);font-size:11px;font-weight:500}
+.ul.dn{color:#B91C1C;font-weight:700}
+.ul.wn{color:#B45309;font-weight:700}
+.cn{font-size:12px;font-weight:600}
+.cs{font-size:10px;color:var(--tx3);margin-top:1px;font-family:var(--mo)}
+.tc{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.ai{padding:12px 16px;display:flex;gap:12px;border-bottom:1px solid var(--bd);border-left:3px solid transparent}
+.ai:last-child{border-bottom:none}
+.ar{border-left-color:#EF4444;background:#FFFAFA}
+.aa{border-left-color:#F59E0B;background:#FFFDF5}
+.ab{border-left-color:#3B82F6;background:#F8FAFF}
+.ag{border-left-color:#10B981;background:#F5FFFB}
+.ad{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.at{font-size:12px;line-height:1.5}
+.am2{font-size:10px;color:var(--tx3);margin-top:2px}
+.pr3{padding:13px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--bd)}
+.pr3:last-child{border-bottom:none}
+.pr3:hover{background:#F5F8FF}
+.pd{width:8px;height:8px;border-radius:50%;margin-right:8px;flex-shrink:0}
+.pn{font-size:12px;font-weight:600;display:flex;align-items:center}
+.pm{font-size:11px;color:var(--tx3);margin-top:2px}
+.lk{font-size:11px;color:var(--ac);cursor:pointer;background:none;border:none;font-family:var(--fn);padding:0;font-weight:500}
+.lk:hover{text-decoration:underline}
+.di{padding:10px 0;border-bottom:1px solid var(--bd);display:flex;justify-content:space-between;align-items:flex-start}
+.di:last-child{border-bottom:none}
+.dl{font-size:11px;color:var(--tx3)}
+.dv{font-size:12px;font-weight:500;text-align:right}
+.tabs{display:flex;border-bottom:1px solid var(--bd);padding:0 16px;background:#FAFCFF}
+.tab{font-size:12px;padding:10px 16px;cursor:pointer;color:var(--tx3);border-bottom:2px solid transparent;margin-bottom:-1px;font-weight:500}
+.tab.on{color:var(--ac);border-bottom-color:var(--ac)}
+.tab:hover:not(.on){color:var(--tx2)}
+.tc2{display:none}
+.tc2.on{display:block}
+.kb{display:flex;align-items:center;gap:16px;padding:12px 20px;background:linear-gradient(90deg,#1A56DB,#1E40AF);flex-wrap:wrap}
+.ki{display:flex;flex-direction:column;gap:2px}
+.kl{font-size:9px;color:rgba(255,255,255,.65);text-transform:uppercase;letter-spacing:.08em;font-weight:600}
+.kv{font-size:14px;font-weight:600;font-family:var(--mo);color:#fff}
+.kd{width:1px;height:30px;background:rgba(255,255,255,.2)}
+.hb{height:8px;background:var(--bd);border-radius:4px;overflow:hidden}
+.hf{height:100%;border-radius:4px}
+.cr{display:flex;justify-content:space-between;align-items:center;padding:11px 14px;background:var(--sf2);border-radius:var(--r);border:1px solid var(--bd)}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-thumb{background:var(--bds);border-radius:3px}
+</style>
+</head>
+<body>
+<nav class="sb">
+  <div class="sb-logo"><div class="pr">CLMS Corporate</div><div class="su">Secured Credit Line Platform</div></div>
+  <div class="sb-bank"><div class="bn">Axis Bank N.A.</div><div class="br">Bank Admin Console</div></div>
+  <div class="nv-s">Portfolio</div>
+  <div class="nv on" id="n-dashboard" onclick="go('dashboard',this)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="5" height="5" rx="1"/><rect x="9" y="2" width="5" height="5" rx="1"/><rect x="2" y="9" width="5" height="5" rx="1"/><rect x="9" y="9" width="5" height="5" rx="1"/></svg>Dashboard</div>
+  <div class="nv" id="n-companies" onclick="go('companies',this)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 14V5l5-3 5 3v9"/><rect x="6" y="9" width="4" height="5"/></svg>Companies</div>
+  <div class="nv" id="n-transactions" onclick="go('transactions',this)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 5h12M2 8h8M2 11h5"/><path d="M12 10l2 2-2 2"/></svg>Transactions<span class="nbg">3</span></div>
+  <div class="nv" id="n-billing" onclick="go('billing',this)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="12" height="10" rx="1"/><path d="M2 7h12M6 11h4"/></svg>Billing</div>
+  <div class="nv" id="n-authqueue" onclick="go('authqueue',this)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M8 5v4l2 2"/></svg>Authorisation Queue<span class="nbg" id="aq-badge">4</span></div>
+  <div class="nv-s">Configuration</div>
+  <div class="nv" id="n-products" onclick="go('products',this)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="2"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.2 3.2l1.4 1.4M11.4 11.4l1.4 1.4M3.2 12.8l1.4-1.4M11.4 4.6l1.4-1.4"/></svg>Products</div>
+  <div class="nv" id="n-users" onclick="go('users',this)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="5" r="3"/><path d="M1 14c0-2.8 2.2-5 5-5"/><path d="M11 9l2 2 3-3"/></svg>User Management</div>
+  <div class="nv" id="n-auditlog" onclick="go('auditlog',this)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4h12v9a1 1 0 01-1 1H3a1 1 0 01-1-1V4z"/><path d="M5 4V3a1 1 0 011-1h4a1 1 0 011 1v1"/><path d="M5 8h6M5 11h4"/></svg>Audit Log</div>
+  <div class="sb-ft"><div class="av">TS</div><div><div style="font-size:11px;font-weight:500;color:#C8D8EE">Teja Sathapathi</div><div style="font-size:10px;color:#5B7A9C">Bank Super Admin</div></div></div>
+</nav>
+<div class="main">
+  <div class="tpb">
+    <div class="tpl">
+      <div id="bkb" class="bkb" onclick="goBack()" style="display:none"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2L4 6l4 4"/></svg>Back</div>
+      <div><div class="tpt" id="pg-title">Portfolio Overview</div><div class="tps" id="pg-sub">Axis Bank N.A. &mdash; Apr 2026</div></div>
+    </div>
+    <div class="tpr"><span class="chip">10 Apr 2026</span></div>
+  </div>
+  <div class="cnt">
+
+    <!-- DASHBOARD -->
+    <div class="vw on" id="vw-dashboard">
+      <div class="mts">
+        <div class="mt mb"><div class="mi ibl"><svg viewBox="0 0 16 16" fill="none" stroke="#2563EB" stroke-width="1.5"><rect x="2" y="4" width="12" height="8" rx="1"/><path d="M5 4V3a1 1 0 011-1h4a1 1 0 011 1v1"/></svg></div><div class="ml">Total sanctioned</div><div class="mv sm">&#x20B9;48.2 Cr</div><div class="mf gd">12 active companies</div></div>
+        <div class="mt mp"><div class="mi ipu"><svg viewBox="0 0 16 16" fill="none" stroke="#7C3AED" stroke-width="1.5"><circle cx="8" cy="9" r="5"/><path d="M8 2v4l3 2"/></svg></div><div class="ml">Total outstanding</div><div class="mv sm">&#x20B9;31.7 Cr</div><div class="mf">65.8% utilisation</div></div>
+        <div class="mt mt2"><div class="mi itl"><svg viewBox="0 0 16 16" fill="none" stroke="#0D9488" stroke-width="1.5"><path d="M3 8h10M8 3l5 5-5 5"/></svg></div><div class="ml">Available credit</div><div class="mv sm">&#x20B9;16.5 Cr</div><div class="mf wn">2 companies above 90%</div></div>
+        <div class="mt me"><div class="mi iem"><svg viewBox="0 0 16 16" fill="none" stroke="#059669" stroke-width="1.5"><circle cx="6" cy="5" r="3"/><path d="M1 14c0-2.8 2.2-5 5-5h2"/><path d="M11 9l2 2 3-3"/></svg></div><div class="ml">Active employees</div><div class="mv">1,284</div><div class="mf gd">Across all companies</div></div>
+      </div>
+      <div class="cd">
+        <div class="ch"><div class="ct">Company portfolio</div><div class="ca"><input type="text" placeholder="Search..." oninput="ftbl(this.value)"><select onchange="fsts(this.value)"><option value="">All statuses</option><option>Active</option><option>Pending KYC</option><option>Suspended</option></select><select><option>All products</option><option>Secured Line A</option><option>Secured Line B</option></select><button class="btn">Export CSV</button><button class="btn bp" onclick="go('companies',null);openOC()">+ Onboard company</button></div></div>
+        <div class="tw"><table><thead><tr><th>Company</th><th>Product</th><th>Status</th><th class="r">Sanctioned limit</th><th class="r">Outstanding</th><th>Utilisation</th><th>FD maturity</th><th class="r">Employees</th><th></th></tr></thead><tbody id="ptbl"></tbody></table></div>
+      </div>
+      <div class="tc">
+        <div class="cd">
+          <div class="ch"><div class="ct">Alerts &amp; notifications</div><span style="font-size:10px;color:var(--tx3)">Last 48 hours</span></div>
+          <div>
+            <div class="ai ar"><div class="ad" style="background:#EF4444"></div><div><div class="at">TCS &mdash; credit utilisation at 93%. Credit line near exhaustion.</div><div class="am2">2 hours ago &middot; <span class="lk" onclick="openCo(1)">View &rarr;</span></div></div></div>
+            <div class="ai ar"><div class="ad" style="background:#EF4444"></div><div><div class="at">Mphasis &mdash; FD matured Dec 2025. Credit line auto-suspended.</div><div class="am2">1 day ago &middot; <span class="lk" onclick="openCo(5)">View &rarr;</span></div></div></div>
+            <div class="ai aa"><div class="ad" style="background:#F59E0B"></div><div><div class="at">Wipro &mdash; FD (FD-AXIS-00934) matures in 15 days. Renewal required.</div><div class="am2">5 hours ago &middot; <span class="lk" onclick="openCo(2)">View &rarr;</span></div></div></div>
+            <div class="ai aa"><div class="ad" style="background:#F59E0B"></div><div><div class="at">HCL &mdash; FD matures in 28 days. Follow up with company admin.</div><div class="am2">Today 09:00 &middot; <span class="lk" onclick="openCo(3)">View &rarr;</span></div></div></div>
+            <div class="ai ab"><div class="ad" style="background:#3B82F6"></div><div><div class="at">Authorisation Queue &mdash; 4 requests pending your approval.</div><div class="am2">Today &middot; <span class="lk" onclick="go('authqueue',null)">View queue &rarr;</span></div></div></div>
+            <div class="ai ag"><div class="ad" style="background:#10B981"></div><div><div class="at">Infosys BPM &mdash; bill repayment of &#x20B9;3.2 Cr received.</div><div class="am2">2 days ago &middot; <span class="lk" onclick="openCo(0)">View &rarr;</span></div></div></div>
+          </div>
+        </div>
+        <div class="cd">
+          <div class="ch"><div class="ct">Credit products</div><button class="btn bp" onclick="go('products',null)">+ New product</button></div>
+          <div>
+            <div class="pr3"><div><div class="pn"><span class="pd" style="background:#2563EB"></span>Secured Line &mdash; A</div><div class="pm">14% p.a. &middot; FD ratio 80% &middot; &#x20B9;1Cr&ndash;&#x20B9;15Cr &middot; Monthly</div></div><div style="text-align:right"><div style="font-size:13px;font-weight:600;font-family:var(--mo)">8</div><div style="font-size:10px;color:var(--tx3)">companies</div></div></div>
+            <div class="pr3"><div><div class="pn"><span class="pd" style="background:#7C3AED"></span>Secured Line &mdash; B</div><div class="pm">16% p.a. &middot; FD ratio 75% &middot; &#x20B9;50L&ndash;&#x20B9;8Cr &middot; Monthly</div></div><div style="text-align:right"><div style="font-size:13px;font-weight:600;font-family:var(--mo)">4</div><div style="font-size:10px;color:var(--tx3)">companies</div></div></div>
+            <div class="pr3" style="opacity:.55"><div><div class="pn"><span class="pd" style="background:#9CA3AF"></span>Secured Line &mdash; C <span class="pgr" style="font-size:9px;margin-left:4px;padding:1px 5px">Draft</span></div><div class="pm">18% p.a. &middot; FD ratio 70% &middot; &#x20B9;10L&ndash;&#x20B9;3Cr</div></div><div style="font-size:10px;color:var(--tx3)">Not published</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COMPANY DETAIL -->
+    <div class="vw" id="vw-company-detail"><div id="co-det"></div></div>
+
+    <!-- COMPANIES -->
+    <div class="vw" id="vw-companies">
+      <div class="cd"><div class="ch"><div class="ct">All companies</div><div class="ca"><input type="text" placeholder="Search..."><select><option>All statuses</option><option>Active</option><option>Pending KYC</option><option>Suspended</option></select><button class="btn bp" onclick="openOC()">+ Onboard company</button></div></div><div class="tw"><table><thead><tr><th>Company</th><th>Product</th><th>Status</th><th class="r">Sanctioned</th><th class="r">Outstanding</th><th>Utilisation</th><th>FD maturity</th><th class="r">Employees</th><th></th></tr></thead><tbody id="ctbl"></tbody></table></div></div>
+    </div>
+
+    <!-- TRANSACTIONS -->
+    <div class="vw" id="vw-transactions">
+      <div class="mts" style="grid-template-columns:repeat(3,minmax(0,1fr))">
+        <div class="mt mb"><div class="ml">Transactions today</div><div class="mv">284</div><div class="mf">&#x20B9;1.2 Cr total value</div></div>
+        <div class="mt mp"><div class="ml">Declined today</div><div class="mv">12</div><div class="mf wn">4.2% decline rate</div></div>
+        <div class="mt mt2"><div class="ml">Disputes open</div><div class="mv">3</div><div class="mf dn">Awaiting resolution</div></div>
+      </div>
+      <div class="cd"><div class="ch"><div class="ct">All transactions</div><div class="ca"><input type="text" placeholder="Search..."><select><option>All companies</option><option>Infosys BPM</option><option>TCS</option><option>Wipro</option></select><select><option>All statuses</option><option>Approved</option><option>Declined</option><option>Disputed</option></select><select><option>All MCCs</option><option>Hotels (7011)</option><option>Dining (5812)</option><option>Software (7372)</option></select><button class="btn">Export CSV</button></div></div><div class="tw"><table><thead><tr><th>Date &amp; time</th><th>Company</th><th>Employee</th><th>Merchant</th><th>MCC</th><th class="r">Amount</th><th>Status</th><th>Decline reason</th></tr></thead><tbody id="ttbl"></tbody></table></div></div>
+    </div>
+
+    <!-- BILLING -->
+    <div class="vw" id="vw-billing">
+      <div class="mts" style="grid-template-columns:repeat(4,minmax(0,1fr))">
+        <div class="mt mb"><div class="ml">Bills this cycle</div><div class="mv">12</div><div class="mf">Apr 2026</div></div>
+        <div class="mt mp"><div class="ml">Total billed</div><div class="mv sm">&#x20B9;31.7 Cr</div><div class="mf">Current cycle</div></div>
+        <div class="mt mt2"><div class="ml">Collected</div><div class="mv sm">&#x20B9;22.4 Cr</div><div class="mf gd">70.7% collected</div></div>
+        <div class="mt me"><div class="ml">Overdue</div><div class="mv sm">&#x20B9;1.8 Cr</div><div class="mf dn">1 company</div></div>
+      </div>
+      <div class="cd"><div class="ch"><div class="ct">Billing status &mdash; Apr 2026</div><div class="ca"><select><option>Apr 2026</option><option>Mar 2026</option><option>Feb 2026</option></select><button class="btn">Export</button></div></div><div class="tw"><table><thead><tr><th>Company</th><th class="r">Bill amount</th><th class="r">Paid</th><th class="r">Outstanding</th><th>Status</th><th>Due date</th><th></th></tr></thead><tbody>
+        <tr><td><div class="cn">Infosys BPM Ltd</div></td><td class="r mn">&#x20B9;7,40,00,000</td><td class="r mn">&#x20B9;7,40,00,000</td><td class="r mn">&#x20B9;0</td><td><span class="pl pg">Paid</span></td><td style="font-size:11px">15 Apr 2026</td><td><button class="btn">Statement</button></td></tr>
+        <tr><td><div class="cn">Tata Consultancy Services</div></td><td class="r mn">&#x20B9;7,90,00,000</td><td class="r mn">&#x20B9;4,00,00,000</td><td class="r mn">&#x20B9;3,90,00,000</td><td><span class="pl pa">Partial</span></td><td style="font-size:11px">15 Apr 2026</td><td><button class="btn">Statement</button></td></tr>
+        <tr><td><div class="cn">Wipro Technologies</div></td><td class="r mn">&#x20B9;5,10,00,000</td><td class="r mn">&#x20B9;5,10,00,000</td><td class="r mn">&#x20B9;0</td><td><span class="pl pg">Paid</span></td><td style="font-size:11px">15 Apr 2026</td><td><button class="btn">Statement</button></td></tr>
+        <tr><td><div class="cn">Mphasis Ltd</div></td><td class="r mn">&#x20B9;1,80,00,000</td><td class="r mn">&#x20B9;0</td><td class="r mn" style="color:var(--rd);font-weight:600">&#x20B9;1,80,00,000</td><td><span class="pl pr2">Overdue</span></td><td style="font-size:11px;color:var(--rd)">1 Apr 2026</td><td><button class="btn">Statement</button></td></tr>
+      </tbody></table></div></div>
+    </div>
+
+    <!-- AUTHORISATION QUEUE -->
+    <div class="vw" id="vw-authqueue">
+      <div class="mts" style="grid-template-columns:repeat(3,minmax(0,1fr))">
+        <div class="mt ma"><div class="mi iam"><svg viewBox="0 0 16 16" fill="none" stroke="#D97706" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M8 5v4l2 2"/></svg></div><div class="ml">Pending requests</div><div class="mv" id="aq-cnt">4</div><div class="mf wn">Awaiting your approval</div></div>
+        <div class="mt mb"><div class="ml">Approved this month</div><div class="mv">18</div><div class="mf gd">By you</div></div>
+        <div class="mt mp"><div class="ml">Sent back this month</div><div class="mv">3</div><div class="mf">With reasons recorded</div></div>
+      </div>
+      <div class="cd"><div class="ch"><div class="ct">Pending authorisations</div><div class="ca"><select><option>All types</option><option>New Product</option><option>Limit Change</option><option>FD Update</option></select><select><option>All requestors</option><option>Rohit Kumar</option></select></div></div><div id="aq-list"></div></div>
+      <div class="cd"><div class="ch"><div class="ct">Recently resolved</div><span style="font-size:10px;color:var(--tx3)">Last 30 days</span></div><div class="tw"><table><thead><tr><th>Date</th><th>Type</th><th>Summary</th><th>Requestor</th><th>Decision</th><th>Decided by</th></tr></thead><tbody>
+        <tr><td style="font-size:11px">08 Apr 2026</td><td><span style="font-size:10px;font-weight:600;padding:2px 7px;border-radius:4px;background:#DBEAFE;color:#1E40AF">Limit Change</span></td><td style="font-size:12px">HCL Technologies &mdash; &#x20B95Cr &rarr; &#x20B96Cr</td><td style="font-size:11px">Rohit Kumar</td><td><span class="pl pg">Approved</span></td><td style="font-size:11px">Teja Sathapathi</td></tr>
+        <tr><td style="font-size:11px">05 Apr 2026</td><td><span style="font-size:10px;font-weight:600;padding:2px 7px;border-radius:4px;background:#EDE9FE;color:#4C1D95">New Product</span></td><td style="font-size:12px">Secured Line C &mdash; interest rate revision needed</td><td style="font-size:11px">Rohit Kumar</td><td><span class="pl pa">Sent back</span></td><td style="font-size:11px">Teja Sathapathi</td></tr>
+        <tr><td style="font-size:11px">02 Apr 2026</td><td><span style="font-size:10px;font-weight:600;padding:2px 7px;border-radius:4px;background:#FEF3C7;color:#92400E">FD Update</span></td><td style="font-size:12px">Wipro &mdash; FD-AXIS-00934 renewal</td><td style="font-size:11px">Rohit Kumar</td><td><span class="pl pg">Approved</span></td><td style="font-size:11px">Teja Sathapathi</td></tr>
+      </tbody></table></div></div>
+    </div>
+
+    <!-- PRODUCTS -->
+    <div class="vw" id="vw-products">
+      <div class="cd"><div class="ch"><div class="ct">Credit products</div><button class="btn bp" onclick="openModal()">+ New product</button></div><div class="tw"><table><thead><tr><th>Product name</th><th>Status</th><th class="r">Interest rate</th><th class="r">FD-to-limit ratio</th><th class="r">Min limit</th><th class="r">Max limit</th><th>Billing cycle</th><th>Grace period</th><th class="r">Companies</th><th></th></tr></thead><tbody>
+        <tr id="pr-0"><td><div class="cn">Secured Line &mdash; A</div><div class="cs">Scheme: SCLA001</div></td><td><span class="pl pg">Active</span></td><td class="r mn">14% p.a.</td><td class="r"><span style="font-family:var(--mo);font-weight:600">80%</span></td><td class="r mn">&#x20B9;1,00,00,000</td><td class="r mn">&#x20B9;15,00,00,000</td><td>Monthly</td><td>30 days</td><td class="r">8</td><td><button class="btn" onclick="editProduct(0)">Edit</button></td></tr>
+        <tr id="pr-1"><td><div class="cn">Secured Line &mdash; B</div><div class="cs">Scheme: SCLB002</div></td><td><span class="pl pg">Active</span></td><td class="r mn">16% p.a.</td><td class="r"><span style="font-family:var(--mo);font-weight:600">75%</span></td><td class="r mn">&#x20B9;50,00,000</td><td class="r mn">&#x20B9;8,00,00,000</td><td>Monthly</td><td>15 days</td><td class="r">4</td><td><button class="btn" onclick="editProduct(1)">Edit</button></td></tr>
+        <tr id="pr-2" style="opacity:.6"><td><div class="cn">Secured Line &mdash; C</div><div class="cs">Scheme: SCLC003</div></td><td><span class="pgr pl">Draft</span></td><td class="r mn">18% p.a.</td><td class="r"><span style="font-family:var(--mo);font-weight:600">70%</span></td><td class="r mn">&#x20B9;10,00,000</td><td class="r mn">&#x20B9;3,00,00,000</td><td>Monthly</td><td>7 days</td><td class="r">0</td><td><button class="btn" onclick="editProduct(2)">Edit</button></td></tr>
+      </tbody></table></div></div>
+      <div class="cd"><div class="ch"><div class="ct">Bank-level configuration</div></div><div style="padding:16px;display:flex;flex-direction:column;gap:10px">
+        <div class="cr"><div><div style="font-size:12px;font-weight:600">FD maturity alert lead time</div><div style="font-size:11px;color:var(--tx3);margin-top:2px">Days before FD maturity to trigger alert</div></div><div style="display:flex;align-items:center;gap:12px"><span style="font-size:22px;font-weight:600;font-family:var(--mo)">30 days</span><button class="btn">Edit</button></div></div>
+        <div class="cr"><div><div style="font-size:12px;font-weight:600">FD lapse grace period</div><div style="font-size:11px;color:var(--tx3);margin-top:2px">Days post-FD maturity before auto-suspension</div></div><div style="display:flex;align-items:center;gap:12px"><span style="font-size:22px;font-weight:600;font-family:var(--mo)">7 days</span><button class="btn">Edit</button></div></div>
+        <div class="cr"><div><div style="font-size:12px;font-weight:600">Maker-checker enforcement</div><div style="font-size:11px;color:var(--tx3);margin-top:2px">Admin changes go to Authorisation Queue before taking effect</div></div><div style="display:flex;align-items:center;gap:12px"><span class="pl pg" style="font-size:11px">Enabled</span><button class="btn">Edit</button></div></div>
+      </div></div>
+    </div>
+
+    <!-- USERS -->
+    <div class="vw" id="vw-users">
+      <div class="cd"><div class="ch"><div class="ct">Bank admin users</div><button class="btn bp" onclick="openIU()">+ Invite user</button></div><div class="tw"><table><thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Last login</th><th>2FA</th><th></th></tr></thead><tbody>
+        <tr><td><div style="display:flex;align-items:center;gap:8px"><div class="av" style="width:26px;height:26px;font-size:9px">TS</div><div class="cn">Teja Sathapathi</div></div></td><td style="font-size:11px;color:var(--tx2)">teja.s@axisbank.com</td><td><span class="pl pb">Super Admin</span></td><td><span class="pl pg">Active</span></td><td style="font-size:11px">Now</td><td><span class="pl pg">Enabled</span></td><td><button class="btn" disabled>Edit</button></td></tr>
+        <tr><td><div style="display:flex;align-items:center;gap:8px"><div class="av" style="width:26px;height:26px;font-size:9px">RK</div><div class="cn">Rohit Kumar</div></div></td><td style="font-size:11px;color:var(--tx2)">rohit.k@axisbank.com</td><td><span class="pl pgr">Admin</span></td><td><span class="pl pg">Active</span></td><td style="font-size:11px">9 Apr 2026</td><td><span class="pl pg">Enabled</span></td><td><button class="btn">Edit</button></td></tr>
+        <tr><td><div style="display:flex;align-items:center;gap:8px"><div class="av" style="width:26px;height:26px;font-size:9px">PM</div><div class="cn">Priya Mehta</div></div></td><td style="font-size:11px;color:var(--tx2)">priya.m@axisbank.com</td><td><span class="pl pgr">Viewer</span></td><td><span class="pl pa">Deactivated</span></td><td style="font-size:11px;color:var(--tx3)">2 Mar 2026</td><td><span class="pl pgr">Disabled</span></td><td><button class="btn">Reactivate</button></td></tr>
+      </tbody></table></div></div>
+    </div>
+
+    <!-- AUDIT LOG -->
+    <div class="vw" id="vw-auditlog">
+      <div class="mts" style="grid-template-columns:repeat(3,minmax(0,1fr))">
+        <div class="mt mb"><div class="ml">Events today</div><div class="mv">24</div><div class="mf">Across all admin users</div></div>
+        <div class="mt mp"><div class="ml">Events this month</div><div class="mv">312</div><div class="mf">Apr 2026</div></div>
+        <div class="mt me"><div class="ml">Active admin users</div><div class="mv">2</div><div class="mf gd">Out of 3 total</div></div>
+      </div>
+      <div class="cd"><div class="ch"><div class="ct">Audit log</div><div class="ca"><select><option>All users</option><option>Teja Sathapathi</option><option>Rohit Kumar</option></select><select><option>All actions</option><option>Product</option><option>Company</option><option>Limit Change</option><option>FD Update</option><option>User Management</option><option>Approval</option></select><select><option>Today</option><option>Last 7 days</option><option>Last 30 days</option></select><button class="btn">Export CSV</button></div></div><div id="al-list"></div></div>
+    </div>
+
+  </div>
+</div>
+<script>
+var cos=[
+  {id:0,name:"Infosys BPM Ltd",cin:"U72200KA2002PTC031009",prod:"Secured Line A",st:"Active",lim:120000000,out:74000000,fd:"Mar 2026",fdd:340,emp:342,sec:"IT/BPM",gstin:"29AABCI1234A1Z5",pan:"AABCI1234A",cont:"Ananya Krishnan",eml:"ananya@infosysbpm.com",addr:"Electronics City, Bengaluru, KA 560100",fda:150000000,lien:120000000,fdr:"FD-AXIS-00821",rat:80},
+  {id:1,name:"Tata Consultancy Services",cin:"L22210MH1995PLC084781",prod:"Secured Line A",st:"Active",lim:85000000,out:79000000,fd:"Jan 2026",fdd:285,emp:218,sec:"IT Services",gstin:"27AAACT1234A1Z3",pan:"AAACT1234A",cont:"Vikram Nair",eml:"vikram.n@tcs.com",addr:"TCS House, Raveline St, Mumbai 400001",fda:110000000,lien:85000000,fdr:"FD-AXIS-00743",rat:80},
+  {id:2,name:"Wipro Technologies",cin:"L32102KA1945PLC020776",prod:"Secured Line B",st:"Active",lim:60000000,out:51000000,fd:"Apr 2026",fdd:15,emp:187,sec:"IT Services",gstin:"29AAACW1234A1Z1",pan:"AAACW1234A",cont:"Shruti Bhat",eml:"shruti.b@wipro.com",addr:"Sarjapur Rd, Bengaluru, KA 560034",fda:80000000,lien:60000000,fdr:"FD-AXIS-00934",rat:75},
+  {id:3,name:"HCL Technologies",cin:"L74140DL1991PLC046624",prod:"Secured Line A",st:"Active",lim:50000000,out:21000000,fd:"May 2026",fdd:445,emp:156,sec:"IT Services",gstin:"09AAACH1234A1Z8",pan:"AAACH1234A",cont:"Deepak Arora",eml:"deepak.a@hcl.com",addr:"A-10, Sector 3, Noida, UP 201301",fda:65000000,lien:50000000,fdr:"FD-AXIS-00612",rat:80},
+  {id:4,name:"Tech Mahindra Ltd",cin:"L64200MH1986PLC041370",prod:"Secured Line B",st:"Pending KYC",lim:30000000,out:0,fd:"Aug 2026",fdd:500,emp:0,sec:"IT/Telecom",gstin:"27AAACT9876A1Z5",pan:"AAACT9876A",cont:"Meera Joshi",eml:"meera.j@techmahindra.com",addr:"Sharda Centre, Erandwane, Pune 411004",fda:40000000,lien:30000000,fdr:"FD-AXIS-01021",rat:75},
+  {id:5,name:"Mphasis Ltd",cin:"L30007KA2000PLC025706",prod:"Secured Line A",st:"Suspended",lim:20000000,out:18000000,fd:"Dec 2025",fdd:-120,emp:54,sec:"IT/BFS",gstin:"29AAACP1234A1Z6",pan:"AAACP1234A",cont:"Rajan Pillai",eml:"rajan.p@mphasis.com",addr:"Bagmane Tech Park, Bengaluru, KA 560093",fda:25000000,lien:20000000,fdr:"FD-AXIS-00612",rat:80}
+];
+var txs=[
+  {dt:"10 Apr 09:42",co:"TCS",emp:"Arun Sharma",mer:"Taj Hotels",mcc:"Hotels (7011)",amt:28500,st:"Approved",rs:""},
+  {dt:"10 Apr 09:31",co:"Infosys BPM",emp:"Kavitha R",mer:"IndiGo Airlines",mcc:"Airlines (4511)",amt:12200,st:"Approved",rs:""},
+  {dt:"10 Apr 09:18",co:"Wipro",emp:"Suresh P",mer:"Amazon Web Services",mcc:"Software (7372)",amt:89000,st:"Approved",rs:""},
+  {dt:"10 Apr 08:55",co:"TCS",emp:"Preethi L",mer:"Zomato Corporate",mcc:"Dining (5812)",amt:3400,st:"Declined",rs:"MCC not permitted"},
+  {dt:"10 Apr 08:42",co:"HCL",emp:"Nikhil M",mer:"Ola Business",mcc:"Transport (4121)",amt:1800,st:"Approved",rs:""},
+  {dt:"10 Apr 08:30",co:"TCS",emp:"Deepa S",mer:"OYO Business",mcc:"Hotels (7011)",amt:45000,st:"Declined",rs:"Per-transaction limit exceeded"},
+  {dt:"10 Apr 08:15",co:"Wipro",emp:"Ajay K",mer:"Microsoft Azure",mcc:"Software (7372)",amt:210000,st:"Approved",rs:""},
+  {dt:"09 Apr 17:45",co:"HCL",emp:"Pooja M",mer:"Swiggy Corporate",mcc:"Dining (5812)",amt:8400,st:"Disputed",rs:"Unauthorised charge"}
+];
+var aqs=[
+  {tp:"Limit Change",co:"Tata Consultancy Services",by:"Rohit Kumar",ts:"10 Apr 2026, 11:42",ds:"Requesting credit limit increase from \u20B98,50,00,000 to \u20B910,00,00,000. Justification: employee headcount expansion Q2 2026. FD coverage at 80% remains intact.",ov:"\u20B98,50,00,000",nv:"\u20B910,00,00,000"},
+  {tp:"FD Update",co:"Wipro Technologies",by:"Rohit Kumar",ts:"10 Apr 2026, 10:15",ds:"FD renewal \u2014 FD-AXIS-00934. Current maturity Apr 2026. New maturity Oct 2026. Lien amount unchanged at \u20B96,00,00,000.",ov:"Apr 2026",nv:"Oct 2026"},
+  {tp:"FD Update",co:"Infosys BPM Ltd",by:"Rohit Kumar",ts:"07 Apr 2026, 17:45",ds:"Request to increase lien on FD-AXIS-00821 following top-up by company. New lien \u20B99,50,00,000 against FD value \u20B912,00,00,000.",ov:"\u20B98,00,00,000",nv:"\u20B99,50,00,000"},
+  {tp:"New Product",co:"Secured Line D (Draft)",by:"Rohit Kumar",ts:"06 Apr 2026, 09:30",ds:"Proposing Secured Line D. Parameters: 15% p.a., FD-to-limit ratio 85%, min \u20B975L, max \u20B910Cr, monthly billing, 30-day grace.",ov:"",nv:""}
+];
+var als=[
+  {ts:"10 Apr, 11:42",usr:"Rohit Kumar",role:"Admin",act:"Limit Change Request",ent:"Tata Consultancy Services",ds:"Requested credit limit increase",ov:"\u20B98,50,00,000",nv:"\u20B910,00,00,000",st:"Pending",ic:"L",icbg:"#DBEAFE",ictx:"#1E40AF"},
+  {ts:"10 Apr, 10:15",usr:"Rohit Kumar",role:"Admin",act:"FD Update Request",ent:"Wipro Technologies",ds:"Requested FD renewal \u2014 FD-AXIS-00934",ov:"Apr 2026",nv:"Oct 2026",st:"Pending",ic:"F",icbg:"#FEF3C7",ictx:"#92400E"},
+  {ts:"09 Apr, 16:30",usr:"Teja Sathapathi",role:"Super Admin",act:"Approval \u2014 Approved",ent:"HCL Technologies",ds:"Approved limit increase raised by Rohit Kumar",ov:"\u20B95,00,00,000",nv:"\u20B96,00,00,000",st:"Approved",ic:"A",icbg:"#D1FAE5",ictx:"#065F46"},
+  {ts:"09 Apr, 14:00",usr:"Rohit Kumar",role:"Admin",act:"Company Onboarded",ent:"Tech Mahindra Ltd",ds:"Onboarded; product: Secured Line B; FD: FD-AXIS-01021",ov:"",nv:"",st:"Completed",ic:"C",icbg:"#EDE9FE",ictx:"#4C1D95"},
+  {ts:"08 Apr, 09:20",usr:"Teja Sathapathi",role:"Super Admin",act:"Product Created",ent:"Secured Line C (Draft)",ds:"Created new product draft \u2014 18% p.a., FD ratio 70%",ov:"",nv:"",st:"Draft",ic:"P",icbg:"#EDE9FE",ictx:"#4C1D95"},
+  {ts:"07 Apr, 17:45",usr:"Rohit Kumar",role:"Admin",act:"FD Update Request",ent:"Infosys BPM Ltd",ds:"Requested FD lien increase \u2014 FD-AXIS-00821",ov:"\u20B98,00,00,000",nv:"\u20B99,50,00,000",st:"Pending",ic:"F",icbg:"#FEF3C7",ictx:"#92400E"},
+  {ts:"05 Apr, 11:10",usr:"Teja Sathapathi",role:"Super Admin",act:"Approval \u2014 Sent back",ent:"Secured Line C (Draft)",ds:"Sent back for revision \u2014 interest rate too high",ov:"",nv:"",st:"Sent back",ic:"A",icbg:"#FEE2E2",ictx:"#991B1B"},
+  {ts:"04 Apr, 15:30",usr:"Rohit Kumar",role:"Admin",act:"Employee Blocked",ent:"TCS \u2014 Deepa S",ds:"Blocked employee. Reason: Policy violation",ov:"Active",nv:"Blocked",st:"Completed",ic:"E",icbg:"#FEE2E2",ictx:"#991B1B"},
+  {ts:"03 Apr, 10:00",usr:"Teja Sathapathi",role:"Super Admin",act:"User Deactivated",ent:"Priya Mehta (Viewer)",ds:"Deactivated user account. Access revoked immediately.",ov:"Active",nv:"Deactivated",st:"Completed",ic:"U",icbg:"#F3F4F6",ictx:"#374151"},
+  {ts:"02 Apr, 14:20",usr:"Teja Sathapathi",role:"Super Admin",act:"Approval \u2014 FD Update",ent:"Wipro Technologies",ds:"Approved FD renewal FD-AXIS-00934 raised by Rohit Kumar",ov:"Feb 2026",nv:"Apr 2026",st:"Approved",ic:"A",icbg:"#D1FAE5",ictx:"#065F46"},
+  {ts:"01 Apr, 09:00",usr:"Rohit Kumar",role:"Admin",act:"Spend Control Updated",ent:"Mphasis Ltd",ds:"Updated per-transaction limit for company account",ov:"\u20B93,00,000",nv:"\u20B91,00,000",st:"Completed",ic:"S",icbg:"#EDE9FE",ictx:"#4C1D95"},
+  {ts:"28 Mar, 16:45",usr:"Teja Sathapathi",role:"Super Admin",act:"Approval \u2014 Limit Change",ent:"Mphasis Ltd",ds:"Approved limit decrease raised by Rohit Kumar",ov:"\u20B93,00,00,000",nv:"\u20B92,00,00,000",st:"Approved",ic:"A",icbg:"#D1FAE5",ictx:"#065F46"}
+];
+
+function fmt(n){return n===0?"\u2014":"\u20B9"+n.toLocaleString("en-IN");}
+function uc(p){return p>=90?"ur":p>=80?"ua":"ug";}
+function ulc(p){return p>=90?"dn":p>=80?"wn":"";}
+function spill(s){if(s==="Active")return '<span class="pl pg">Active</span>';if(s==="Pending KYC")return '<span class="pl pa">Pending KYC</span>';if(s==="Suspended")return '<span class="pl pr2">Suspended</span>';return '<span class="pl pgr">'+s+'</span>';}
+function fdcell(c){if(c.fdd<0)return '<span style="color:var(--rd);font-weight:600">'+c.fd+' !</span>';if(c.fdd<=30)return '<span style="color:var(--am);font-weight:600">'+c.fd+' \u26a0</span>';return '<span style="font-size:12px">'+c.fd+'</span>';}
+function crow(c){var p=c.out===0?0:Math.round(c.out/c.lim*100);return '<tr><td><div class="cn">'+c.name+'</div><div class="cs">'+c.cin+'</div></td><td><span class="tg">'+c.prod+'</span></td><td>'+spill(c.st)+'</td><td class="r mn">'+fmt(c.lim)+'</td><td class="r mn">'+fmt(c.out)+'</td><td><div class="uw"><div class="ut"><div class="uf '+uc(p)+'" style="width:'+p+'%"></div></div><span class="ul '+ulc(p)+'">'+p+'%</span></div></td><td>'+fdcell(c)+'</td><td class="r">'+c.emp+'</td><td><button class="lk" onclick="openCo('+c.id+')">View \u2192</button></td></tr>';}
+function diff(o,n){if(!o&&!n)return "";return '<div style="display:flex;gap:6px;align-items:center;margin-top:5px;font-size:11px">'+(o?'<span style="background:#FEE2E2;color:#991B1B;padding:2px 7px;border-radius:4px;font-family:var(--mo)">'+o+'</span>':'')+(o&&n?'<span style="color:var(--tx3)">\u2192</span>':'')+(n?'<span style="background:#D1FAE5;color:#065F46;padding:2px 7px;border-radius:4px;font-family:var(--mo)">'+n+'</span>':'')+'</div>';}
+
+function initTbls(){
+  var r=cos.map(crow).join("");
+  document.getElementById("ptbl").innerHTML=r;
+  document.getElementById("ctbl").innerHTML=r;
+  document.getElementById("ttbl").innerHTML=txs.map(function(t){var p=t.st==="Approved"?"pg":t.st==="Declined"?"pr2":"pa";return '<tr><td style="font-size:11px;white-space:nowrap">'+t.dt+'</td><td style="font-size:11px">'+t.co+'</td><td style="font-size:11px">'+t.emp+'</td><td style="font-size:12px;font-weight:500">'+t.mer+'</td><td><span class="tg">'+t.mcc+'</span></td><td class="r mn">'+fmt(t.amt)+'</td><td><span class="pl '+p+'">'+t.st+'</span></td><td style="font-size:11px;color:var(--rd)">'+t.rs+'</td></tr>';}).join("");
+  renderAQ();
+  renderAL();
+}
+
+function renderAQ(){
+  var el=document.getElementById("aq-list");
+  if(!el)return;
+  var cnt=document.getElementById("aq-cnt");if(cnt)cnt.textContent=aqs.length;
+  var badge=document.getElementById("aq-badge");if(badge)badge.textContent=aqs.length;
+  if(aqs.length===0){el.innerHTML='<div style="padding:32px;text-align:center;color:var(--tx3);font-size:12px">No pending authorisations</div>';return;}
+  var tpbg={"Limit Change":"#DBEAFE","FD Update":"#FEF3C7","New Product":"#EDE9FE"};
+  var tptx={"Limit Change":"#1E40AF","FD Update":"#92400E","New Product":"#4C1D95"};
+  el.innerHTML=aqs.map(function(q,i){
+    return '<div style="padding:14px 16px;border-bottom:1px solid var(--bd)"><div style="display:flex;align-items:center;gap:8px;margin-bottom:5px"><span style="font-size:9px;font-weight:600;padding:2px 7px;border-radius:4px;background:'+(tpbg[q.tp]||"#F3F4F6")+';color:'+(tptx[q.tp]||"#374151")+'">'+q.tp+'</span><span style="font-size:12px;font-weight:600">'+q.co+'</span></div><div style="font-size:11px;color:var(--tx2);line-height:1.5">'+q.ds+'</div>'+diff(q.ov,q.nv)+'<div style="font-size:10px;color:var(--tx3);margin-top:4px">Raised by <strong style="color:var(--tx2)">'+q.by+'</strong> &middot; '+q.ts+'</div><div style="display:flex;gap:6px;margin-top:8px"><button class="btn bap" onclick="resolveAQ('+i+',true)">Approve</button><button class="btn brj" onclick="resolveAQ('+i+',false)">Send back</button><button class="btn" style="margin-left:4px">View detail</button></div></div>';
+  }).join("");
+}
+
+function resolveAQ(i,approved){
+  var q=aqs[i];
+  aqs.splice(i,1);
+  als.unshift({ts:"10 Apr, now",usr:"Teja Sathapathi",role:"Super Admin",act:"Approval \u2014 "+(approved?"Approved":"Sent back"),ent:q.co,ds:(approved?"Approved":"Sent back")+" the "+q.tp.toLowerCase()+" request raised by "+q.by,ov:q.ov,nv:q.nv,st:approved?"Approved":"Sent back",ic:"A",icbg:approved?"#D1FAE5":"#FEE2E2",ictx:approved?"#065F46":"#991B1B"});
+  renderAQ();
+  renderAL();
+}
+
+function renderAL(){
+  var el=document.getElementById("al-list");if(!el)return;
+  el.innerHTML=als.map(function(e){var sc=e.st==="Approved"||e.st==="Completed"?"pg":e.st==="Pending"?"pa":e.st==="Sent back"?"pr2":"pgr";return '<div style="padding:12px 16px;border-bottom:1px solid var(--bd);display:flex;gap:14px;align-items:flex-start"><div style="width:30px;height:30px;border-radius:50%;background:'+e.icbg+';color:'+e.ictx+';font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px">'+e.ic+'</div><div style="flex:1"><div style="font-size:12px;font-weight:600">'+e.act+' &mdash; <span style="color:var(--ac)">'+e.ent+'</span></div><div style="font-size:11px;color:var(--tx2);margin-top:2px;line-height:1.5">'+e.ds+'</div>'+diff(e.ov,e.nv)+'<div style="font-size:10px;color:var(--tx3);margin-top:4px;display:flex;gap:10px"><span>'+e.ts+'</span><span style="color:var(--tx2);font-weight:500">'+e.usr+'</span><span class="tg">'+e.role+'</span><span class="pl '+sc+'" style="font-size:9px">'+e.st+'</span></div></div></div>';}).join("");
+}
+
+function ftbl(v){document.querySelectorAll("#ptbl tr").forEach(function(r){r.style.display=r.textContent.toLowerCase().includes(v.toLowerCase())?"":"none";});}
+function fsts(v){document.querySelectorAll("#ptbl tr").forEach(function(r){r.style.display=(!v||r.textContent.includes(v))?"":"none";});}
+
+var prev="dashboard";
+function go(id,el){
+  prev=id;
+  document.querySelectorAll(".vw").forEach(function(v){v.classList.remove("on");});
+  var vw=document.getElementById("vw-"+id);if(vw)vw.classList.add("on");
+  document.getElementById("bkb").style.display="none";
+  var titles={dashboard:"Portfolio Overview",companies:"Companies",transactions:"All Transactions",billing:"Billing",authqueue:"Authorisation Queue",products:"Credit Products",users:"User Management",auditlog:"Audit Log"};
+  document.getElementById("pg-title").textContent=titles[id]||id;
+  document.getElementById("pg-sub").textContent="Axis Bank N.A. \u2014 Apr 2026";
+  if(el){document.querySelectorAll(".nv").forEach(function(n){n.classList.remove("on");});el.classList.add("on");}
+}
+
+function goBack(){
+  go(prev==="company-detail"?"dashboard":prev,null);
+  document.getElementById("n-dashboard").classList.add("on");
+}
+
+function openCo(id){
+  var c=cos[id];
+  var p=c.out===0?0:Math.round(c.out/c.lim*100);
+  var av=c.lim-c.out;
+  var mx=Math.round(c.fda*(c.rat/100));
+  var hr=mx-c.lim;
+  var hrc=c.lim>mx?"var(--rd)":p>=80?"var(--am)":"#059669";
+  var hw=mx>0?Math.min(100,Math.round(c.lim/mx*100)):0;
+  var txr=txs.slice(0,4).map(function(t){var pl=t.st==="Approved"?"pg":t.st==="Declined"?"pr2":"pa";return '<tr><td style="font-size:11px">'+t.dt+'</td><td style="font-size:11px">'+t.emp+'</td><td>'+t.mer+'</td><td><span class="tg">'+t.mcc+'</span></td><td class="r mn">'+fmt(t.amt)+'</td><td><span class="pl '+pl+'">'+t.st+'</span></td><td style="font-size:11px;color:var(--rd)">'+t.rs+'</td></tr>';}).join("");
+  document.getElementById("co-det").innerHTML=
+    '<div style="display:flex;flex-direction:column;gap:16px">'
+    +'<div class="kb"><div class="ki"><div class="kl">Sanctioned limit</div><div class="kv">'+fmt(c.lim)+'</div></div><div class="kd"></div><div class="ki"><div class="kl">Outstanding</div><div class="kv">'+fmt(c.out)+'</div></div><div class="kd"></div><div class="ki"><div class="kl">Available credit</div><div class="kv">'+fmt(av)+'</div></div><div class="kd"></div><div class="ki"><div class="kl">Utilisation</div><div class="kv">'+p+'%</div></div><div class="kd"></div><div class="ki"><div class="kl">Employees</div><div class="kv">'+c.emp+'</div></div><div class="kd"></div><div class="ki"><div class="kl">Status</div><div style="margin-top:4px">'+spill(c.st)+'</div></div><div style="margin-left:auto;display:flex;gap:8px">'+(c.st==="Active"?'<button class="btn bd2">Suspend</button>':'<button class="btn bs">Reactivate</button>')+'<button class="btn bp" onclick="openRL('+id+')">Request limit change</button></div></div>'
+    +'<div class="tc"><div class="cd"><div class="ch"><div class="ct">Company information</div><button class="btn">Edit</button></div><div style="padding:0 16px"><div class="di"><span class="dl">Legal name</span><span class="dv">'+c.name+'</span></div><div class="di"><span class="dl">CIN</span><span class="dv" style="font-family:var(--mo);font-size:11px">'+c.cin+'</span></div><div class="di"><span class="dl">GSTIN</span><span class="dv" style="font-family:var(--mo);font-size:11px">'+c.gstin+'</span></div><div class="di"><span class="dl">PAN</span><span class="dv" style="font-family:var(--mo);font-size:11px">'+c.pan+'</span></div><div class="di"><span class="dl">Sector</span><span class="dv">'+c.sec+'</span></div><div class="di"><span class="dl">Primary contact</span><span class="dv">'+c.cont+'</span></div><div class="di"><span class="dl">Contact email</span><span class="dv" style="font-size:11px;font-family:var(--mo)">'+c.eml+'</span></div><div class="di"><span class="dl">Product</span><span class="dv"><span class="tg">'+c.prod+'</span></span></div><div class="di"><span class="dl">Billing cycle</span><span class="dv">Monthly (1st of month)</span></div></div></div>'
+    +'<div class="cd"><div class="ch"><div class="ct">Security deposit &amp; coverage</div><button class="btn">Request FD update</button></div><div style="padding:0 16px"><div class="di"><span class="dl">FD account number</span><span class="dv" style="font-family:var(--mo);font-size:11px">'+c.fdr+'</span></div><div class="di"><span class="dl">FD amount</span><span class="dv" style="font-family:var(--mo)">'+fmt(c.fda)+'</span></div><div class="di"><span class="dl">Lien amount</span><span class="dv" style="font-family:var(--mo)">'+fmt(c.lien)+'</span></div><div class="di"><span class="dl">FD maturity date</span><span class="dv" style="'+(c.fdd<0?'color:var(--rd);font-weight:600':c.fdd<=30?'color:var(--am);font-weight:600':'')+'">'+(c.fdd<0?c.fd+' (Expired !)':c.fdd<=30?c.fd+' (\u26a0 Due soon)':c.fd)+'</span></div><div class="di"><span class="dl">FD-to-limit ratio</span><span class="dv">'+c.rat+'% (product config)</span></div><div class="di"><span class="dl">Max approvable limit</span><span class="dv" style="font-family:var(--mo)">'+fmt(mx)+'</span></div><div class="di"><span class="dl">Sanctioned limit</span><span class="dv" style="font-family:var(--mo)">'+fmt(c.lim)+'</span></div><div class="di"><span class="dl">Headroom available</span><span class="dv" style="font-family:var(--mo);color:'+(hr<0?'var(--rd)':'#059669')+';font-weight:600">'+fmt(hr)+'</span></div></div><div style="padding:12px 16px;border-top:1px solid var(--bd)"><div style="font-size:10px;color:var(--tx3);margin-bottom:5px">Sanctioned vs. max approvable</div><div class="hb"><div class="hf" style="width:'+hw+'%;background:'+hrc+'"></div></div><div style="display:flex;justify-content:space-between;margin-top:4px;font-size:10px;color:var(--tx3)"><span>\u20B90</span><span>'+fmt(mx)+' (max)</span></div></div></div></div>'
+    +'<div class="cd"><div class="tabs"><div class="tab on" onclick="stab(this,\'t-txn\')">Recent transactions</div><div class="tab" onclick="stab(this,\'t-bill\')">Billing history</div></div><div class="tc2 on" id="t-txn"><div class="tw"><table><thead><tr><th>Date</th><th>Employee</th><th>Merchant</th><th>MCC</th><th class="r">Amount</th><th>Status</th><th>Reason</th></tr></thead><tbody>'+txr+'</tbody></table></div></div><div class="tc2" id="t-bill"><div class="tw"><table><thead><tr><th>Period</th><th class="r">Bill amount</th><th class="r">Paid</th><th>Status</th><th>Due date</th><th></th></tr></thead><tbody><tr><td>Apr 2026</td><td class="r mn">'+fmt(c.out)+'</td><td class="r mn">\u2014</td><td><span class="pl pa">Due 15 Apr</span></td><td style="font-size:11px">15 Apr 2026</td><td><button class="btn">Statement</button></td></tr><tr><td>Mar 2026</td><td class="r mn">'+fmt(Math.round(c.out*.9))+'</td><td class="r mn">'+fmt(Math.round(c.out*.9))+'</td><td><span class="pl pg">Paid</span></td><td style="font-size:11px">15 Mar 2026</td><td><button class="btn">Statement</button></td></tr><tr><td>Feb 2026</td><td class="r mn">'+fmt(Math.round(c.out*.75))+'</td><td class="r mn">'+fmt(Math.round(c.out*.75))+'</td><td><span class="pl pg">Paid</span></td><td style="font-size:11px">15 Feb 2026</td><td><button class="btn">Statement</button></td></tr></tbody></table></div></div></div>'
+    +'</div>';
+  document.querySelectorAll(".vw").forEach(function(v){v.classList.remove("on");});
+  document.getElementById("vw-company-detail").classList.add("on");
+  document.getElementById("pg-title").textContent=c.name;
+  document.getElementById("pg-sub").textContent="CIN: "+c.cin;
+  document.getElementById("bkb").style.display="flex";
+}
+
+function stab(el,tid){
+  el.closest(".cd").querySelectorAll(".tab").forEach(function(t){t.classList.remove("on");});
+  el.closest(".cd").querySelectorAll(".tc2").forEach(function(t){t.classList.remove("on");});
+  el.classList.add("on");
+  document.getElementById(tid).classList.add("on");
+}
+
+initTbls();
+
+var activeCoId = -1;
+
+/* ── INVITE USER ── */
+function openIU(){
+  ["iu-name","iu-email"].forEach(function(id){document.getElementById(id).value="";});
+  document.getElementById("iu-role").value="Admin";
+  document.getElementById("iu-err").style.display="none";
+  document.getElementById("iu-overlay").style.display="flex";
+}
+function closeIU(){document.getElementById("iu-overlay").style.display="none";}
+function submitIU(){
+  var name=document.getElementById("iu-name").value.trim();
+  var email=document.getElementById("iu-email").value.trim();
+  var role=document.getElementById("iu-role").value;
+  var err=document.getElementById("iu-err");
+  if(!name||!email){err.style.display="block";err.textContent="Please fill in name and email.";return;}
+  if(!email.includes("@")){err.style.display="block";err.textContent="Please enter a valid email address.";return;}
+  err.style.display="none";
+  var initials=name.split(" ").map(function(w){return w[0];}).join("").slice(0,2).toUpperCase();
+  var pillCls=role==="Super Admin"?"pb":role==="Admin"?"pgr":"pgr";
+  var tbody=document.querySelector("#vw-users table tbody");
+  var row=document.createElement("tr");
+  row.innerHTML='<td><div style="display:flex;align-items:center;gap:8px"><div class="av" style="width:26px;height:26px;font-size:9px">'+initials+'</div><div class="cn">'+name+'</div></div></td><td style="font-size:11px;color:var(--tx2)">'+email+'</td><td><span class="pl '+pillCls+'">'+role+'</span></td><td><span class="pl pa">Invited</span></td><td style="font-size:11px;color:var(--tx3)">Never</td><td><span class="pl pgr">Pending</span></td><td><button class="btn">Revoke</button></td>';
+  tbody.appendChild(row);
+  als.unshift({ts:"10 Apr, just now",usr:"Teja Sathapathi",role:"Super Admin",act:"User Invited",ent:name+" ("+role+")",ds:"Invitation sent to "+email+". Role: "+role+". 2FA setup required before access is granted.",ov:"",nv:"",st:"Completed",ic:"U",icbg:"#F3F4F6",ictx:"#374151"});
+  renderAL();
+  closeIU();
+}
+document.getElementById("iu-overlay").addEventListener("click",function(e){if(e.target===this)closeIU();});
+
+/* ── REQUEST LIMIT CHANGE ── */
+function openRL(coId){
+  activeCoId=coId;
+  var c=cos[coId];
+  var mx=Math.round(c.fda*(c.rat/100));
+  document.getElementById("rl-company-name").textContent=c.name;
+  document.getElementById("rl-cur-lim").textContent=fmt(c.lim);
+  document.getElementById("rl-max-lim").textContent=fmt(mx);
+  document.getElementById("rl-outstanding").textContent=fmt(c.out);
+  document.getElementById("rl-headroom").textContent=fmt(mx-c.lim);
+  document.getElementById("rl-new-lim").value="";
+  document.getElementById("rl-reason").value="";
+  document.getElementById("rl-notes").value="";
+  document.getElementById("rl-hint").style.display="none";
+  document.getElementById("rl-err").style.display="none";
+  document.getElementById("rl-overlay").style.display="flex";
+}
+function closeRL(){document.getElementById("rl-overlay").style.display="none";}
+function rlLimCheck(){
+  var c=cos[activeCoId];if(!c)return;
+  var mx=Math.round(c.fda*(c.rat/100));
+  var newLim=parseInt(document.getElementById("rl-new-lim").value)||0;
+  var hint=document.getElementById("rl-hint");
+  if(newLim<=0){hint.style.display="none";return;}
+  if(newLim>mx){
+    hint.style.display="block";hint.style.background="#FEE2E2";hint.style.color="#991B1B";hint.style.borderLeftColor="#EF4444";
+    hint.textContent="Limit ₹"+newLim.toLocaleString("en-IN")+" exceeds max approvable limit of ₹"+mx.toLocaleString("en-IN")+". Increase the FD amount first.";
+  } else if(newLim<c.out){
+    hint.style.display="block";hint.style.background="#FEE2E2";hint.style.color="#991B1B";hint.style.borderLeftColor="#EF4444";
+    hint.textContent="New limit cannot be lower than current outstanding of ₹"+c.out.toLocaleString("en-IN")+".";
+  } else {
+    var dir=newLim>c.lim?"increase":"decrease";
+    hint.style.display="block";hint.style.background="#EBF0FD";hint.style.color="#1E40AF";hint.style.borderLeftColor="#1A56DB";
+    hint.textContent="Limit "+dir+" of ₹"+(Math.abs(newLim-c.lim)).toLocaleString("en-IN")+". This will be routed to the Authorisation Queue for Super Admin approval.";
+  }
+}
+function submitRL(){
+  var c=cos[activeCoId];if(!c)return;
+  var mx=Math.round(c.fda*(c.rat/100));
+  var newLim=parseInt(document.getElementById("rl-new-lim").value)||0;
+  var reason=document.getElementById("rl-reason").value;
+  var notes=document.getElementById("rl-notes").value.trim();
+  var err=document.getElementById("rl-err");
+  if(!newLim||newLim<=0){err.style.display="block";err.textContent="Please enter a valid new limit.";return;}
+  if(!reason){err.style.display="block";err.textContent="Please select a reason for the change.";return;}
+  if(newLim>mx){err.style.display="block";err.textContent="New limit exceeds the max approvable limit of ₹"+mx.toLocaleString("en-IN")+". Please increase the FD first.";return;}
+  if(newLim<c.out){err.style.display="block";err.textContent="New limit cannot be lower than the current outstanding balance of ₹"+c.out.toLocaleString("en-IN")+".";return;}
+  err.style.display="none";
+  var dir=newLim>c.lim?"Increase":"Decrease";
+  var desc=dir+" credit limit for "+c.name+". Reason: "+reason+(notes?". Notes: "+notes:"");
+  aqs.push({tp:"Limit Change",co:c.name,by:"Teja Sathapathi",ts:"10 Apr 2026, just now",ds:desc,ov:fmt(c.lim),nv:fmt(newLim)});
+  als.unshift({ts:"10 Apr, just now",usr:"Teja Sathapathi",role:"Super Admin",act:"Limit Change Request",ent:c.name,ds:desc,ov:fmt(c.lim),nv:fmt(newLim),st:"Pending",ic:"L",icbg:"#DBEAFE",ictx:"#1E40AF"});
+  renderAQ();
+  renderAL();
+  var badge=document.getElementById("aq-badge");if(badge)badge.textContent=aqs.length;
+  var cnt=document.getElementById("aq-cnt");if(cnt)cnt.textContent=aqs.length;
+  closeRL();
+}
+document.getElementById("rl-overlay").addEventListener("click",function(e){if(e.target===this)closeRL();});
+
+/* ── REQUEST FD UPDATE ── */
+function openRF(coId){
+  activeCoId=coId;
+  var c=cos[coId];
+  document.getElementById("rf-company-name").textContent=c.name;
+  document.getElementById("rf-cur-ref").textContent=c.fdr;
+  document.getElementById("rf-cur-fda").textContent=fmt(c.fda);
+  document.getElementById("rf-cur-lien").textContent=fmt(c.lien);
+  document.getElementById("rf-cur-mat").textContent=c.fd;
+  document.getElementById("rf-type").value="";
+  document.getElementById("rf-notes").value="";
+  document.getElementById("rf-err").style.display="none";
+  ["rf-renewal-fields","rf-increase-fields","rf-lien-fields","rf-closure-fields"].forEach(function(id){document.getElementById(id).style.display="none";});
+  ["rf-new-mat","rf-new-fda","rf-new-lien-inc","rf-new-lien","rf-sub-fdn","rf-sub-fda"].forEach(function(id){document.getElementById(id).value="";});
+  document.getElementById("rf-overlay").style.display="flex";
+}
+function closeRF(){document.getElementById("rf-overlay").style.display="none";}
+function rfTypeChange(){
+  var t=document.getElementById("rf-type").value;
+  var map={renewal:"rf-renewal-fields",increase:"rf-increase-fields",lien:"rf-lien-fields",closure:"rf-closure-fields"};
+  Object.values(map).forEach(function(id){document.getElementById(id).style.display="none";});
+  if(map[t])document.getElementById(map[t]).style.display="flex";
+}
+function submitRF(){
+  var c=cos[activeCoId];if(!c)return;
+  var t=document.getElementById("rf-type").value;
+  var err=document.getElementById("rf-err");
+  if(!t){err.style.display="block";err.textContent="Please select an update type.";return;}
+  var desc="";var ov="";var nv="";
+  if(t==="renewal"){
+    var nm=document.getElementById("rf-new-mat").value;
+    if(!nm){err.style.display="block";err.textContent="Please select a new maturity date.";return;}
+    desc="FD renewal for "+c.fdr+". New maturity: "+new Date(nm).toLocaleDateString("en-IN",{month:"short",year:"numeric"})+". Maturity instruction: "+document.getElementById("rf-matins").value+".";
+    ov=c.fd;nv=new Date(nm).toLocaleDateString("en-IN",{month:"short",year:"numeric"});
+  } else if(t==="increase"){
+    var nfa=document.getElementById("rf-new-fda").value.trim();
+    if(!nfa||parseInt(nfa)<=c.fda){err.style.display="block";err.textContent="New FD amount must be greater than the current amount of "+fmt(c.fda)+".";return;}
+    desc="FD top-up for "+c.fdr+". New FD amount: "+fmt(parseInt(nfa))+(document.getElementById("rf-new-lien-inc").value?". New lien: "+fmt(parseInt(document.getElementById("rf-new-lien-inc").value)):".")+".";
+    ov=fmt(c.fda);nv=fmt(parseInt(nfa));
+  } else if(t==="lien"){
+    var nl=document.getElementById("rf-new-lien").value.trim();
+    if(!nl||parseInt(nl)<=0||parseInt(nl)>c.fda){err.style.display="block";err.textContent="New lien amount must be a positive number not exceeding FD amount of "+fmt(c.fda)+".";return;}
+    desc="Lien amount update for "+c.fdr+". New lien: "+fmt(parseInt(nl))+".";
+    ov=fmt(c.lien);nv=fmt(parseInt(nl));
+  } else if(t==="closure"){
+    desc="FD closure request for "+c.fdr+"."+(document.getElementById("rf-sub-fdn").value?" Substitute FD: "+document.getElementById("rf-sub-fdn").value+(document.getElementById("rf-sub-fda").value?", amount "+fmt(parseInt(document.getElementById("rf-sub-fda").value)):"")+".":" No substitute FD provided — credit line will be suspended.");
+    ov=c.fdr;nv="Closed";
+  }
+  var notes=document.getElementById("rf-notes").value.trim();
+  if(notes)desc+=" Notes: "+notes;
+  err.style.display="none";
+  aqs.push({tp:"FD Update",co:c.name,by:"Teja Sathapathi",ts:"10 Apr 2026, just now",ds:desc,ov:ov,nv:nv});
+  als.unshift({ts:"10 Apr, just now",usr:"Teja Sathapathi",role:"Super Admin",act:"FD Update Request",ent:c.name,ds:desc,ov:ov,nv:nv,st:"Pending",ic:"F",icbg:"#FEF3C7",ictx:"#92400E"});
+  renderAQ();
+  renderAL();
+  var badge=document.getElementById("aq-badge");if(badge)badge.textContent=aqs.length;
+  var cnt=document.getElementById("aq-cnt");if(cnt)cnt.textContent=aqs.length;
+  closeRF();
+}
+document.getElementById("rf-overlay").addEventListener("click",function(e){if(e.target===this)closeRF();});
+
+
+var ocStep = 1;
+var ocMaxApp = 0;
+var ocProdRat = 80;
+
+function openOC() {
+  ocStep = 1;
+  ocSetStep(1);
+  ["oc-name","oc-cin","oc-gstin","oc-pan","oc-sector","oc-addr","oc-cname","oc-cdesig","oc-cemail","oc-cphone",
+   "oc-fdn","oc-fda","oc-lien","oc-lcode","oc-ldesc","oc-lim"].forEach(function(id){
+    var el=document.getElementById(id);if(el)el.value="";
+  });
+  ["oc-fdopen","oc-fdmat","oc-bdate"].forEach(function(id){var el=document.getElementById(id);if(el)el.value="";});
+  document.getElementById("oc-prod").value="";
+  document.getElementById("oc-fd-preview").style.display="none";
+  document.getElementById("oc-lim-hint").style.display="none";
+  document.getElementById("oc-lim-warn").style.display="none";
+  ["oc-err1","oc-err2","oc-err3"].forEach(function(id){document.getElementById(id).style.display="none";});
+  document.getElementById("oc-overlay").style.display="flex";
+}
+
+function closeOC(){document.getElementById("oc-overlay").style.display="none";}
+
+function ocSetStep(n){
+  ocStep=n;
+  ["oc-step1","oc-step2","oc-step3"].forEach(function(id,i){
+    var el=document.getElementById(id);
+    if(!el)return;
+    el.style.display=(i+1===n)?"flex":"none";
+  });
+  var tabs=["oc-s1-tab","oc-s2-tab","oc-s3-tab"];
+  var labels=["Step 1 of 3 — Company details","Step 2 of 3 — Security deposit","Step 3 of 3 — Credit setup"];
+  tabs.forEach(function(id,i){
+    var el=document.getElementById(id);
+    if(!el)return;
+    el.style.color=i+1===n?"#1A56DB":"#8899AE";
+    el.style.borderBottom=i+1===n?"2px solid #1A56DB":"2px solid transparent";
+    el.style.fontWeight=i+1===n?"600":"500";
+  });
+  document.getElementById("oc-step-label").textContent=labels[n-1];
+  document.getElementById("oc-back-btn").style.display=n>1?"block":"none";
+  document.getElementById("oc-next-btn").textContent=n<3?"Next →":"Onboard company";
+}
+
+function ocBack(){if(ocStep>1)ocSetStep(ocStep-1);}
+
+function ocNext(){
+  var err;
+  if(ocStep===1){
+    err=document.getElementById("oc-err1");
+    var name=document.getElementById("oc-name").value.trim();
+    var cin=document.getElementById("oc-cin").value.trim();
+    var gstin=document.getElementById("oc-gstin").value.trim();
+    var pan=document.getElementById("oc-pan").value.trim();
+    var addr=document.getElementById("oc-addr").value.trim();
+    var cname=document.getElementById("oc-cname").value.trim();
+    var cemail=document.getElementById("oc-cemail").value.trim();
+    if(!name||!cin||!gstin||!pan||!addr||!cname||!cemail){err.style.display="block";err.textContent="Please fill in all required fields.";return;}
+    if(!cemail.includes("@")){err.style.display="block";err.textContent="Please enter a valid email address.";return;}
+    err.style.display="none";
+    ocSetStep(2);
+  } else if(ocStep===2){
+    err=document.getElementById("oc-err2");
+    var fdn=document.getElementById("oc-fdn").value.trim();
+    var fda=document.getElementById("oc-fda").value.trim();
+    var lien=document.getElementById("oc-lien").value.trim();
+    var fdopen=document.getElementById("oc-fdopen").value;
+    var fdmat=document.getElementById("oc-fdmat").value;
+    if(!fdn||!fda||!lien||!fdopen||!fdmat){err.style.display="block";err.textContent="Please fill in all required deposit fields.";return;}
+    if(isNaN(parseInt(fda))||parseInt(fda)<=0){err.style.display="block";err.textContent="FD amount must be a positive number.";return;}
+    if(isNaN(parseInt(lien))||parseInt(lien)<=0||parseInt(lien)>parseInt(fda)){err.style.display="block";err.textContent="Lien amount must be a positive number not exceeding the FD amount.";return;}
+    if(new Date(fdmat)<=new Date(fdopen)){err.style.display="block";err.textContent="FD maturity date must be after the opening date.";return;}
+    err.style.display="none";
+    ocMaxApp=0;
+    ocSetStep(3);
+    ocProdChange();
+  } else if(ocStep===3){
+    err=document.getElementById("oc-err3");
+    var pidx=document.getElementById("oc-prod").value;
+    var lim=document.getElementById("oc-lim").value.trim();
+    var bdate=document.getElementById("oc-bdate").value;
+    if(!pidx&&pidx!=="0"){err.style.display="block";err.textContent="Please select a credit product.";return;}
+    if(!lim||isNaN(parseInt(lim))||parseInt(lim)<=0){err.style.display="block";err.textContent="Please enter a valid sanctioned credit limit.";return;}
+    if(ocMaxApp>0&&parseInt(lim)>ocMaxApp){err.style.display="block";err.textContent="Limit ₹"+parseInt(lim).toLocaleString("en-IN")+" exceeds the maximum approvable limit of ₹"+ocMaxApp.toLocaleString("en-IN")+" based on the FD amount and product ratio.";return;}
+    if(!bdate){err.style.display="block";err.textContent="Please select a billing cycle start date.";return;}
+    err.style.display="none";
+    ocSubmit();
+  }
+}
+
+function ocProdChange(){
+  var pidx=document.getElementById("oc-prod").value;
+  if(pidx===""){document.getElementById("oc-lim-hint").style.display="none";ocMaxApp=0;return;}
+  var ratios=[80,75];
+  ocProdRat=ratios[parseInt(pidx)]||80;
+  var fda=parseInt(document.getElementById("oc-fda").value)||0;
+  ocMaxApp=fda>0?Math.round(fda*(ocProdRat/100)):0;
+  var hint=document.getElementById("oc-lim-hint");
+  if(ocMaxApp>0){
+    hint.style.display="block";
+    hint.innerHTML="Based on FD amount ₹"+fda.toLocaleString("en-IN")+" and this product’s FD ratio of "+ocProdRat+"%, the <strong>maximum approvable limit is ₹"+ocMaxApp.toLocaleString("en-IN")+"</strong>.";
+  } else {
+    hint.style.display="none";
+  }
+  ocLimCheck();
+}
+
+function ocLimCheck(){
+  var lim=parseInt(document.getElementById("oc-lim").value)||0;
+  var warn=document.getElementById("oc-lim-warn");
+  if(ocMaxApp>0&&lim>ocMaxApp){
+    warn.style.display="block";
+    warn.textContent="Warning: entered limit ₹"+lim.toLocaleString("en-IN")+" exceeds max approvable limit of ₹"+ocMaxApp.toLocaleString("en-IN")+".";
+  } else {
+    warn.style.display="none";
+  }
+}
+
+function ocFdPreview(){
+  var fda=parseInt(document.getElementById("oc-fda").value)||0;
+  var prev=document.getElementById("oc-fd-preview");
+  if(fda>0){
+    prev.style.display="block";
+    document.getElementById("oc-prev-fda").textContent="₹"+fda.toLocaleString("en-IN");
+    document.getElementById("oc-prev-rat").textContent=ocProdRat+"% (product config)";
+    var mx=Math.round(fda*(ocProdRat/100));
+    document.getElementById("oc-prev-max").textContent="₹"+mx.toLocaleString("en-IN");
+  } else {
+    prev.style.display="none";
+  }
+}
+
+function ocSubmit(){
+  var name=document.getElementById("oc-name").value.trim();
+  var cin=document.getElementById("oc-cin").value.trim();
+  var prod=document.getElementById("oc-prod");
+  var prodName=prod.options[prod.selectedIndex].text.split("—")[0].trim();
+  var lim=parseInt(document.getElementById("oc-lim").value);
+  var fda=parseInt(document.getElementById("oc-fda").value);
+  var fdn=document.getElementById("oc-fdn").value.trim();
+  var fdmat=document.getElementById("oc-fdmat").value;
+  var fdmatLabel=fdmat?new Date(fdmat).toLocaleDateString("en-IN",{month:"short",year:"numeric"}):"—";
+  var fdDiff=fdmat?Math.round((new Date(fdmat)-new Date())/86400000):999;
+  var cont=document.getElementById("oc-cname").value.trim();
+  var eml=document.getElementById("oc-cemail").value.trim();
+  var addr=document.getElementById("oc-addr").value.trim();
+  var sec=document.getElementById("oc-sector").value.trim()||"—";
+  var gstin=document.getElementById("oc-gstin").value.trim();
+  var pan=document.getElementById("oc-pan").value.trim();
+  var rat=ocProdRat;
+  var newCo={id:cos.length,name:name,cin:cin,prod:prodName,st:"Pending KYC",lim:lim,out:0,fd:fdmatLabel,fdd:fdDiff,emp:0,sec:sec,gstin:gstin,pan:pan,cont:cont,eml:eml,addr:addr,fda:fda,lien:parseInt(document.getElementById("oc-lien").value)||0,fdr:fdn,rat:rat};
+  cos.push(newCo);
+  var r=cos.map(crow).join("");
+  document.getElementById("ptbl").innerHTML=r;
+  document.getElementById("ctbl").innerHTML=r;
+  als.unshift({ts:"10 Apr, just now",usr:"Teja Sathapathi",role:"Super Admin",act:"Company Onboarded",ent:name,ds:"Onboarded "+name+" (CIN: "+cin+") on "+prodName+". Sanctioned limit: ₹"+lim.toLocaleString("en-IN")+". FD: "+fdn+". Primary contact: "+cont+" ("+eml+").",ov:"",nv:"",st:"Completed",ic:"C",icbg:"#EDE9FE",ictx:"#4C1D95"});
+  renderAL();
+  closeOC();
+}
+
+document.getElementById("oc-overlay").addEventListener("click",function(e){if(e.target===this)closeOC();});
+document.getElementById("oc-fda").addEventListener("input",function(){ocFdPreview();});
+
+
+
+var prods = [
+  {name:"Secured Line — A", scheme:"SCLA001", rate:"14", fdr:"80", min:"10000000", max:"150000000", cycle:"Monthly", grace:"30", st:"Active", cos:8},
+  {name:"Secured Line — B", scheme:"SCLB002", rate:"16", fdr:"75", min:"5000000",  max:"80000000",  cycle:"Monthly", grace:"15", st:"Active", cos:4},
+  {name:"Secured Line — C", scheme:"SCLC003", rate:"18", fdr:"70", min:"1000000",  max:"30000000",  cycle:"Monthly", grace:"7",  st:"Draft",  cos:0}
+];
+var editIdx = -1;
+
+function editProduct(idx) {
+  editIdx = idx;
+  var p = prods[idx];
+  document.getElementById("np-modal-title").textContent = "Edit product — " + p.name;
+  document.getElementById("np-submit-btn").textContent = p.st === "Draft" ? "Submit for approval" : "Save changes";
+  document.getElementById("np-name").value = p.name.replace(/\u2014/g, "-");
+  document.getElementById("np-scheme").value = p.scheme;
+  document.getElementById("np-rate").value = p.rate;
+  document.getElementById("np-fdr").value = p.fdr;
+  document.getElementById("np-min").value = p.min;
+  document.getElementById("np-max").value = p.max;
+  document.getElementById("np-cycle").value = p.cycle;
+  document.getElementById("np-grace").value = p.grace;
+  document.getElementById("np-fee").value = "";
+  document.getElementById("np-late").value = "";
+  document.getElementById("np-err").style.display = "none";
+  document.getElementById("np-overlay").style.display = "flex";
+}
+
+function openModal(){
+  editIdx = -1;
+  document.getElementById("np-modal-title").textContent = "Create new credit product";
+  document.getElementById("np-submit-btn").textContent = "Submit for approval";
+  document.getElementById("np-overlay").style.display="flex";
+  document.getElementById("np-err").style.display="none";
+  ["np-name","np-scheme","np-rate","np-fdr","np-min","np-max","np-grace","np-fee","np-late"].forEach(function(id){document.getElementById(id).value="";});
+}
+function closeModal(){document.getElementById("np-overlay").style.display="none";}
+function saveProduct(submit){
+  var name=document.getElementById("np-name").value.trim();
+  var scheme=document.getElementById("np-scheme").value.trim();
+  var rate=document.getElementById("np-rate").value.trim();
+  var fdr=document.getElementById("np-fdr").value.trim();
+  var min=document.getElementById("np-min").value.trim();
+  var max=document.getElementById("np-max").value.trim();
+  var err=document.getElementById("np-err");
+  if(!name||!scheme||!rate||!fdr||!min||!max){err.style.display="block";err.textContent="Please fill in all required fields.";return;}
+  if(isNaN(parseFloat(rate))||parseFloat(rate)<=0){err.style.display="block";err.textContent="Interest rate must be a positive number.";return;}
+  if(isNaN(parseFloat(fdr))||parseFloat(fdr)<=0||parseFloat(fdr)>100){err.style.display="block";err.textContent="FD-to-limit ratio must be between 1 and 100.";return;}
+  if(isNaN(parseInt(min))||isNaN(parseInt(max))||parseInt(min)>=parseInt(max)){err.style.display="block";err.textContent="Max limit must be greater than min limit.";return;}
+  var grace=document.getElementById("np-grace").value.trim()||"30";
+  var cycle=document.getElementById("np-cycle").value;
+  var st=submit?"Pending approval":"Draft";
+  // Add to audit log
+  als.unshift({ts:"10 Apr, just now",usr:"Teja Sathapathi",role:"Super Admin",act:"Product Created",ent:name+" ("+st+")",ds:"New product: "+rate+"% p.a., FD ratio "+fdr+"%, limit ₹"+parseInt(min).toLocaleString("en-IN")+"–₹"+parseInt(max).toLocaleString("en-IN")+", "+cycle+" billing",ov:"",nv:"",st:st,ic:"P",icbg:"#EDE9FE",ictx:"#4C1D95"});
+  // Add to products table
+  var tbody=document.querySelector("#vw-products table tbody");
+  var newRow=document.createElement("tr");
+  if(st==="Draft")newRow.style.opacity="0.6";
+  var schemeCode=scheme.toUpperCase();
+  var ratePct=parseFloat(rate).toFixed(0);
+  var fdPct=parseInt(fdr);
+  var minFmt="₹"+parseInt(min).toLocaleString("en-IN");
+  var maxFmt="₹"+parseInt(max).toLocaleString("en-IN");
+  var stPill=submit?'<span class="pl pa">Pending approval</span>':'<span class="pgr pl">Draft</span>';
+  newRow.innerHTML='<td><div class="cn">'+name+'</div><div class="cs">Scheme: '+schemeCode+'</div></td><td>'+stPill+'</td><td class="r mn">'+ratePct+'% p.a.</td><td class="r"><span style="font-family:var(--mo);font-weight:600">'+fdPct+'%</span></td><td class="r mn">'+minFmt+'</td><td class="r mn">'+maxFmt+'</td><td>'+cycle+'</td><td>'+grace+' days</td><td class="r">0</td><td><button class="btn">Edit</button></td>';
+  tbody.appendChild(newRow);
+  // Add to auth queue if submitted
+  if(submit){
+    aqs.push({tp:"New Product",co:name,by:"Teja Sathapathi",ts:"10 Apr 2026, just now",ds:"New product proposal: "+rate+"% p.a., FD-to-limit ratio "+fdr+"%, min "+minFmt+", max "+maxFmt+", "+cycle+" billing, "+grace+"-day grace.",ov:"",nv:""});
+    renderAQ();
+    var badge=document.getElementById("aq-badge");if(badge)badge.textContent=aqs.length;
+    var cnt=document.getElementById("aq-cnt");if(cnt)cnt.textContent=aqs.length;
+  }
+  renderAL();
+  closeModal();
+}
+document.getElementById("np-overlay").addEventListener("click",function(e){if(e.target===this)closeModal();});
+
+</script>
+
+<!-- NEW PRODUCT MODAL -->
+<div id="np-overlay" style="display:none;position:fixed;inset:0;background:rgba(15,28,46,.45);z-index:100;align-items:center;justify-content:center">
+  <div style="background:#fff;border-radius:12px;width:560px;max-height:90vh;overflow-y:auto;box-shadow:0 8px 32px rgba(15,28,46,.18)">
+    <div style="padding:18px 20px;border-bottom:1px solid #DDE3ED;display:flex;align-items:center;justify-content:space-between">
+      <div style="font-size:15px;font-weight:600;color:#0F1C2E" id="np-modal-title">Create new credit product</div>
+      <button onclick="closeModal()" style="background:none;border:none;cursor:pointer;font-size:18px;color:#8899AE;line-height:1">&times;</button>
+    </div>
+    <div style="padding:20px;display:flex;flex-direction:column;gap:16px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div style="grid-column:1/-1"><label style="font-size:11px;font-weight:600;color:#4A5B72;display:block;margin-bottom:5px">Product name <span style="color:#B91C1C">*</span></label><input id="np-name" type="text" placeholder="e.g. Secured Line D" style="width:100%"></div>
+        <div><label style="font-size:11px;font-weight:600;color:#4A5B72;display:block;margin-bottom:5px">Scheme code <span style="color:#B91C1C">*</span></label><input id="np-scheme" type="text" placeholder="e.g. SCLD004" style="width:100%"></div>
+        <div><label style="font-size:11px;font-weight:600;color:#4A5B72;display:block;margin-bottom:5px">Interest rate (% p.a.) <span style="color:#B91C1C">*</span></label><input id="np-rate" type="text" placeholder="e.g. 15" style="width:100%"></div>
+        <div><label style="font-size:11px;font-weight:600;color:#4A5B72;display:block;margin-bottom:5px">FD-to-limit ratio (%) <span style="color:#B91C1C">*</span></label><input id="np-fdr" type="text" placeholder="e.g. 80" style="width:100%"></div>
+        <div><label style="font-size:11px;font-weight:600;color:#4A5B72;display:block;margin-bottom:5px">Min credit limit (&#x20B9;) <span style="color:#B91C1C">*</span></label><input id="np-min" type="text" placeholder="e.g. 1000000" style="width:100%"></div>
+        <div><label style="font-size:11px;font-weight:600;color:#4A5B72;display:block;margin-bottom:5px">Max credit limit (&#x20B9;) <span style="color:#B91C1C">*</span></label><input id="np-max" type="text" placeholder="e.g. 150000000" style="width:100%"></div>
+        <div><label style="font-size:11px;font-weight:600;color:#4A5B72;display:block;margin-bottom:5px">Billing cycle</label><select id="np-cycle" style="width:100%"><option>Monthly</option><option>Quarterly</option></select></div>
+        <div><label style="font-size:11px;font-weight:600;color:#4A5B72;display:block;margin-bottom:5px">Grace period (days)</label><input id="np-grace" type="text" placeholder="e.g. 30" style="width:100%"></div>
+        <div><label style="font-size:11px;font-weight:600;color:#4A5B72;display:block;margin-bottom:5px">Processing fee (&#x20B9;)</label><input id="np-fee" type="text" placeholder="e.g. 0" style="width:100%"></div>
+        <div><label style="font-size:11px;font-weight:600;color:#4A5B72;display:block;margin-bottom:5px">Late payment fee (&#x20B9;)</label><input id="np-late" type="text" placeholder="e.g. 500" style="width:100%"></div>
+      </div>
+      <div id="np-err" style="display:none;background:#FEE2E2;color:#991B1B;font-size:12px;padding:9px 12px;border-radius:6px;border-left:3px solid #EF4444"></div>
+    </div>
+    <div style="padding:14px 20px;border-top:1px solid #DDE3ED;display:flex;justify-content:flex-end;gap:8px">
+      <button onclick="closeModal()" style="font-size:11px;padding:7px 16px;border:1px solid #DDE3ED;border-radius:6px;background:#fff;color:#4A5B72;cursor:pointer;font-family:'IBM Plex Sans',sans-serif">Cancel</button>
+      <button onclick="saveProduct(false)" style="font-size:11px;padding:7px 16px;border:1px solid #DDE3ED;border-radius:6px;background:#F5F7FA;color:#0F1C2E;cursor:pointer;font-family:'IBM Plex Sans',sans-serif">Save as draft</button>
+      <button onclick="saveProduct(true)" id="np-submit-btn" style="font-size:11px;padding:7px 16px;border:1px solid #1A56DB;border-radius:6px;background:#1A56DB;color:#fff;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;font-weight:500">Submit for approval</button>
+    </div>
+  </div>
+</div>
+
+<!-- ONBOARD COMPANY MODAL -->
+<div id="oc-overlay" style="display:none;position:fixed;inset:0;background:rgba(15,28,46,.45);z-index:100;align-items:flex-start;justify-content:center;overflow-y:auto;padding:32px 0">
+  <div style="background:#fff;border-radius:12px;width:640px;box-shadow:0 8px 32px rgba(15,28,46,.18);margin:auto">
+    <div style="padding:18px 20px;border-bottom:1px solid #DDE3ED;display:flex;align-items:center;justify-content:space-between">
+      <div>
+        <div style="font-size:15px;font-weight:600;color:#0F1C2E">Onboard corporate company</div>
+        <div style="font-size:11px;color:#8899AE;margin-top:2px" id="oc-step-label">Step 1 of 3 &mdash; Company details</div>
+      </div>
+      <button onclick="closeOC()" style="background:none;border:none;cursor:pointer;font-size:18px;color:#8899AE;line-height:1">&times;</button>
+    </div>
+
+    <!-- Step indicator -->
+    <div style="display:flex;gap:0;border-bottom:1px solid #DDE3ED">
+      <div id="oc-s1-tab" style="flex:1;padding:10px 0;text-align:center;font-size:11px;font-weight:600;color:#1A56DB;border-bottom:2px solid #1A56DB">Company details</div>
+      <div id="oc-s2-tab" style="flex:1;padding:10px 0;text-align:center;font-size:11px;font-weight:500;color:#8899AE;border-bottom:2px solid transparent">Security deposit</div>
+      <div id="oc-s3-tab" style="flex:1;padding:10px 0;text-align:center;font-size:11px;font-weight:500;color:#8899AE;border-bottom:2px solid transparent">Credit setup</div>
+    </div>
+
+    <!-- STEP 1: Company details -->
+    <div id="oc-step1" style="padding:20px;display:flex;flex-direction:column;gap:14px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div style="grid-column:1/-1"><label style="font-size:11px;font-weight:600;color:#4A5B72;display:block;margin-bottom:5px">Legal / registered company name <span style="color:#B91C1C">*</span></label><input id="oc-name" type="text" placeholder="e.g. Infosys BPM Ltd" style="width:100%"></div>
+        <div><label style="font-size:11px;font-weight:600;color:#4A5B72;display:block;margin-bottom:5px">CIN <span style="color:#B91C1C">*</span></label><input id="oc-cin" type="text" placeholder="e.g. U72200KA2002PTC031009" style="width:100%"></div>
+        <div><label style="font-size:11px;font-weight:600;color:#4A5B72;display:block;margin-bottom:5px">GSTIN <span style="color:#B91C1C">*</span></label><input id="oc-gstin" type="text" placeholder="e.g. 29AABCI1234A1Z5" style="width:100%"></div>
+        <div><label style="font-size:11px;font-weight:600;color:#4A5B72;display:block;margin-bottom:5px">Company PAN <span style="color:#B91C1C">*</span></label><input id="oc-pan" type="text" placeholder="e.g. AABCI1234A" style="width:100%"></div>
+        <div><label style="font-size:11px;font-weight:600;color:#4A5B72;display:block;margin-bottom:5px">Industry / sector</label><input id="oc-sector" type="text" placeholder="e.g. IT Services" style="width:100%"></div>
+        <div style="grid-column:1/-1"><label style="font-size:11px;font-weight:600;color:#4A5B72;display:block;margin-bottom:5px">Registered address <span style="color:#B91C1C">*</span></label><input id="oc-addr" type="text" placeholder="e.g. Electronics City, Bengaluru, KA 560100" style="width:100%"></div>
+      </div>
+      <div style="background:#F5F7FA;border-radius:8px;padding:14px;border-left:3px solid #1A56DB">
+        <div style="font-size:11px;font-weight:600;color:#1A56DB;margin-bottom:10px">Primary contact (will become Company Admin)</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div><label style="font-size:11px;font-weight:600;color:#4A5B72;display:block;margin-bottom:4px">Full name <span style="color:#B91C1C">*</span></label><input id="oc-cname" type="text" placeholder="e.g. Ananya Krishnan" style="width:100%"></div>
+          <div><label style="font-size:11px;font-weight:600;color:#4A5B72;display:block;margin-bottom:4px">Designation</label><input id="oc-cdesig" type="text" placeholder="e.g. CFO" style="width:100%"></div>
+          <div><label style="font-size:11px;font-weight:600;color:#4A5B72;display:block;margin-bottom:4px">Email <span style="color:#B91C1C">*</span></label><input id="oc-cemail" type="text" placeholder="e.g. ananya@company.com" style="width:100%"></div>
+          <div><label style="font-size:11px;font-weight:600;color:#4A5B72;display:block;margin-bottom:4px">Mobile</label><input id="oc-cphone" type="text" placeholder="e.g. 9880123456" style="width:100%"></div>
+        </div>
+      </div>
+      <div id="oc-err1" style="display:none;background:#FEE2E2;color:#991B1B;font-size:12px;padding:9px 12px;border-radius:6px;border-left:3px solid #EF4444"></div>
+    </div>
+
+    <!-- STEP 2: Security deposit -->
+    <div id="oc-step2" style="display:none;padding:20px;display:none;flex-direction:column;gap:14px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div><label style="font-size:11px;font-weight:600;color:#4A5B72;display:block;margin-bottom:5px">FD account number <span style="color:#B91C1C">*</span></label><input id="oc-fdn" type="text" placeholder="e.g. FD-AXIS-00999" style="width:100%"></div>
+        <div><label style="font-size:11px;font-weight:600;color:#4A5B72;display:block;margin-bottom:5px">FD amount (&#x20B9;) <span style="color:#B91C1C">*</span></label><input id="oc-fda" type="text" placeholder="e.g. 100000000" style="width:100%"></div>
+        <div><label style="font-size:11px;font-weight:600;color:#4A5B72;display:block;margin-bottom:5px">Lien amount (&#x20B9;) <span style="color:#B91C1C">*</span></label><input id="oc-lien" type="text" placeholder="Must be ≤ FD amount" style="width:100%"></div>
+        <div><label style="font-size:11px;font-weight:600;color:#4A5B72;display:block;margin-bottom:5px">FD opening date <span style="color:#B91C1C">*</span></label><input id="oc-fdopen" type="date" style="width:100%"></div>
+        <div><label style="font-size:11px;font-weight:600;color:#4A5B72;display:block;margin-bottom:5px">FD maturity date <span style="color:#B91C1C">*</span></label><input id="oc-fdmat" type="date" style="width:100%"></div>
+        <div><label style="font-size:11px;font-weight:600;color:#4A5B72;display:block;margin-bottom:5px">Maturity instruction</label><select id="oc-matins" style="width:100%"><option>Auto-renew</option><option>Liquidate on maturity</option><option>Transfer to savings</option></select></div>
+        <div><label style="font-size:11px;font-weight:600;color:#4A5B72;display:block;margin-bottom:5px">Lien code</label><input id="oc-lcode" type="text" placeholder="e.g. LN-01" style="width:100%"></div>
+        <div><label style="font-size:11px;font-weight:600;color:#4A5B72;display:block;margin-bottom:5px">Lien description</label><input id="oc-ldesc" type="text" placeholder="e.g. Credit line collateral" style="width:100%"></div>
+      </div>
+      <div id="oc-fd-preview" style="display:none;background:#F0FDF4;border-radius:8px;padding:12px 14px;border:1px solid #A7F3D0">
+        <div style="font-size:11px;font-weight:600;color:#065F46;margin-bottom:6px">FD coverage preview</div>
+        <div style="display:flex;gap:24px;font-size:12px">
+          <div><div style="color:#4A5B72;font-size:10px">FD amount</div><div style="font-weight:600;font-family:'IBM Plex Mono',monospace" id="oc-prev-fda"></div></div>
+          <div><div style="color:#4A5B72;font-size:10px">FD-to-limit ratio</div><div style="font-weight:600;font-family:'IBM Plex Mono',monospace" id="oc-prev-rat"></div></div>
+          <div><div style="color:#4A5B72;font-size:10px">Max approvable limit</div><div style="font-weight:600;font-family:'IBM Plex Mono',monospace;color:#1A56DB" id="oc-prev-max"></div></div>
+        </div>
+      </div>
+      <div id="oc-err2" style="display:none;background:#FEE2E2;color:#991B1B;font-size:12px;padding:9px 12px;border-radius:6px;border-left:3px solid #EF4444"></div>
+    </div>
+
+    <!-- STEP 3: Credit setup -->
+    <div id="oc-step3" style="display:none;padding:20px;flex-direction:column;gap:14px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div style="grid-column:1/-1"><label style="font-size:11px;font-weight:600;color:#4A5B72;display:block;margin-bottom:5px">Credit product <span style="color:#B91C1C">*</span></label><select id="oc-prod" style="width:100%" onchange="ocProdChange()"><option value="">-- Select product --</option><option value="0">Secured Line A &mdash; 14% p.a., FD ratio 80%</option><option value="1">Secured Line B &mdash; 16% p.a., FD ratio 75%</option></select></div>
+        <div><label style="font-size:11px;font-weight:600;color:#4A5B72;display:block;margin-bottom:5px">Sanctioned credit limit (&#x20B9;) <span style="color:#B91C1C">*</span></label><input id="oc-lim" type="text" placeholder="Must not exceed max approvable" style="width:100%" oninput="ocLimCheck()"></div>
+        <div><label style="font-size:11px;font-weight:600;color:#4A5B72;display:block;margin-bottom:5px">Billing cycle start date <span style="color:#B91C1C">*</span></label><input id="oc-bdate" type="date" style="width:100%"></div>
+      </div>
+      <div id="oc-lim-hint" style="display:none;font-size:11px;color:#4A5B72;background:#EBF0FD;padding:9px 12px;border-radius:6px;border-left:3px solid #1A56DB"></div>
+      <div id="oc-lim-warn" style="display:none;font-size:11px;color:#991B1B;background:#FEE2E2;padding:9px 12px;border-radius:6px;border-left:3px solid #EF4444"></div>
+      <div id="oc-err3" style="display:none;background:#FEE2E2;color:#991B1B;font-size:12px;padding:9px 12px;border-radius:6px;border-left:3px solid #EF4444"></div>
+    </div>
+
+    <!-- Footer buttons -->
+    <div style="padding:14px 20px;border-top:1px solid #DDE3ED;display:flex;justify-content:space-between;align-items:center">
+      <button id="oc-back-btn" onclick="ocBack()" style="display:none;font-size:11px;padding:7px 16px;border:1px solid #DDE3ED;border-radius:6px;background:#fff;color:#4A5B72;cursor:pointer;font-family:'IBM Plex Sans',sans-serif">&larr; Back</button>
+      <div style="margin-left:auto;display:flex;gap:8px">
+        <button onclick="closeOC()" style="font-size:11px;padding:7px 16px;border:1px solid #DDE3ED;border-radius:6px;background:#fff;color:#4A5B72;cursor:pointer;font-family:'IBM Plex Sans',sans-serif">Cancel</button>
+        <button id="oc-next-btn" onclick="ocNext()" style="font-size:11px;padding:7px 16px;border:1px solid #1A56DB;border-radius:6px;background:#1A56DB;color:#fff;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;font-weight:500">Next &rarr;</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- INVITE USER MODAL -->
+<div id="iu-overlay" style="display:none;position:fixed;inset:0;background:rgba(15,28,46,.45);z-index:100;align-items:center;justify-content:center">
+  <div style="background:#fff;border-radius:12px;width:460px;box-shadow:0 8px 32px rgba(15,28,46,.18)">
+    <div style="padding:18px 20px;border-bottom:1px solid #DDE3ED;display:flex;align-items:center;justify-content:space-between">
+      <div style="font-size:15px;font-weight:600;color:#0F1C2E">Invite bank admin user</div>
+      <button onclick="closeIU()" style="background:none;border:none;cursor:pointer;font-size:18px;color:#8899AE">&times;</button>
+    </div>
+    <div style="padding:20px;display:flex;flex-direction:column;gap:13px">
+      <div><label style="font-size:11px;font-weight:600;color:#4A5B72;display:block;margin-bottom:5px">Full name <span style="color:#B91C1C">*</span></label><input id="iu-name" type="text" placeholder="e.g. Arjun Mehta" style="width:100%"></div>
+      <div><label style="font-size:11px;font-weight:600;color:#4A5B72;display:block;margin-bottom:5px">Email address <span style="color:#B91C1C">*</span></label><input id="iu-email" type="text" placeholder="e.g. arjun.m@axisbank.com" style="width:100%"></div>
+      <div><label style="font-size:11px;font-weight:600;color:#4A5B72;display:block;margin-bottom:5px">Role <span style="color:#B91C1C">*</span></label>
+        <select id="iu-role" style="width:100%">
+          <option value="Admin">Admin &mdash; can create and edit; changes go to Authorisation Queue</option>
+          <option value="Viewer">Viewer &mdash; read-only access across all panels</option>
+          <option value="Super Admin">Super Admin &mdash; full access including approvals</option>
+        </select>
+      </div>
+      <div style="background:#F5F7FA;border-radius:8px;padding:11px 13px;font-size:11px;color:#4A5B72;border-left:3px solid #1A56DB">
+        An invitation email will be sent to the user with a link to set their password and enable 2FA. Access is granted only after 2FA setup is complete.
+      </div>
+      <div id="iu-err" style="display:none;background:#FEE2E2;color:#991B1B;font-size:12px;padding:9px 12px;border-radius:6px;border-left:3px solid #EF4444"></div>
+    </div>
+    <div style="padding:14px 20px;border-top:1px solid #DDE3ED;display:flex;justify-content:flex-end;gap:8px">
+      <button onclick="closeIU()" style="font-size:11px;padding:7px 16px;border:1px solid #DDE3ED;border-radius:6px;background:#fff;color:#4A5B72;cursor:pointer;font-family:'IBM Plex Sans',sans-serif">Cancel</button>
+      <button onclick="submitIU()" style="font-size:11px;padding:7px 16px;border:1px solid #1A56DB;border-radius:6px;background:#1A56DB;color:#fff;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;font-weight:500">Send invitation</button>
+    </div>
+  </div>
+</div>
+
+<!-- REQUEST LIMIT CHANGE MODAL -->
+<div id="rl-overlay" style="display:none;position:fixed;inset:0;background:rgba(15,28,46,.45);z-index:100;align-items:center;justify-content:center">
+  <div style="background:#fff;border-radius:12px;width:480px;box-shadow:0 8px 32px rgba(15,28,46,.18)">
+    <div style="padding:18px 20px;border-bottom:1px solid #DDE3ED;display:flex;align-items:center;justify-content:space-between">
+      <div>
+        <div style="font-size:15px;font-weight:600;color:#0F1C2E">Request credit limit change</div>
+        <div style="font-size:11px;color:#8899AE;margin-top:2px" id="rl-company-name"></div>
+      </div>
+      <button onclick="closeRL()" style="background:none;border:none;cursor:pointer;font-size:18px;color:#8899AE">&times;</button>
+    </div>
+    <div style="padding:20px;display:flex;flex-direction:column;gap:13px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;background:#F5F7FA;border-radius:8px;padding:12px">
+        <div><div style="font-size:10px;color:#8899AE;margin-bottom:2px">Current sanctioned limit</div><div style="font-size:14px;font-weight:600;font-family:'IBM Plex Mono',monospace" id="rl-cur-lim"></div></div>
+        <div><div style="font-size:10px;color:#8899AE;margin-bottom:2px">Max approvable limit</div><div style="font-size:14px;font-weight:600;font-family:'IBM Plex Mono',monospace;color:#1A56DB" id="rl-max-lim"></div></div>
+        <div><div style="font-size:10px;color:#8899AE;margin-bottom:2px">Current outstanding</div><div style="font-size:14px;font-weight:600;font-family:'IBM Plex Mono',monospace" id="rl-outstanding"></div></div>
+        <div><div style="font-size:10px;color:#8899AE;margin-bottom:2px">Headroom available</div><div style="font-size:14px;font-weight:600;font-family:'IBM Plex Mono',monospace" id="rl-headroom"></div></div>
+      </div>
+      <div><label style="font-size:11px;font-weight:600;color:#4A5B72;display:block;margin-bottom:5px">New credit limit (&#x20B9;) <span style="color:#B91C1C">*</span></label><input id="rl-new-lim" type="text" placeholder="Enter new limit amount" style="width:100%" oninput="rlLimCheck()"></div>
+      <div><label style="font-size:11px;font-weight:600;color:#4A5B72;display:block;margin-bottom:5px">Reason for change <span style="color:#B91C1C">*</span></label><select id="rl-reason" style="width:100%"><option value="">-- Select reason --</option><option>Employee headcount increase</option><option>Business expansion</option><option>Seasonal spending uplift</option><option>Limit reduction &mdash; risk management</option><option>Limit reduction &mdash; company request</option><option>Other</option></select></div>
+      <div><label style="font-size:11px;font-weight:600;color:#4A5B72;display:block;margin-bottom:5px">Additional notes</label><input id="rl-notes" type="text" placeholder="Optional justification" style="width:100%"></div>
+      <div id="rl-hint" style="display:none;font-size:11px;padding:9px 12px;border-radius:6px;border-left:3px solid #EF4444"></div>
+      <div id="rl-err" style="display:none;background:#FEE2E2;color:#991B1B;font-size:12px;padding:9px 12px;border-radius:6px;border-left:3px solid #EF4444"></div>
+    </div>
+    <div style="padding:14px 20px;border-top:1px solid #DDE3ED;display:flex;justify-content:flex-end;gap:8px">
+      <button onclick="closeRL()" style="font-size:11px;padding:7px 16px;border:1px solid #DDE3ED;border-radius:6px;background:#fff;color:#4A5B72;cursor:pointer;font-family:'IBM Plex Sans',sans-serif">Cancel</button>
+      <button onclick="submitRL()" style="font-size:11px;padding:7px 16px;border:1px solid #1A56DB;border-radius:6px;background:#1A56DB;color:#fff;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;font-weight:500">Submit for approval</button>
+    </div>
+  </div>
+</div>
+
+<!-- REQUEST FD UPDATE MODAL -->
+<div id="rf-overlay" style="display:none;position:fixed;inset:0;background:rgba(15,28,46,.45);z-index:100;align-items:center;justify-content:center">
+  <div style="background:#fff;border-radius:12px;width:480px;box-shadow:0 8px 32px rgba(15,28,46,.18)">
+    <div style="padding:18px 20px;border-bottom:1px solid #DDE3ED;display:flex;align-items:center;justify-content:space-between">
+      <div>
+        <div style="font-size:15px;font-weight:600;color:#0F1C2E">Request FD update</div>
+        <div style="font-size:11px;color:#8899AE;margin-top:2px" id="rf-company-name"></div>
+      </div>
+      <button onclick="closeRF()" style="background:none;border:none;cursor:pointer;font-size:18px;color:#8899AE">&times;</button>
+    </div>
+    <div style="padding:20px;display:flex;flex-direction:column;gap:13px">
+      <div style="background:#F5F7FA;border-radius:8px;padding:12px;font-size:12px">
+        <div style="font-size:10px;color:#8899AE;margin-bottom:6px;font-weight:600;text-transform:uppercase;letter-spacing:.05em">Current FD details</div>
+        <div style="display:flex;gap:20px">
+          <div><div style="color:#8899AE;font-size:10px">FD ref</div><div style="font-family:'IBM Plex Mono',monospace;font-weight:500" id="rf-cur-ref"></div></div>
+          <div><div style="color:#8899AE;font-size:10px">FD amount</div><div style="font-family:'IBM Plex Mono',monospace;font-weight:500" id="rf-cur-fda"></div></div>
+          <div><div style="color:#8899AE;font-size:10px">Lien amount</div><div style="font-family:'IBM Plex Mono',monospace;font-weight:500" id="rf-cur-lien"></div></div>
+          <div><div style="color:#8899AE;font-size:10px">Maturity</div><div style="font-weight:500" id="rf-cur-mat"></div></div>
+        </div>
+      </div>
+      <div><label style="font-size:11px;font-weight:600;color:#4A5B72;display:block;margin-bottom:5px">Update type <span style="color:#B91C1C">*</span></label>
+        <select id="rf-type" style="width:100%" onchange="rfTypeChange()">
+          <option value="">-- Select update type --</option>
+          <option value="renewal">FD renewal &mdash; extend maturity date</option>
+          <option value="increase">FD top-up &mdash; increase FD amount</option>
+          <option value="lien">Lien amount update</option>
+          <option value="closure">FD closure &mdash; substitute collateral</option>
+        </select>
+      </div>
+      <div id="rf-renewal-fields" style="display:none;flex-direction:column;gap:10px">
+        <div><label style="font-size:11px;font-weight:600;color:#4A5B72;display:block;margin-bottom:5px">New maturity date <span style="color:#B91C1C">*</span></label><input id="rf-new-mat" type="date" style="width:100%"></div>
+        <div><label style="font-size:11px;font-weight:600;color:#4A5B72;display:block;margin-bottom:5px">Maturity instruction</label><select id="rf-matins" style="width:100%"><option>Auto-renew</option><option>Liquidate on maturity</option><option>Transfer to savings</option></select></div>
+      </div>
+      <div id="rf-increase-fields" style="display:none;flex-direction:column;gap:10px">
+        <div><label style="font-size:11px;font-weight:600;color:#4A5B72;display:block;margin-bottom:5px">New FD amount (&#x20B9;) <span style="color:#B91C1C">*</span></label><input id="rf-new-fda" type="text" placeholder="Must be greater than current amount" style="width:100%"></div>
+        <div><label style="font-size:11px;font-weight:600;color:#4A5B72;display:block;margin-bottom:5px">New lien amount (&#x20B9;)</label><input id="rf-new-lien-inc" type="text" placeholder="Leave blank to keep current" style="width:100%"></div>
+      </div>
+      <div id="rf-lien-fields" style="display:none;flex-direction:column;gap:10px">
+        <div><label style="font-size:11px;font-weight:600;color:#4A5B72;display:block;margin-bottom:5px">New lien amount (&#x20B9;) <span style="color:#B91C1C">*</span></label><input id="rf-new-lien" type="text" placeholder="Must not exceed FD amount" style="width:100%"></div>
+      </div>
+      <div id="rf-closure-fields" style="display:none;flex-direction:column;gap:10px">
+        <div style="background:#FEF3C7;border-radius:6px;padding:10px 12px;font-size:11px;color:#92400E;border-left:3px solid #F59E0B">Closing an FD will trigger credit line suspension unless a substitute FD is registered simultaneously. Please confirm substitute FD details below.</div>
+        <div><label style="font-size:11px;font-weight:600;color:#4A5B72;display:block;margin-bottom:5px">Substitute FD account number</label><input id="rf-sub-fdn" type="text" placeholder="New FD reference" style="width:100%"></div>
+        <div><label style="font-size:11px;font-weight:600;color:#4A5B72;display:block;margin-bottom:5px">Substitute FD amount (&#x20B9;)</label><input id="rf-sub-fda" type="text" placeholder="Must be equal or greater value" style="width:100%"></div>
+      </div>
+      <div><label style="font-size:11px;font-weight:600;color:#4A5B72;display:block;margin-bottom:5px">Notes / supporting details</label><input id="rf-notes" type="text" placeholder="e.g. FD certificate number, bank branch" style="width:100%"></div>
+      <div id="rf-err" style="display:none;background:#FEE2E2;color:#991B1B;font-size:12px;padding:9px 12px;border-radius:6px;border-left:3px solid #EF4444"></div>
+    </div>
+    <div style="padding:14px 20px;border-top:1px solid #DDE3ED;display:flex;justify-content:flex-end;gap:8px">
+      <button onclick="closeRF()" style="font-size:11px;padding:7px 16px;border:1px solid #DDE3ED;border-radius:6px;background:#fff;color:#4A5B72;cursor:pointer;font-family:'IBM Plex Sans',sans-serif">Cancel</button>
+      <button onclick="submitRF()" style="font-size:11px;padding:7px 16px;border:1px solid #1A56DB;border-radius:6px;background:#1A56DB;color:#fff;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;font-weight:500">Submit for approval</button>
+    </div>
+  </div>
+</div>
+</body>
+</html>
