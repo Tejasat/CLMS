@@ -1,0 +1,1413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nova Bank — Credit Line on UPI · Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f3f2ee;--surface:#fff;--s2:#f7f6f2;--border:#e4e2da;--border2:#cac8be;
+  --text:#17170f;--t2:#58574e;--t3:#9a9890;
+  --teal:#0a6450;--tl:#daf2ea;--tm:#3ab882;
+  --blue:#154f96;--bl:#e0edf8;
+  --amber:#7a4808;--al:#faebd0;--am:#e09628;
+  --red:#902020;--rl:#fbe8e8;--rm:#d43c3c;
+  --green:#2e6010;--gl:#e6f2da;
+  --gray-l:#eeedea;--gray:#606058;
+  --purple:#42368c;--pl:#edeafa;
+  --pink:#8c2058;--pkl:#fae8f2;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5}
+.shell{display:grid;grid-template-columns:224px 1fr;height:100vh;overflow:hidden}
+/* SIDEBAR */
+.sidebar{background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto}
+.logo{padding:18px 16px 14px;border-bottom:1px solid var(--border)}
+.logo-eye{font-size:9.5px;font-weight:500;letter-spacing:.14em;color:var(--t3);text-transform:uppercase}
+.logo-name{font-size:16px;font-weight:500;margin-top:3px}
+.logo-chip{display:inline-flex;align-items:center;gap:5px;margin-top:6px;background:var(--pl);color:var(--purple);font-size:10px;font-weight:500;padding:2px 8px;border-radius:9px}
+nav{padding:10px 8px;flex:1}
+.ns{font-size:9px;font-weight:500;letter-spacing:.12em;color:var(--t3);padding:14px 8px 5px;text-transform:uppercase}
+.ni{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:8px;cursor:pointer;color:var(--t2);font-size:13px;margin-bottom:1px;transition:background .12s,color .12s;user-select:none}
+.ni:hover,.ni.active{background:var(--s2);color:var(--text)}
+.ni.active{font-weight:500}
+.nicon{width:15px;height:15px;flex-shrink:0;opacity:.6}
+.nbadge{margin-left:auto;font-size:10px;border-radius:9px;padding:1px 6px;font-weight:500;line-height:1.5;color:#fff}
+.nb-r{background:var(--rm)}.nb-a{background:var(--am)}
+.sf{padding:10px 8px;border-top:1px solid var(--border)}
+/* TOPBAR */
+.main{display:flex;flex-direction:column;overflow:hidden}
+.topbar{display:flex;align-items:center;gap:12px;padding:12px 24px;border-bottom:1px solid var(--border);background:var(--surface);flex-shrink:0}
+.pt{font-size:15px;font-weight:500}.pmeta{font-size:11px;color:var(--t3)}.sp{flex:1}
+.sw{position:relative;width:230px}
+.sw input{width:100%;padding:7px 12px 7px 30px;border:1px solid var(--border);border-radius:8px;font-size:13px;background:var(--s2);color:var(--text);font-family:'DM Sans',sans-serif;outline:none}
+.sw input:focus{border-color:var(--border2)}
+.sico{position:absolute;left:9px;top:50%;transform:translateY(-50%);color:var(--t3);font-size:13px;pointer-events:none}
+/* BUTTONS */
+.btn{padding:7px 14px;border:1px solid var(--border2);border-radius:8px;font-size:13px;cursor:pointer;background:transparent;color:var(--text);font-family:'DM Sans',sans-serif;transition:background .12s}
+.btn:hover{background:var(--s2)}
+.btn-teal{background:var(--teal);color:#fff;border-color:var(--teal)}.btn-teal:hover{background:#085040}
+.btn-purple{background:var(--purple);color:#fff;border-color:var(--purple)}.btn-purple:hover{background:#32287a}
+.btn-red{background:var(--rm);color:#fff;border-color:var(--rm)}
+.btn-sm{padding:4px 10px;font-size:12px}
+/* CONTENT */
+.content{padding:20px 24px;overflow-y:auto;flex:1}
+.page{display:none}.page.active{display:block}
+/* METRICS */
+.mg{display:grid;gap:10px;margin-bottom:16px}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.metric{background:var(--s2);border-radius:10px;padding:14px 16px;border:1px solid var(--border)}
+.mlb{font-size:11px;color:var(--t3);margin-bottom:4px;letter-spacing:.02em}
+.mvl{font-size:22px;font-weight:500;letter-spacing:-.01em}
+.msu{font-size:11px;color:var(--t3);margin-top:3px}
+.up{color:#2a8050}.dn{color:var(--rm)}.neu{color:var(--t3)}
+/* CARDS */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 20px;margin-bottom:14px}
+.ct{font-size:12.5px;font-weight:500;margin-bottom:13px;letter-spacing:.01em}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+/* TABLES */
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{font-size:10.5px;font-weight:500;color:var(--t3);text-align:left;padding:8px 10px;border-bottom:1px solid var(--border);letter-spacing:.03em;white-space:nowrap;text-transform:uppercase}
+td{padding:10px 10px;border-bottom:1px solid var(--border);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--s2)}
+/* BADGES */
+.badge{display:inline-flex;align-items:center;font-size:11px;padding:3px 8px;border-radius:9px;font-weight:500;white-space:nowrap}
+.b-green{background:var(--gl);color:var(--green)}
+.b-red{background:var(--rl);color:var(--red)}
+.b-amber{background:var(--al);color:var(--amber)}
+.b-gray{background:var(--gray-l);color:var(--gray)}
+.b-blue{background:var(--bl);color:var(--blue)}
+.b-teal{background:var(--tl);color:var(--teal)}
+.b-purple{background:var(--pl);color:var(--purple)}
+.b-pink{background:var(--pkl);color:var(--pink)}
+/* DPD badge */
+.dpd-0{background:var(--gl);color:var(--green)}
+.dpd-low{background:var(--al);color:var(--amber)}
+.dpd-mid{background:#fde4d0;color:#8a3a10}
+.dpd-high{background:var(--rl);color:var(--red)}
+.dpd-npa{background:#2c0a0a;color:#ffb3b3}
+/* Avatar */
+.av{width:30px;height:30px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;flex-shrink:0}
+.cr{display:flex;align-items:center;gap:9px}
+/* Filter pills */
+.fr{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.fb{padding:5px 12px;border:1px solid var(--border);border-radius:20px;font-size:12px;cursor:pointer;background:transparent;color:var(--t2);font-family:'DM Sans',sans-serif;transition:all .12s}
+.fb:hover{background:var(--s2);color:var(--text)}
+.fb.active{background:var(--s2);color:var(--text);border-color:var(--border2);font-weight:500}
+/* Util bar */
+.uw{display:flex;align-items:center;gap:8px}
+.ut{flex:1;height:5px;background:var(--border);border-radius:3px;overflow:hidden;min-width:56px}
+.uf{height:100%;border-radius:3px}
+.uv{font-size:12px;color:var(--t2);min-width:34px;text-align:right}
+/* Progress bar */
+.pr{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.pl2{font-size:12px;color:var(--t2);width:120px;flex-shrink:0}
+.pt2{flex:1;height:5px;background:var(--border);border-radius:3px;overflow:hidden}
+.pf{height:100%;border-radius:3px}
+/* Mini bars */
+.mb{display:flex;align-items:flex-end;gap:4px;height:48px;margin:10px 0 5px}
+.mbb{border-radius:3px 3px 0 0;background:var(--tm);flex:1;opacity:.85}
+.bl{display:flex;justify-content:space-between;font-size:10px;color:var(--t3)}
+/* Limit meter */
+.lm{margin:12px 0}
+.lbar{height:9px;background:var(--border);border-radius:5px;overflow:hidden;margin:5px 0}
+.lused{height:100%;border-radius:5px}
+.llabels{display:flex;justify-content:space-between;font-size:11px;color:var(--t3)}
+/* Alert items */
+.ai{display:flex;align-items:flex-start;gap:11px;padding:12px 0;border-bottom:1px solid var(--border)}
+.ai:last-child{border-bottom:none}
+.ad{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.dot-r{background:var(--rm)}.dot-a{background:var(--am)}.dot-g{background:var(--tm)}
+/* Mono */
+.mono{font-family:'DM Mono',monospace;font-size:12px}
+.camt{color:#2a8050;font-weight:500}.damt{color:var(--text)}
+/* EMI pill */
+.emi-pill{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:500;padding:2px 7px;border-radius:9px;background:var(--pl);color:var(--purple)}
+/* Seg bars */
+.sr{margin-bottom:13px}
+.st2{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px}
+.sb{height:5px;background:var(--border);border-radius:3px;overflow:hidden;margin-bottom:3px}
+.sf2{height:100%;border-radius:3px}
+/* Tabs */
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:14px}
+.tab{padding:8px 16px;font-size:13px;cursor:pointer;color:var(--t2);border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .12s}
+.tab:hover{color:var(--text)}
+.tab.active{color:var(--teal);border-bottom-color:var(--teal);font-weight:500}
+.tab-panel{display:none}.tab-panel.active{display:block}
+/* Product cards */
+.product-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:14px}
+.pcard{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px;position:relative;transition:border-color .15s}
+.pcard:hover{border-color:var(--border2)}
+.pcard-accent{position:absolute;top:0;left:0;right:0;height:3px;border-radius:12px 12px 0 0}
+.pcard-name{font-size:14px;font-weight:500;margin-bottom:2px;margin-top:4px}
+.pcard-sub{font-size:11px;color:var(--t3);margin-bottom:12px}
+.pstat{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.psi .psl{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:2px}
+.psi .psv{font-size:13px;font-weight:500}
+.pcard-meta{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px}
+.pcard-actions{display:flex;gap:6px}
+/* MCC chip */
+.mcc-chip{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:500;padding:2px 7px;border-radius:6px;background:var(--bl);color:var(--blue);margin:2px}
+.mcc-chip.declined{background:var(--gray-l);color:var(--gray);text-decoration:line-through}
+.mcc-section{margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
+.mcc-label{font-size:10px;font-weight:500;color:var(--t3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.mcc-wrap{display:flex;flex-wrap:wrap;gap:3px}
+/* Blocked txn row */
+tr.blocked-row td{color:var(--t3)}
+/* MODAL */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.35);display:none;align-items:center;justify-content:center;z-index:100}
+.modal-bg.open{display:flex}
+.modal{background:var(--surface);border-radius:14px;padding:24px;width:560px;max-width:96vw;max-height:92vh;overflow-y:auto}
+.modal h2{font-size:15px;font-weight:500;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.field{margin-bottom:13px}
+.field label{display:block;font-size:12px;color:var(--t2);margin-bottom:5px;font-weight:500}
+.field input,.field select,.field textarea{width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--text);background:var(--s2);outline:none}
+.field input:focus,.field select:focus{border-color:var(--border2)}
+.field textarea{resize:vertical;min-height:56px}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.modal-footer{display:flex;justify-content:flex-end;gap:8px;margin-top:18px;padding-top:14px;border-top:1px solid var(--border)}
+/* MCC picker inside modal */
+.mcc-picker{display:flex;flex-wrap:wrap;gap:6px;padding:10px;background:var(--s2);border:1px solid var(--border);border-radius:8px;max-height:160px;overflow-y:auto}
+.mcc-toggle{font-size:11px;font-weight:500;padding:4px 10px;border-radius:6px;border:1px solid var(--border);cursor:pointer;background:var(--surface);color:var(--t2);font-family:'DM Sans',sans-serif;transition:all .12s;user-select:none}
+.mcc-toggle.sel{background:var(--bl);color:var(--blue);border-color:#5aa0e8}
+/* EMI convert button */
+.btn-emi{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border:1px solid var(--purple);border-radius:7px;font-size:11px;font-weight:500;cursor:pointer;color:var(--purple);background:var(--pl);font-family:'DM Sans',sans-serif;transition:background .12s,box-shadow .12s;white-space:nowrap}
+.btn-emi:hover{background:#e0dcf7;box-shadow:0 0 0 2px #c5bff060}
+.btn-emi svg{flex-shrink:0}
+/* Statement modal */
+.stmt-header{background:var(--teal);color:#fff;border-radius:10px 10px 0 0;padding:20px 24px;margin:-24px -24px 20px}
+.stmt-bank{font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;opacity:.8;margin-bottom:4px}
+.stmt-title{font-size:18px;font-weight:500}
+.stmt-meta{font-size:11px;opacity:.75;margin-top:4px}
+.stmt-section{margin-bottom:18px}
+.stmt-section-title{font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.stmt-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 20px;margin-bottom:16px}
+.stmt-info-item .sil{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:2px}
+.stmt-info-item .siv{font-size:13px}
+.stmt-table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:4px}
+.stmt-table th{font-size:10px;font-weight:500;color:var(--t3);text-align:left;padding:6px 8px;border-bottom:1px solid var(--border);text-transform:uppercase;letter-spacing:.04em}
+.stmt-table td{padding:8px 8px;border-bottom:1px solid var(--border);vertical-align:middle}
+.stmt-table tr:last-child td{border-bottom:none}
+.stmt-table .tar{text-align:right}
+.stmt-subtotal{display:flex;justify-content:space-between;padding:6px 8px;background:var(--s2);border-radius:6px;font-size:12px;margin-top:4px}
+.stmt-summary{background:var(--s2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-top:6px}
+.stmt-sum-row{display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;font-size:13px;border-bottom:1px solid var(--border)}
+.stmt-sum-row:last-child{border-bottom:none}
+.stmt-sum-row.total{font-weight:500;font-size:14px;padding-top:10px;margin-top:4px}
+.stmt-sum-row.total .amount{color:var(--teal);font-size:15px}
+.stmt-min-due{background:var(--tl);border:1px solid #9adfc4;border-radius:8px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;margin-top:10px}
+.stmt-fee-note{font-size:11px;color:var(--t3);margin-top:6px;line-height:1.5}
+/* Print button */
+.btn-print{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border:1px solid var(--border2);border-radius:8px;font-size:12px;cursor:pointer;background:transparent;color:var(--t2);font-family:'DM Sans',sans-serif}
+.btn-print:hover{background:var(--s2)}
+/* Bill modal */
+.bill-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)}
+.bill-row:last-child{border-bottom:none}
+.bill-check{width:16px;height:16px;cursor:pointer;flex-shrink:0}
+.bill-emi-select{padding:4px 8px;border:1px solid var(--border);border-radius:6px;font-size:12px;font-family:'DM Sans',sans-serif;color:var(--text);background:var(--s2)}
+/* Scrollbar */
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+</style>
+</head>
+<body>
+
+<!-- ══ PRODUCT MODAL ══════════════════════════════════════════════════════════ -->
+<div class="modal-bg" id="prod-modal">
+  <div class="modal">
+    <h2 id="prod-modal-title">Add New Product</h2>
+    <div class="field-row">
+      <div class="field"><label>Product Name</label><input type="text" id="f-name" placeholder="e.g. UPI Gold Credit"></div>
+      <div class="field"><label>Product Code</label><input type="text" id="f-code" placeholder="e.g. UGC-003"></div>
+    </div>
+    <div class="field"><label>Description</label><textarea id="f-desc" placeholder="Brief description…"></textarea></div>
+    <div class="field-row">
+      <div class="field"><label>Min Limit (₹)</label><input type="number" id="f-min" placeholder="5000"></div>
+      <div class="field"><label>Max Limit (₹)</label><input type="number" id="f-max" placeholder="100000"></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Interest Rate (% p.a.)</label><input type="number" id="f-rate" placeholder="24" step="0.5"></div>
+      <div class="field"><label>Processing Fee (%)</label><input type="number" id="f-fee" placeholder="0" step="0.1"></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Billing Cycle (days)</label><select id="f-cycle"><option>30</option><option>45</option><option>60</option></select></div>
+      <div class="field"><label>Grace Period (days)</label><input type="number" id="f-grace" placeholder="3"></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Max EMI Tenure (months)</label><input type="number" id="f-emi" placeholder="12"></div>
+      <div class="field"><label>Min EMI Amount (₹)</label><input type="number" id="f-emiamt" placeholder="1000"></div>
+    </div>
+    <div class="field"><label>Eligible Segment</label>
+      <select id="f-seg"><option>All Segments</option><option>New-to-Credit</option><option>Prime</option><option>Super Prime</option><option>Priority</option></select>
+    </div>
+    <div class="field">
+      <label>Whitelisted MCCs <span style="font-weight:400;color:var(--t3)">(only transactions from these categories are permitted)</span></label>
+      <div class="mcc-picker" id="mcc-picker"></div>
+    </div>
+    <div class="field"><label>Status</label><select id="f-status"><option>Active</option><option>Draft</option></select></div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeProdModal()">Cancel</button>
+      <button class="btn btn-teal" onclick="saveProduct()">Save Product</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ EMI CONVERSION MODAL ═══════════════════════════════════════════════════ -->
+<div class="modal-bg" id="emi-modal">
+  <div class="modal" style="width:500px">
+    <h2 id="emi-modal-title">Convert to EMI</h2>
+    <div id="emi-modal-body"></div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeEmiModal()">Cancel</button>
+      <button class="btn btn-purple" onclick="confirmEmiConversion()">Convert to EMI</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ BILL-TO-EMI MODAL ══════════════════════════════════════════════════════ -->
+<div class="modal-bg" id="bill-modal">
+  <div class="modal" style="width:520px">
+    <h2 id="bill-modal-title">Bill → EMI Conversion</h2>
+    <p style="font-size:12px;color:var(--t2);margin-bottom:14px">Select individual transactions to convert to EMI, or convert the entire bill at once.</p>
+    <div id="bill-txn-list"></div>
+    <div style="background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:12px;margin-top:12px">
+      <div style="font-size:12px;font-weight:500;margin-bottom:8px">Convert Entire Bill</div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="flex:1;font-size:13px" id="bill-total-label">Total: —</div>
+        <select class="bill-emi-select" id="bill-full-tenure" style="width:120px">
+          <option value="">EMI Tenure</option>
+          <option value="3">3 months</option>
+          <option value="6">6 months</option>
+          <option value="9">9 months</option>
+          <option value="12">12 months</option>
+        </select>
+        <button class="btn btn-purple btn-sm" onclick="convertFullBill()">Convert All</button>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeBillModal()">Close</button>
+      <button class="btn btn-purple" onclick="convertSelectedTxns()">Convert Selected</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ BILL STATEMENT MODAL ══════════════════════════════════════════════════ -->
+<div class="modal-bg" id="stmt-modal">
+  <div class="modal" style="width:640px;max-height:90vh;overflow-y:auto;padding:0">
+    <div style="padding:24px" id="stmt-content">
+      <!-- filled by JS -->
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 24px;border-top:1px solid var(--border);background:var(--s2);border-radius:0 0 14px 14px;position:sticky;bottom:0">
+      <button class="btn-print" onclick="window.print()">
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="1" width="10" height="5" rx="1"/><path d="M3 6H1a1 1 0 00-1 1v5a1 1 0 001 1h2v2h10v-2h2a1 1 0 001-1V7a1 1 0 00-1-1h-2"/><rect x="3" y="10" width="10" height="5" rx="1"/></svg>
+        Print / Download
+      </button>
+      <button class="btn" onclick="closeStmtModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SHELL ══════════════════════════════════════════════════════════════════ -->
+<div class="shell">
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="logo-eye">Nova Bank</div>
+      <div class="logo-name">Admin Console</div>
+      <div class="logo-chip"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 8h12M10 4l4 4-4 4"/></svg>Credit Line on UPI</div>
+    </div>
+    <nav>
+      <div class="ns">Overview</div>
+      <div class="ni active" onclick="go(this,'overview')"><svg class="nicon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="1" width="6" height="6" rx="1.2"/><rect x="9" y="1" width="6" height="6" rx="1.2"/><rect x="1" y="9" width="6" height="6" rx="1.2"/><rect x="9" y="9" width="6" height="6" rx="1.2"/></svg>Dashboard</div>
+      <div class="ns">Products</div>
+      <div class="ni" onclick="go(this,'products')"><svg class="nicon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="5" height="5" rx="1"/><rect x="9" y="2" width="5" height="5" rx="1"/><rect x="2" y="9" width="5" height="5" rx="1"/><path d="M9 11.5h5M11.5 9v5"/></svg>Manage Products</div>
+      <div class="ns">Credit Lines</div>
+      <div class="ni" onclick="go(this,'customers')"><svg class="nicon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="5" r="3"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>Customer Lookup</div>
+      <div class="ni" onclick="go(this,'creditlines')"><svg class="nicon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="3" width="14" height="10" rx="1.5"/><path d="M1 7h14"/><path d="M4 10.5h2M10 10.5h2"/></svg>Credit Lines</div>
+      <div class="ns">Transactions</div>
+      <div class="ni" onclick="go(this,'transactions')"><svg class="nicon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 8h12M10 4l4 4-4 4M6 4L2 8l4 4"/></svg>UPI &amp; EMI Log</div>
+      <div class="ni" onclick="go(this,'emi')"><svg class="nicon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12V6l6-4 6 4v6"/><path d="M6 12V9h4v3"/></svg>EMI Management</div>
+      <div class="ni" onclick="go(this,'billing')"><svg class="nicon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="1" width="12" height="14" rx="1.5"/><path d="M5 5h6M5 8h6M5 11h4"/></svg>Billing &amp; Statements</div>
+      <div class="ni" onclick="go(this,'repayments')"><svg class="nicon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 5H6a3 3 0 000 6h7"/><path d="M10 8l3-3-3-3"/></svg>Repayments</div>
+      <div class="ns">Risk</div>
+      <div class="ni" onclick="go(this,'alerts')"><svg class="nicon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1l1.5 4h4l-3.2 2.5 1.5 4.3L8 9.3l-3.8 2.5 1.5-4.3L2.5 5H6.5z"/></svg>Alerts &amp; Flags<span class="nbadge nb-r">6</span></div>
+      <div class="ni" onclick="go(this,'overdue')"><svg class="nicon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6.5"/><path d="M8 4.5V9l2.5 1.5"/></svg>Overdue &amp; DPD<span class="nbadge nb-a">4</span></div>
+    </nav>
+    <div class="sf">
+      <div class="ni" style="cursor:default">
+        <svg class="nicon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="5" r="2.5"/><path d="M3 13.5c0-2.5 2.2-4.5 5-4.5s5 2 5 4.5"/></svg>
+        <span style="font-size:12px">Admin User</span>
+        <span class="badge b-purple" style="margin-left:auto;font-size:10px">Super</span>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div><div class="pt" id="page-title">Dashboard</div><div class="pmeta">Credit Line on UPI · Wed 15 Apr 2026</div></div>
+      <div class="sp"></div>
+      <div class="sw"><span class="sico">⌕</span><input type="text" placeholder="Search name, CIF, UPI ID…" oninput="handleSearch(this.value)"></div>
+      <button class="btn">Export</button>
+    </div>
+
+    <div class="content">
+
+      <!-- ── OVERVIEW ─────────────────────────────────────────────────────── -->
+      <div class="page active" id="page-overview">
+        <div class="mg g4">
+          <div class="metric"><div class="mlb">Active Credit Lines</div><div class="mvl">38,420</div><div class="msu up">↑ 1,240 this month</div></div>
+          <div class="metric"><div class="mlb">Outstanding (Cr)</div><div class="mvl">₹384</div><div class="msu neu">41.7% utilisation</div></div>
+          <div class="metric"><div class="mlb">Active Products</div><div class="mvl" id="ov-prod-count">4</div><div class="msu neu">Across limit tiers</div></div>
+          <div class="metric"><div class="mlb">MCC-Blocked Txns Today</div><div class="mvl">248</div><div class="msu dn">Auto-declined</div></div>
+        </div>
+        <div class="mg g4">
+          <div class="metric"><div class="mlb">UPI Txns Today</div><div class="mvl">1,18,400</div><div class="msu up">↑ 6%</div></div>
+          <div class="metric"><div class="mlb">EMI Txns Today</div><div class="mvl">6,400</div><div class="msu up">5.1% of all txns</div></div>
+          <div class="metric"><div class="mlb">Bills Due This Week</div><div class="mvl">4,840</div><div class="msu neu">₹12 Cr total</div></div>
+          <div class="metric"><div class="mlb">DPD 30+ Accounts</div><div class="mvl">84</div><div class="msu dn">NPA watch list</div></div>
+        </div>
+        <div class="two-col">
+          <div class="card">
+            <div class="ct">UPI + EMI Spend — Last 7 Days (₹ Cr)</div>
+            <div class="mb"><div class="mbb" style="height:58%"></div><div class="mbb" style="height:72%"></div><div class="mbb" style="height:54%"></div><div class="mbb" style="height:88%"></div><div class="mbb" style="height:68%"></div><div class="mbb" style="height:80%"></div><div class="mbb" style="height:100%"></div></div>
+            <div class="bl"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
+            <div style="margin-top:10px;font-size:12px;color:var(--t2)">7-day UPI: <strong>₹388 Cr</strong> &nbsp;·&nbsp; EMI deductions: <strong>₹40 Cr</strong></div>
+          </div>
+          <div class="card">
+            <div class="ct">Customers by Product</div>
+            <div id="ov-prod-breakdown"></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="ct">Recent Activity</div>
+          <table><thead><tr><th>Customer</th><th>Product</th><th>Type</th><th>Merchant / Detail</th><th>MCC</th><th>Amount</th><th>Time</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td><div class="cr"><div class="av" style="background:var(--tl);color:var(--teal)">RV</div>Ritu Verma</div></td><td><span class="badge b-teal" style="font-size:10px">Lite</span></td><td>UPI</td><td>Swiggy</td><td><span class="mcc-chip" style="margin:0">5812 · Food</span></td><td>₹480</td><td>2m ago</td><td><span class="badge b-green">Success</span></td></tr>
+            <tr><td><div class="cr"><div class="av" style="background:var(--bl);color:var(--blue)">AM</div>Arjun Mehta</div></td><td><span class="badge b-blue" style="font-size:10px">Prime</span></td><td><span class="emi-pill">EMI</span></td><td>Samsung TV · 6m</td><td><span class="mcc-chip" style="margin:0">5732 · Electronics</span></td><td>₹2,000/mo</td><td>9m ago</td><td><span class="badge b-purple">EMI Active</span></td></tr>
+            <tr><td><div class="cr"><div class="av" style="background:var(--al);color:var(--amber)">SK</div>Sneha Kumar</div></td><td><span class="badge b-amber" style="font-size:10px">Gold</span></td><td>UPI</td><td>Zepto</td><td><span class="mcc-chip" style="margin:0">5411 · Grocery</span></td><td>₹1,240</td><td>18m ago</td><td><span class="badge b-amber">Flagged</span></td></tr>
+            <tr><td><div class="cr"><div class="av" style="background:var(--rl);color:var(--red)">RP</div>Ramesh Patel</div></td><td><span class="badge b-teal" style="font-size:10px">Lite</span></td><td>UPI</td><td>Betway Gaming</td><td><span class="mcc-chip declined" style="margin:0">7995 · Gaming</span></td><td>₹2,000</td><td>26m ago</td><td><span class="badge b-red">MCC Blocked</span></td></tr>
+            <tr><td><div class="cr"><div class="av" style="background:var(--pl);color:var(--purple)">VR</div>Vijay Rao</div></td><td><span class="badge b-purple" style="font-size:10px">Elite</span></td><td>UPI</td><td>MakeMyTrip</td><td><span class="mcc-chip" style="margin:0">4722 · Travel</span></td><td>₹12,400</td><td>41m ago</td><td><span class="badge b-green">Success</span></td></tr>
+          </tbody></table>
+        </div>
+      </div>
+
+      <!-- ── PRODUCTS ────────────────────────────────────────────────────── -->
+      <div class="page" id="page-products">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+          <div style="font-size:13px;color:var(--t2)">Each product defines allowed MCCs. UPI transactions from unlisted MCCs are auto-declined.</div>
+          <button class="btn btn-teal" onclick="openProdModal()">+ Add Product</button>
+        </div>
+        <div class="product-grid" id="product-grid"></div>
+        <div class="card">
+          <div class="ct">Product Comparison</div>
+          <table><thead><tr><th>Product</th><th>Limit Range</th><th>Rate</th><th>Max EMI</th><th>Billing</th><th>Segment</th><th>Whitelisted MCCs</th><th>Customers</th><th>Status</th></tr></thead>
+          <tbody id="prod-table-body"></tbody></table>
+        </div>
+      </div>
+
+      <!-- ── CUSTOMER LOOKUP ─────────────────────────────────────────────── -->
+      <div class="page" id="page-customers">
+        <div class="fr">
+          <button class="fb active" onclick="setFilt(this)">All</button>
+          <button class="fb" onclick="setFilt(this)">Active</button>
+          <button class="fb" onclick="setFilt(this)">Suspended</button>
+          <button class="fb" onclick="setFilt(this)">Overdue</button>
+          <button class="fb" onclick="setFilt(this)">DPD 1–30</button>
+          <button class="fb" onclick="setFilt(this)">DPD 30+</button>
+          <button class="fb" onclick="setFilt(this)">With EMI</button>
+        </div>
+        <div class="card" style="padding:0;overflow:hidden">
+          <table><thead><tr>
+            <th style="padding-left:20px">Customer</th>
+            <th>CIF</th><th>Product</th><th>UPI ID</th>
+            <th>Limit</th><th>UPI Outstanding</th><th>EMI Outstanding</th>
+            <th>Utilisation</th><th>Due Date</th>
+            <th>DPD</th><th>Status</th>
+            <th style="padding-right:20px">Action</th>
+          </tr></thead>
+          <tbody id="cust-tbody"></tbody></table>
+        </div>
+      </div>
+
+      <!-- ── CREDIT LINES ────────────────────────────────────────────────── -->
+      <div class="page" id="page-creditlines">
+        <div class="mg g3">
+          <div class="metric"><div class="mlb">Total Credit Lines</div><div class="mvl">38,420</div><div class="msu neu">1 per customer</div></div>
+          <div class="metric"><div class="mlb">Avg Sanctioned Limit</div><div class="mvl">₹23,940</div><div class="msu up">↑ ₹840 vs last month</div></div>
+          <div class="metric"><div class="mlb">Lines with Active EMI</div><div class="mvl">12,400</div><div class="msu neu">32.3% of all lines</div></div>
+        </div>
+        <div class="card" style="padding:0;overflow:hidden">
+          <div style="padding:16px 20px 0"><div class="fr">
+            <button class="fb active" onclick="setFilt(this)">All</button>
+            <button class="fb" onclick="setFilt(this)">Active</button>
+            <button class="fb" onclick="setFilt(this)">Suspended</button>
+            <button class="fb" onclick="setFilt(this)">Has EMI</button>
+            <button class="fb" onclick="setFilt(this)">DPD 30+</button>
+          </div></div>
+          <table><thead><tr>
+            <th style="padding-left:20px">Line ID</th><th>Customer</th><th>Product</th><th>UPI ID</th>
+            <th>Sanctioned</th><th>UPI Outs.</th><th>EMI Outs.</th><th>Available</th>
+            <th>DPD</th><th>Due Date</th><th>Status</th>
+          </tr></thead>
+          <tbody id="cl-tbody"></tbody></table>
+        </div>
+      </div>
+
+      <!-- ── TRANSACTIONS ────────────────────────────────────────────────── -->
+      <div class="page" id="page-transactions">
+        <div class="mg g4">
+          <div class="metric"><div class="mlb">UPI Txns Today</div><div class="mvl">1,18,400</div><div class="msu up">↑ 6%</div></div>
+          <div class="metric"><div class="mlb">EMI Deductions Today</div><div class="mvl">6,400</div><div class="msu neu">Auto-deducted</div></div>
+          <div class="metric"><div class="mlb">MCC-Blocked Today</div><div class="mvl">248</div><div class="msu dn">Auto-declined</div></div>
+          <div class="metric"><div class="mlb">Avg UPI Txn Value</div><div class="mvl">₹497</div><div class="msu neu">Today</div></div>
+        </div>
+        <div class="card">
+          <div class="ct">Transaction Log</div>
+          <div class="fr">
+            <button class="fb active" onclick="setFilt(this)">All</button>
+            <button class="fb" onclick="setFilt(this)">UPI Pay</button>
+            <button class="fb" onclick="setFilt(this)">EMI Deduction</button>
+            <button class="fb" onclick="setFilt(this)">EMI Conversion</button>
+            <button class="fb" onclick="setFilt(this)">MCC Blocked</button>
+            <button class="fb" onclick="setFilt(this)">Failed</button>
+            <button class="fb" onclick="setFilt(this)">Refund</button>
+          </div>
+          <table><thead><tr>
+            <th>Txn ID</th><th>Customer</th><th>Product</th><th>Type</th>
+            <th>Merchant / Detail</th><th>MCC</th><th>Amount</th><th>Avail. After</th>
+            <th>Date &amp; Time</th><th>Status</th><th>Action</th>
+          </tr></thead>
+          <tbody id="txn-tbody"></tbody></table>
+        </div>
+      </div>
+
+      <!-- ── EMI MANAGEMENT ──────────────────────────────────────────────── -->
+      <div class="page" id="page-emi">
+        <div class="mg g4">
+          <div class="metric"><div class="mlb">Active EMI Plans</div><div class="mvl">12,400</div><div class="msu neu">Across all products</div></div>
+          <div class="metric"><div class="mlb">EMI Outstanding (Cr)</div><div class="mvl">₹28</div><div class="msu neu">7.3% of book</div></div>
+          <div class="metric"><div class="mlb">EMI Deductions (MTD)</div><div class="mvl">₹9.2 Cr</div><div class="msu up">94.8% auto-success</div></div>
+          <div class="metric"><div class="mlb">EMI Defaults</div><div class="mvl">84</div><div class="msu dn">Auto-suspended lines</div></div>
+        </div>
+        <div class="two-col">
+          <div class="card">
+            <div class="ct">Active EMI Plans</div>
+            <table><thead><tr><th>EMI ID</th><th>Customer</th><th>Product</th><th>Purchase / Item</th><th>Principal</th><th>Tenure</th><th>Rate</th><th>Monthly EMI</th><th>Total Payable</th><th>Progress</th><th>Status</th></tr></thead>
+            <tbody id="emi-tbody"></tbody></table>
+          </div>
+          <div>
+            <div class="card">
+              <div class="ct">EMI by Tenure</div>
+              <div class="pr"><div class="pl2">3 months</div><div class="pt2"><div class="pf" style="width:42%;background:var(--tm)"></div></div><span style="font-size:12px;color:var(--t2);min-width:42px;text-align:right">5,208</span></div>
+              <div class="pr"><div class="pl2">6 months</div><div class="pt2"><div class="pf" style="width:38%;background:#378ADD"></div></div><span style="font-size:12px;color:var(--t2);min-width:42px;text-align:right">4,712</span></div>
+              <div class="pr"><div class="pl2">9 months</div><div class="pt2"><div class="pf" style="width:14%;background:var(--am)"></div></div><span style="font-size:12px;color:var(--t2);min-width:42px;text-align:right">1,736</span></div>
+              <div class="pr"><div class="pl2">12 months</div><div class="pt2"><div class="pf" style="width:6%;background:var(--purple)"></div></div><span style="font-size:12px;color:var(--t2);min-width:42px;text-align:right">744</span></div>
+            </div>
+            <div class="card">
+              <div class="ct">Top EMI Categories</div>
+              <div class="pr"><div class="pl2">Electronics</div><div class="pt2"><div class="pf" style="width:52%;background:var(--bl);border:1px solid #378ADD"></div></div><span style="font-size:12px;color:var(--t2);min-width:36px;text-align:right">52%</span></div>
+              <div class="pr"><div class="pl2">Fashion</div><div class="pt2"><div class="pf" style="width:20%;background:var(--pkl);border:1px solid var(--pink)"></div></div><span style="font-size:12px;color:var(--t2);min-width:36px;text-align:right">20%</span></div>
+              <div class="pr"><div class="pl2">Travel</div><div class="pt2"><div class="pf" style="width:16%;background:var(--pl);border:1px solid var(--purple)"></div></div><span style="font-size:12px;color:var(--t2);min-width:36px;text-align:right">16%</span></div>
+              <div class="pr"><div class="pl2">Others</div><div class="pt2"><div class="pf" style="width:12%;background:var(--gray-l);border:1px solid var(--gray)"></div></div><span style="font-size:12px;color:var(--t2);min-width:36px;text-align:right">12%</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── BILLING & STATEMENTS ────────────────────────────────────────── -->
+      <div class="page" id="page-billing">
+        <div class="mg g3">
+          <div class="metric"><div class="mlb">Bills Generated (MTD)</div><div class="mvl">38,420</div><div class="msu neu">Full customer base</div></div>
+          <div class="metric"><div class="mlb">Total Billed Amount (Cr)</div><div class="mvl">₹51.2</div><div class="msu neu">This cycle</div></div>
+          <div class="metric"><div class="mlb">Txns Converted to EMI</div><div class="mvl">1,240</div><div class="msu up">This billing cycle</div></div>
+        </div>
+        <div class="card">
+          <div class="ct">Current Billing Cycle — Customer Bills</div>
+          <div class="fr">
+            <button class="fb active" onclick="setFilt(this)">All</button>
+            <button class="fb" onclick="setFilt(this)">Paid</button>
+            <button class="fb" onclick="setFilt(this)">Unpaid</button>
+            <button class="fb" onclick="setFilt(this)">Partially Paid</button>
+            <button class="fb" onclick="setFilt(this)">EMI Converted</button>
+          </div>
+          <table><thead><tr>
+            <th>Bill ID</th><th>Customer</th><th>Product</th><th>Bill Period</th>
+            <th>Total Spend</th><th>EMI Outstanding</th><th>Total Due</th>
+            <th>Due Date</th><th>DPD</th><th>Status</th><th>Actions</th>
+          </tr></thead>
+          <tbody id="bill-tbody"></tbody></table>
+        </div>
+      </div>
+
+      <!-- ── REPAYMENTS ──────────────────────────────────────────────────── -->
+      <div class="page" id="page-repayments">
+        <div class="mg g4">
+          <div class="metric"><div class="mlb">UPI Repayments Due (MTD)</div><div class="mvl">₹42 Cr</div><div class="msu neu">This billing cycle</div></div>
+          <div class="metric"><div class="mlb">EMI Deductions Due (MTD)</div><div class="mvl">₹9.2 Cr</div><div class="msu neu">Auto-debited</div></div>
+          <div class="metric"><div class="mlb">Total Collected</div><div class="mvl">₹44 Cr</div><div class="msu up">86.3% collection</div></div>
+          <div class="metric"><div class="mlb">Auto-Debit Success</div><div class="mvl">94.2%</div><div class="msu up">↑ 1.1% vs last month</div></div>
+        </div>
+        <div class="card">
+          <div class="ct">Upcoming Due</div>
+          <table><thead><tr><th>Customer</th><th>Product</th><th>DPD</th><th>Due Date</th><th>UPI Due</th><th>EMI Due</th><th>Total Due</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td><div class="cr"><div class="av" style="background:var(--tl);color:var(--teal)">RV</div>Ritu Verma</div></td><td><span class="badge b-teal" style="font-size:10px">Lite</span></td><td><span class="badge dpd-0">0 DPD</span></td><td>18 Apr</td><td>₹8,500</td><td>—</td><td>₹8,500</td><td><span class="badge b-blue">Upcoming</span></td></tr>
+            <tr><td><div class="cr"><div class="av" style="background:var(--bl);color:var(--blue)">AM</div>Arjun Mehta</div></td><td><span class="badge b-blue" style="font-size:10px">Prime</span></td><td><span class="badge dpd-0">0 DPD</span></td><td>20 Apr</td><td>₹9,120</td><td>₹2,000</td><td>₹11,120</td><td><span class="badge b-blue">Upcoming</span></td></tr>
+            <tr><td><div class="cr"><div class="av" style="background:var(--al);color:var(--amber)">SK</div>Sneha Kumar</div></td><td><span class="badge b-amber" style="font-size:10px">Gold</span></td><td><span class="badge dpd-low">5 DPD</span></td><td>16 Apr</td><td>₹22,400</td><td>₹2,000</td><td>₹24,400</td><td><span class="badge b-amber">Due Tomorrow</span></td></tr>
+            <tr><td><div class="cr"><div class="av" style="background:var(--rl);color:var(--red)">MD</div>Mohan Das</div></td><td><span class="badge b-teal" style="font-size:10px">Lite</span></td><td><span class="badge dpd-mid">32 DPD</span></td><td>14 Apr</td><td>₹9,800</td><td>—</td><td>₹9,800</td><td><span class="badge b-red">Overdue</span></td></tr>
+          </tbody></table>
+        </div>
+      </div>
+
+      <!-- ── ALERTS ──────────────────────────────────────────────────────── -->
+      <div class="page" id="page-alerts">
+        <div class="two-col">
+          <div>
+            <div class="mg g2" style="margin-bottom:14px">
+              <div class="metric"><div class="mlb">Open Alerts</div><div class="mvl dn">6</div></div>
+              <div class="metric"><div class="mlb">Resolved Today</div><div class="mvl up">9</div></div>
+            </div>
+            <div class="card">
+              <div class="ct">Active Alerts</div>
+              <div class="ai"><div class="ad dot-r"></div><div><div style="font-size:13px;font-weight:500">MCC Blocked × 3 — Ramesh Patel</div><div style="font-size:12px;color:var(--t3);margin-top:2px">Repeated attempts at 7995 Gaming / 6011 ATM · UPI Lite · Blocked by product rules</div><div style="display:flex;gap:6px;margin-top:8px"><button class="btn btn-sm" onclick="viewProfile(7)">View Profile</button><button class="btn btn-sm">Dismiss</button></div></div></div>
+              <div class="ai"><div class="ad dot-r"></div><div><div style="font-size:13px;font-weight:500">EMI Default — Ramesh Patel</div><div style="font-size:12px;color:var(--t3);margin-top:2px">EMI deduction bounced 3x · UPI Lite · Line auto-suspended · DPD: 18</div><div style="display:flex;gap:6px;margin-top:8px"><button class="btn btn-sm" onclick="viewProfile(7)">View Profile</button><button class="btn btn-sm">Dismiss</button></div></div></div>
+              <div class="ai"><div class="ad dot-a"></div><div><div style="font-size:13px;font-weight:500">High Utilisation — Arjun Mehta</div><div style="font-size:12px;color:var(--t3);margin-top:2px">88% utilised incl. EMI block · UPI Prime · ₹1,240 free</div><div style="display:flex;gap:6px;margin-top:8px"><button class="btn btn-sm" onclick="viewProfile(1)">View Profile</button><button class="btn btn-sm">Dismiss</button></div></div></div>
+              <div class="ai"><div class="ad dot-a"></div><div><div style="font-size:13px;font-weight:500">Repayment Due Tomorrow — Sneha Kumar</div><div style="font-size:12px;color:var(--t3);margin-top:2px">₹24,400 due 16 Apr · DPD 5 · Auto-debit active</div><div style="display:flex;gap:6px;margin-top:8px"><button class="btn btn-sm">Send Reminder</button><button class="btn btn-sm">Dismiss</button></div></div></div>
+              <div class="ai"><div class="ad dot-a"></div><div><div style="font-size:13px;font-weight:500">DPD 32 — Mohan Das</div><div style="font-size:12px;color:var(--t3);margin-top:2px">₹9,800 overdue · UPI Lite · Line suspended · NPA risk</div><div style="display:flex;gap:6px;margin-top:8px"><button class="btn btn-sm" onclick="viewProfile(5)">View Profile</button><button class="btn btn-sm">Dismiss</button></div></div></div>
+              <div class="ai"><div class="ad dot-a"></div><div><div style="font-size:13px;font-weight:500">Large UPI Txn — Vijay Rao</div><div style="font-size:12px;color:var(--t3);margin-top:2px">₹48,000 to unknown VPA · UPI Elite · 14 Apr, 11:40 PM</div><div style="display:flex;gap:6px;margin-top:8px"><button class="btn btn-sm" onclick="viewProfile(8)">View Profile</button><button class="btn btn-sm">Dismiss</button></div></div></div>
+            </div>
+          </div>
+          <div>
+            <div class="card">
+              <div class="ct">Alert Rules</div>
+              <table><thead><tr><th>Rule</th><th>Condition</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td>MCC Block Attempt</td><td>Txn from non-whitelisted MCC</td><td><span class="badge b-green">Active</span></td></tr>
+                <tr><td>Repeated MCC Blocks</td><td>3+ blocks in 1h</td><td><span class="badge b-green">Active</span></td></tr>
+                <tr><td>Limit Breach Attempt</td><td>2+ declined in 1h</td><td><span class="badge b-green">Active</span></td></tr>
+                <tr><td>EMI Default</td><td>Deduction bounced 2+</td><td><span class="badge b-green">Active</span></td></tr>
+                <tr><td>High Utilisation</td><td>&gt;85% incl. EMI block</td><td><span class="badge b-green">Active</span></td></tr>
+                <tr><td>DPD Escalation</td><td>DPD reaches 7 / 30 / 60</td><td><span class="badge b-green">Active</span></td></tr>
+                <tr><td>Large UPI Txn</td><td>Single pay &gt; ₹25,000</td><td><span class="badge b-green">Active</span></td></tr>
+                <tr><td>Repayment Due</td><td>1 day prior</td><td><span class="badge b-green">Active</span></td></tr>
+              </tbody></table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── OVERDUE & DPD ───────────────────────────────────────────────── -->
+      <div class="page" id="page-overdue">
+        <div class="mg g4">
+          <div class="metric"><div class="mlb">Overdue Accounts</div><div class="mvl dn">214</div><div class="msu dn">↑ 18 this week</div></div>
+          <div class="metric"><div class="mlb">UPI Overdue (Cr)</div><div class="mvl">₹6.8</div><div class="msu dn">1.77% of UPI book</div></div>
+          <div class="metric"><div class="mlb">EMI Overdue (Cr)</div><div class="mvl">₹1.6</div><div class="msu dn">5.7% of EMI book</div></div>
+          <div class="metric"><div class="mlb">60+ DPD (NPA Risk)</div><div class="mvl">22</div><div class="msu dn">Escalated</div></div>
+        </div>
+        <div class="two-col">
+          <div class="card">
+            <div class="ct">DPD Bucket Summary</div>
+            <div class="pr"><div class="pl2">1–7 DPD</div><div class="pt2"><div class="pf" style="width:50%;background:var(--am)"></div></div><span style="font-size:12px;color:var(--t2);min-width:36px;text-align:right">108</span></div>
+            <div class="pr"><div class="pl2">8–30 DPD</div><div class="pt2"><div class="pf" style="width:37%;background:#e06020"></div></div><span style="font-size:12px;color:var(--t2);min-width:36px;text-align:right">80</span></div>
+            <div class="pr"><div class="pl2">31–60 DPD</div><div class="pt2"><div class="pf" style="width:28%;background:var(--rm)"></div></div><span style="font-size:12px;color:var(--t2);min-width:36px;text-align:right">62</span></div>
+            <div class="pr"><div class="pl2">60+ DPD</div><div class="pt2"><div class="pf" style="width:10%;background:var(--red)"></div></div><span style="font-size:12px;color:var(--t2);min-width:36px;text-align:right">22</span></div>
+            <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--border);font-size:12px;color:var(--t2)">Lines 8+ DPD are auto-suspended. Active EMIs are paused pending clearance.</div>
+          </div>
+          <div class="card">
+            <div class="ct">Top Overdue Cases</div>
+            <table><thead><tr><th>Customer</th><th>Product</th><th>DPD</th><th>UPI Overdue</th><th>EMI Overdue</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td><div class="cr"><div class="av" style="background:var(--rl);color:var(--red)">MD</div>Mohan Das</div></td><td><span class="badge b-teal" style="font-size:10px">Lite</span></td><td><span class="badge dpd-mid">32 DPD</span></td><td>₹9,800</td><td>—</td><td><span class="badge b-red">Suspended</span></td></tr>
+              <tr><td><div class="cr"><div class="av" style="background:var(--al);color:var(--amber)">SK</div>Sneha Kumar</div></td><td><span class="badge b-amber" style="font-size:10px">Gold</span></td><td><span class="badge dpd-low">5 DPD</span></td><td>₹22,400</td><td>₹2,000</td><td><span class="badge b-amber">Warning</span></td></tr>
+              <tr><td><div class="cr"><div class="av" style="background:var(--rl);color:var(--red)">RP</div>Ramesh Patel</div></td><td><span class="badge b-teal" style="font-size:10px">Lite</span></td><td><span class="badge dpd-mid">18 DPD</span></td><td>₹6,200</td><td>₹1,800</td><td><span class="badge b-red">Suspended</span></td></tr>
+              <tr><td><div class="cr"><div class="av" style="background:var(--al);color:var(--amber)">AN</div>Anjali Nambiar</div></td><td><span class="badge b-teal" style="font-size:10px">Lite</span></td><td><span class="badge dpd-low">3 DPD</span></td><td>₹4,200</td><td>—</td><td><span class="badge b-amber">Warning</span></td></tr>
+            </tbody></table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── CUSTOMER PROFILE ────────────────────────────────────────────── -->
+      <div class="page" id="page-profile">
+        <div style="margin-bottom:14px"><button class="btn" onclick="go(null,'customers')">← Back to Customer Lookup</button></div>
+        <div class="two-col">
+          <div>
+            <div class="card">
+              <div class="ph" style="display:flex;align-items:center;gap:14px;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--border)">
+                <div id="p-av" style="width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:500;flex-shrink:0;background:var(--tl);color:var(--teal)">RV</div>
+                <div style="flex:1"><div style="font-size:15px;font-weight:500" id="p-name">Ritu Verma</div><div style="font-size:12px;color:var(--t3);margin-top:2px" id="p-sub">CIF-001</div></div>
+                <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px">
+                  <span class="badge b-green" id="p-cl-status">Active</span>
+                  <span class="badge b-teal" id="p-product-badge">Lite</span>
+                </div>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px 20px">
+                <div><div style="font-size:10.5px;color:var(--t3);margin-bottom:2px;text-transform:uppercase;letter-spacing:.03em">UPI ID</div><div class="mono" id="p-upi">ritu@okaxis</div></div>
+                <div><div style="font-size:10.5px;color:var(--t3);margin-bottom:2px;text-transform:uppercase;letter-spacing:.03em">Mobile</div><div>+91 98XXX XXXXX</div></div>
+                <div><div style="font-size:10.5px;color:var(--t3);margin-bottom:2px;text-transform:uppercase;letter-spacing:.03em">Product</div><div id="p-product-name">UPI Lite Credit</div></div>
+                <div><div style="font-size:10.5px;color:var(--t3);margin-bottom:2px;text-transform:uppercase;letter-spacing:.03em">KYC</div><div><span class="badge b-teal">Verified</span></div></div>
+                <div><div style="font-size:10.5px;color:var(--t3);margin-bottom:2px;text-transform:uppercase;letter-spacing:.03em">Risk</div><div><span class="badge b-green" id="p-risk">Low Risk</span></div></div>
+                <div><div style="font-size:10.5px;color:var(--t3);margin-bottom:2px;text-transform:uppercase;letter-spacing:.03em">DPD Status</div><div><span class="badge dpd-0" id="p-dpd-badge">0 DPD</span></div></div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="ct">Credit Line</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px">
+                <div><div style="font-size:10.5px;color:var(--t3);text-transform:uppercase;letter-spacing:.03em;margin-bottom:2px">Sanctioned</div><div style="font-size:17px;font-weight:500" id="p-limit">₹25,000</div></div>
+                <div><div style="font-size:10.5px;color:var(--t3);text-transform:uppercase;letter-spacing:.03em;margin-bottom:2px">UPI Outstanding</div><div style="font-size:17px;font-weight:500;color:var(--amber)" id="p-outs">₹8,500</div></div>
+                <div><div style="font-size:10.5px;color:var(--t3);text-transform:uppercase;letter-spacing:.03em;margin-bottom:2px">EMI Block</div><div style="font-size:17px;font-weight:500;color:var(--purple)" id="p-emi-block">₹0</div></div>
+              </div>
+              <div class="lm">
+                <div class="lbar"><div class="lused" id="p-bar" style="width:34%;background:var(--tm)"></div></div>
+                <div class="llabels"><span id="p-util-label">34% utilised</span><span id="p-avail-label">₹16,500 available</span></div>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px 20px;margin-top:10px">
+                <div><div style="font-size:10.5px;color:var(--t3);text-transform:uppercase;letter-spacing:.03em;margin-bottom:2px">Due Date</div><div id="p-due">18 Apr 2026</div></div>
+                <div><div style="font-size:10.5px;color:var(--t3);text-transform:uppercase;letter-spacing:.03em;margin-bottom:2px">Amount Due</div><div id="p-amt-due">₹8,500</div></div>
+                <div><div style="font-size:10.5px;color:var(--t3);text-transform:uppercase;letter-spacing:.03em;margin-bottom:2px">Interest Rate</div><div id="p-rate">24% p.a.</div></div>
+                <div><div style="font-size:10.5px;color:var(--t3);text-transform:uppercase;letter-spacing:.03em;margin-bottom:2px">DPD</div><div><span class="badge dpd-0" id="p-dpd-badge2">0 DPD</span></div></div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="ct">Whitelisted MCCs (Product)</div>
+              <div id="p-mcc-list" style="display:flex;flex-wrap:wrap;gap:4px"></div>
+            </div>
+          </div>
+          <div>
+            <div class="card">
+              <div class="tabs">
+                <div class="tab active" onclick="switchTab(this,'t-upi')">UPI Transactions</div>
+                <div class="tab" onclick="switchTab(this,'t-emi')">EMI Plans</div>
+                <div class="tab" onclick="switchTab(this,'t-repay')">Repayments</div>
+              </div>
+              <div class="tab-panel active" id="t-upi">
+                <table><thead><tr><th>Merchant</th><th>MCC</th><th>Amount</th><th>Date</th><th>Status</th><th>Action</th></tr></thead>
+                <tbody id="p-upi-tbody">
+                  <tr><td>Swiggy</td><td><span class="mcc-chip" style="margin:0">5812</span></td><td>₹480</td><td>Today</td><td><span class="badge b-green">Success</span></td><td><button class="btn-emi" onclick="openEmiModal({id:'TXN-00A',merchant:'Swiggy',amount:480,custIdx:0})"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 8h10M9 4l4 4-4 4"/><path d="M2 4v2a2 2 0 002 2"/></svg>Convert to EMI</button></td></tr>
+                  <tr><td>Amazon</td><td><span class="mcc-chip" style="margin:0">5999</span></td><td>₹1,299</td><td>12 Apr</td><td><span class="badge b-green">Success</span></td><td><button class="btn-emi" onclick="openEmiModal({id:'TXN-00B',merchant:'Amazon',amount:1299,custIdx:0})"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 8h10M9 4l4 4-4 4"/><path d="M2 4v2a2 2 0 002 2"/></svg>Convert to EMI</button></td></tr>
+                  <tr><td>Uber</td><td><span class="mcc-chip" style="margin:0">4121</span></td><td>₹340</td><td>11 Apr</td><td><span class="badge b-green">Success</span></td><td><button class="btn-emi" onclick="openEmiModal({id:'TXN-00C',merchant:'Uber',amount:340,custIdx:0})"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 8h10M9 4l4 4-4 4"/><path d="M2 4v2a2 2 0 002 2"/></svg>Convert to EMI</button></td></tr>
+                  <tr><td>Blinkit</td><td><span class="mcc-chip" style="margin:0">5411</span></td><td>₹820</td><td>10 Apr</td><td><span class="badge b-green">Success</span></td><td><button class="btn-emi" onclick="openEmiModal({id:'TXN-00D',merchant:'Blinkit',amount:820,custIdx:0})"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 8h10M9 4l4 4-4 4"/><path d="M2 4v2a2 2 0 002 2"/></svg>Convert to EMI</button></td></tr>
+                </tbody></table>
+              </div>
+              <div class="tab-panel" id="t-emi"><div id="p-emi-content"><div style="text-align:center;padding:24px;color:var(--t3);font-size:13px">No active EMI plans.</div></div></div>
+              <div class="tab-panel" id="t-repay">
+                <table><thead><tr><th>Period</th><th>Bill</th><th>EMI</th><th>Total Paid</th><th>DPD at Payment</th><th>Status</th></tr></thead>
+                <tbody>
+                  <tr><td>Mar 2026</td><td>₹6,240</td><td>—</td><td>₹6,240</td><td><span class="badge dpd-0">0 DPD</span></td><td><span class="badge b-teal">Full</span></td></tr>
+                  <tr><td>Feb 2026</td><td>₹9,800</td><td>—</td><td>₹9,800</td><td><span class="badge dpd-0">0 DPD</span></td><td><span class="badge b-teal">Full</span></td></tr>
+                </tbody></table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<script>
+// ── PAGE NAV ──────────────────────────────────────────────────────────────────
+const pageLabels={overview:'Dashboard',products:'Manage Products',customers:'Customer Lookup',creditlines:'Credit Lines',transactions:'UPI & EMI Log',emi:'EMI Management',billing:'Billing & Statements',repayments:'Repayments',alerts:'Alerts & Flags',overdue:'Overdue & DPD',profile:'Customer Profile'};
+function go(el,page){
+  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));
+  if(el&&el.classList)el.classList.add('active');
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  document.getElementById('page-title').textContent=pageLabels[page]||page;
+}
+function setFilt(el){el.closest('.fr').querySelectorAll('.fb').forEach(b=>b.classList.remove('active'));el.classList.add('active');}
+function switchTab(el,id){
+  el.closest('.tabs').querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');
+  el.closest('.card').querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// ── MCC MASTER LIST ───────────────────────────────────────────────────────────
+const ALL_MCCS=[
+  {code:'5411',label:'Grocery Stores'},{code:'5812',label:'Restaurants & Food'},
+  {code:'5814',label:'Fast Food'},{code:'4111',label:'Local Transit'},
+  {code:'4121',label:'Taxi / Cab'},{code:'4722',label:'Travel Agencies'},
+  {code:'4511',label:'Airlines'},{code:'5732',label:'Electronics Stores'},
+  {code:'5999',label:'Retail General'},{code:'5045',label:'Computers'},
+  {code:'5621',label:'Women\'s Clothing'},{code:'5691',label:'Men\'s Clothing'},
+  {code:'7011',label:'Hotels & Lodging'},{code:'7922',label:'Entertainment'},
+  {code:'5912',label:'Pharmacies'},{code:'8099',label:'Health & Medical'},
+  {code:'5541',label:'Fuel Stations'},{code:'5200',label:'Home & Garden'},
+  {code:'6011',label:'ATM Cash'},{code:'7995',label:'Gambling / Gaming'},
+  {code:'5094',label:'Jewellery'},{code:'9311',label:'Tax Payments'},
+];
+
+// ── PRODUCTS ──────────────────────────────────────────────────────────────────
+const PRODUCTS=[
+  {name:'UPI Lite Credit',code:'ULC-001',desc:'Entry-level credit for new-to-credit customers.',min:5000,max:15000,rate:30,fee:0,cycle:30,grace:3,emiMax:6,emiMin:1000,seg:'New-to-Credit',status:'Active',color:'#3ab882',colorClass:'b-teal',badge:'Lite',customers:18440,
+   mccs:['5411','5812','5814','4111','4121','5912','5999']},
+  {name:'UPI Prime Credit',code:'UPC-002',desc:'Mid-tier product for established customers.',min:15001,max:30000,rate:24,fee:1,cycle:30,grace:5,emiMax:9,emiMin:1500,seg:'Prime',status:'Active',color:'#378ADD',colorClass:'b-blue',badge:'Prime',customers:11526,
+   mccs:['5411','5812','5814','4111','4121','4722','5732','5999','5621','5691','7011','7922','5912','8099']},
+  {name:'UPI Gold Credit',code:'UGC-003',desc:'Premium product for high-income customers.',min:30001,max:60000,rate:18,fee:1.5,cycle:45,grace:7,emiMax:12,emiMin:2000,seg:'Super Prime',status:'Active',color:'#e09628',colorClass:'b-amber',badge:'Gold',customers:5379,
+   mccs:['5411','5812','5814','4111','4121','4722','4511','5732','5999','5045','5621','5691','7011','7922','5912','8099','5541','5200','5094']},
+  {name:'UPI Elite',code:'UEC-004',desc:'Highest-tier for ultra HNI customers. Nearly all MCCs allowed.',min:60001,max:200000,rate:15,fee:0,cycle:45,grace:10,emiMax:18,emiMin:3000,seg:'Priority',status:'Active',color:'#42368c',colorClass:'b-purple',badge:'Elite',customers:3075,
+   mccs:['5411','5812','5814','4111','4121','4722','4511','5732','5999','5045','5621','5691','7011','7922','5912','8099','5541','5200','5094','9311']},
+];
+let editProdIdx='';
+
+function mccInfo(code){return ALL_MCCS.find(m=>m.code===code)||{code,label:'Unknown'};}
+
+function renderProducts(){
+  const grid=document.getElementById('product-grid');
+  grid.innerHTML=PRODUCTS.map((p,i)=>`
+    <div class="pcard">
+      <div class="pcard-accent" style="background:${p.color}"></div>
+      <div class="pcard-name" style="margin-top:4px">${p.name}</div>
+      <div class="pcard-sub">${p.code} · ${p.seg}</div>
+      <div class="pstat">
+        <div class="psi"><div class="psl">Limit Range</div><div class="psv" style="font-size:12px">₹${(p.min/1000).toFixed(0)}K – ₹${(p.max/1000).toFixed(0)}K</div></div>
+        <div class="psi"><div class="psl">Interest</div><div class="psv">${p.rate}% p.a.</div></div>
+        <div class="psi"><div class="psl">Max EMI</div><div class="psv">${p.emiMax}m</div></div>
+        <div class="psi"><div class="psl">Customers</div><div class="psv">${p.customers.toLocaleString('en-IN')}</div></div>
+      </div>
+      <div class="mcc-section">
+        <div class="mcc-label">Whitelisted MCCs (${p.mccs.length})</div>
+        <div class="mcc-wrap">${p.mccs.map(c=>{const m=mccInfo(c);return`<span class="mcc-chip" title="${m.label}">${m.code} · ${m.label.split(' ')[0]}</span>`;}).join('')}</div>
+      </div>
+      <div class="pcard-actions" style="margin-top:12px">
+        <button class="btn btn-sm" style="flex:1" onclick="openProdModal(${i})">Edit</button>
+        <button class="btn btn-sm" style="flex:1;color:var(--red)">Deactivate</button>
+      </div>
+    </div>
+  `).join('');
+
+  document.getElementById('prod-table-body').innerHTML=PRODUCTS.map(p=>`<tr>
+    <td style="font-weight:500">${p.name}</td>
+    <td>₹${p.min.toLocaleString('en-IN')} – ₹${p.max.toLocaleString('en-IN')}</td>
+    <td>${p.rate}% p.a.</td><td>${p.emiMax}m</td><td>${p.cycle}d</td><td>${p.seg}</td>
+    <td><div style="display:flex;flex-wrap:wrap;gap:2px">${p.mccs.slice(0,4).map(c=>`<span class="mcc-chip" style="margin:0">${c}</span>`).join('')}${p.mccs.length>4?`<span class="badge b-gray" style="font-size:10px">+${p.mccs.length-4}</span>`:''}</div></td>
+    <td>${p.customers.toLocaleString('en-IN')}</td>
+    <td><span class="badge ${p.status==='Active'?'b-green':'b-gray'}">${p.status}</span></td>
+  </tr>`).join('');
+
+  // overview breakdown
+  const total=PRODUCTS.reduce((s,p)=>s+p.customers,0);
+  document.getElementById('ov-prod-count').textContent=PRODUCTS.filter(p=>p.status==='Active').length;
+  document.getElementById('ov-prod-breakdown').innerHTML=PRODUCTS.map(p=>{
+    const pct=Math.round(p.customers/total*100);
+    return`<div class="pr"><div class="pl2">${p.name}</div><div class="pt2"><div class="pf" style="width:${pct}%;background:${p.color}"></div></div><span style="font-size:12px;color:var(--t2);min-width:48px;text-align:right">${p.customers.toLocaleString('en-IN')}</span></div>`;
+  }).join('');
+}
+
+function buildMccPicker(selected=[]){
+  const wrap=document.getElementById('mcc-picker');
+  wrap.innerHTML=ALL_MCCS.map(m=>`<button type="button" class="mcc-toggle${selected.includes(m.code)?' sel':''}" data-code="${m.code}" onclick="this.classList.toggle('sel')">${m.code} · ${m.label}</button>`).join('');
+}
+function getSelectedMccs(){return [...document.querySelectorAll('.mcc-toggle.sel')].map(b=>b.dataset.code);}
+
+function openProdModal(i){
+  editProdIdx=(i!==undefined)?i:'';
+  const p=i!==undefined?PRODUCTS[i]:null;
+  document.getElementById('prod-modal-title').textContent=p?'Edit Product':'Add New Product';
+  document.getElementById('f-name').value=p?p.name:'';
+  document.getElementById('f-code').value=p?p.code:'';
+  document.getElementById('f-desc').value=p?p.desc:'';
+  document.getElementById('f-min').value=p?p.min:'';
+  document.getElementById('f-max').value=p?p.max:'';
+  document.getElementById('f-rate').value=p?p.rate:'';
+  document.getElementById('f-fee').value=p?p.fee:'';
+  document.getElementById('f-grace').value=p?p.grace:'';
+  document.getElementById('f-emi').value=p?p.emiMax:'';
+  document.getElementById('f-emiamt').value=p?p.emiMin:'';
+  buildMccPicker(p?p.mccs:[]);
+  document.getElementById('prod-modal').classList.add('open');
+}
+function closeProdModal(){document.getElementById('prod-modal').classList.remove('open');}
+document.getElementById('prod-modal').addEventListener('click',e=>{if(e.target===e.currentTarget)closeProdModal();});
+
+function saveProduct(){
+  const name=document.getElementById('f-name').value.trim();
+  if(!name){alert('Product name is required.');return;}
+  const selMccs=getSelectedMccs();
+  const obj={
+    name,code:document.getElementById('f-code').value.trim()||'NEW-00X',
+    desc:document.getElementById('f-desc').value.trim(),
+    min:parseInt(document.getElementById('f-min').value)||5000,
+    max:parseInt(document.getElementById('f-max').value)||15000,
+    rate:parseFloat(document.getElementById('f-rate').value)||24,
+    fee:parseFloat(document.getElementById('f-fee').value)||0,
+    cycle:parseInt(document.getElementById('f-cycle').value)||30,
+    grace:parseInt(document.getElementById('f-grace').value)||3,
+    emiMax:parseInt(document.getElementById('f-emi').value)||6,
+    emiMin:parseInt(document.getElementById('f-emiamt').value)||1000,
+    seg:document.getElementById('f-seg').value,
+    status:document.getElementById('f-status').value,
+    color:'#888',colorClass:'b-gray',badge:name.split(' ').pop(),
+    customers:0,mccs:selMccs,
+  };
+  if(editProdIdx!=='')Object.assign(PRODUCTS[parseInt(editProdIdx)],obj);
+  else PRODUCTS.push(obj);
+  closeProdModal();renderProducts();renderCusts(custs);renderCreditLines();
+}
+
+// ── DPD BADGE HELPER ──────────────────────────────────────────────────────────
+function dpdBadge(dpd){
+  if(dpd===0)return`<span class="badge dpd-0">0 DPD</span>`;
+  if(dpd<=7)return`<span class="badge dpd-low">${dpd} DPD</span>`;
+  if(dpd<=30)return`<span class="badge dpd-mid">${dpd} DPD</span>`;
+  if(dpd<=60)return`<span class="badge dpd-high">${dpd} DPD</span>`;
+  return`<span class="badge dpd-npa">${dpd} DPD · NPA</span>`;
+}
+function dpdCls(dpd){return dpd===0?'dpd-0':dpd<=7?'dpd-low':dpd<=30?'dpd-mid':dpd<=60?'dpd-high':'dpd-npa';}
+
+// ── CUSTOMERS ─────────────────────────────────────────────────────────────────
+const custs=[
+  {init:'RV',name:'Ritu Verma',id:'CIF-001',upi:'ritu@okaxis',prodIdx:0,limit:25000,upiOuts:8500,emiOuts:0,util:34,due:'18 Apr',status:'Active',dpd:0,risk:'Low',bc:'background:var(--tl);color:var(--teal)',since:'Jan 2024',sanc:'10 Jan 2024',hasEmi:false},
+  {init:'AM',name:'Arjun Mehta',id:'CIF-002',upi:'arjun@ybl',prodIdx:1,limit:20000,upiOuts:5760,emiOuts:6000,util:88,due:'20 Apr',status:'Active',dpd:0,risk:'Medium',bc:'background:var(--bl);color:var(--blue)',since:'Mar 2023',sanc:'15 Mar 2023',hasEmi:true},
+  {init:'SK',name:'Sneha Kumar',id:'CIF-003',upi:'sneha@paytm',prodIdx:2,limit:32000,upiOuts:22400,emiOuts:4000,util:83,due:'16 Apr',status:'Overdue',dpd:5,risk:'High',bc:'background:var(--al);color:var(--amber)',since:'Jun 2023',sanc:'1 Jun 2023',hasEmi:true},
+  {init:'PM',name:'Priya Malhotra',id:'CIF-004',upi:'priya@ibl',prodIdx:0,limit:15000,upiOuts:2100,emiOuts:0,util:14,due:'22 Apr',status:'Active',dpd:0,risk:'Low',bc:'background:var(--rl);color:var(--red)',since:'Nov 2023',sanc:'5 Nov 2023',hasEmi:false},
+  {init:'DS',name:'Deepak Sharma',id:'CIF-005',upi:'deepak@okhdfc',prodIdx:3,limit:60000,upiOuts:10000,emiOuts:8000,util:30,due:'25 Apr',status:'Active',dpd:0,risk:'Low',bc:'background:var(--tl);color:var(--teal)',since:'Aug 2022',sanc:'20 Aug 2022',hasEmi:true},
+  {init:'MD',name:'Mohan Das',id:'CIF-006',upi:'mohan@ybl',prodIdx:0,limit:10000,upiOuts:9800,emiOuts:0,util:98,due:'14 Apr',status:'Suspended',dpd:32,risk:'High',bc:'background:var(--bl);color:var(--blue)',since:'Dec 2023',sanc:'10 Dec 2023',hasEmi:false},
+  {init:'KN',name:'Kavya Nair',id:'CIF-007',upi:'kavya@okhdfc',prodIdx:0,limit:18000,upiOuts:1960,emiOuts:6000,util:44,due:'22 Apr',status:'Active',dpd:0,risk:'Low',bc:'background:var(--tl);color:var(--teal)',since:'Feb 2024',sanc:'2 Feb 2024',hasEmi:true},
+  {init:'RP',name:'Ramesh Patel',id:'CIF-008',upi:'ramesh@ibl',prodIdx:0,limit:12000,upiOuts:6200,emiOuts:5400,util:97,due:'14 Apr',status:'Suspended',dpd:18,risk:'Very High',bc:'background:var(--al);color:var(--amber)',since:'May 2023',sanc:'1 May 2023',hasEmi:true},
+  {init:'VR',name:'Vijay Rao',id:'CIF-009',upi:'vijay@okaxis',prodIdx:3,limit:150000,upiOuts:22500,emiOuts:0,util:15,due:'28 Apr',status:'Active',dpd:0,risk:'Low',bc:'background:var(--pl);color:var(--purple)',since:'Jan 2022',sanc:'15 Jan 2022',hasEmi:false},
+  {init:'AN',name:'Anjali Nambiar',id:'CIF-010',upi:'anjali@paytm',prodIdx:0,limit:8000,upiOuts:4000,emiOuts:0,util:50,due:'14 Apr',status:'Overdue',dpd:3,risk:'Medium',bc:'background:var(--tl);color:var(--teal)',since:'Sep 2024',sanc:'20 Sep 2024',hasEmi:false},
+];
+
+function uc(u){return u>=90?'var(--rm)':u>=70?'var(--am)':'var(--tm)';}
+function stB(s){const m={Active:'b-green',Suspended:'b-red',Overdue:'b-amber'};return`<span class="badge ${m[s]||'b-gray'}">${s}</span>`;}
+function riskB(r){const m={'Low':'b-teal','Medium':'b-blue','High':'b-amber','Very High':'b-red'};return`<span class="badge ${m[r]||'b-gray'}">${r}</span>`;}
+
+function renderCusts(list){
+  document.getElementById('cust-tbody').innerHTML=list.map(c=>{
+    const p=PRODUCTS[c.prodIdx]||{};
+    return`<tr>
+      <td style="padding-left:20px"><div class="cr"><div class="av" style="${c.bc}">${c.init}</div>${c.name}</div></td>
+      <td class="mono">${c.id}</td>
+      <td><span class="badge ${p.colorClass||'b-gray'}" style="font-size:10px">${p.badge||'—'}</span></td>
+      <td class="mono" style="font-size:11px;color:var(--t2)">${c.upi}</td>
+      <td style="font-weight:500">₹${c.limit.toLocaleString('en-IN')}</td>
+      <td>₹${c.upiOuts.toLocaleString('en-IN')}</td>
+      <td>${c.emiOuts>0?`<span class="emi-pill">₹${c.emiOuts.toLocaleString('en-IN')}</span>`:'—'}</td>
+      <td><div class="uw"><div class="ut"><div class="uf" style="width:${c.util}%;background:${uc(c.util)}"></div></div><span class="uv">${c.util}%</span></div></td>
+      <td style="color:${c.dpd>0?'var(--rm)':'var(--t2)'}">${c.due}</td>
+      <td>${dpdBadge(c.dpd)}</td>
+      <td>${stB(c.status)}</td>
+      <td style="padding-right:20px"><button class="btn btn-sm" onclick="viewProfile(${custs.indexOf(c)})">View</button></td>
+    </tr>`;
+  }).join('');
+}
+
+function renderCreditLines(){
+  document.getElementById('cl-tbody').innerHTML=custs.map((c,i)=>{
+    const p=PRODUCTS[c.prodIdx]||{};
+    const avail=Math.max(0,c.limit-c.upiOuts-c.emiOuts);
+    return`<tr>
+      <td style="padding-left:20px" class="mono">CL-${String(1001+i).padStart(4,'0')}</td>
+      <td><div class="cr"><div class="av" style="${c.bc}">${c.init}</div>${c.name}</div></td>
+      <td><span class="badge ${p.colorClass||'b-gray'}" style="font-size:10px">${p.badge||'—'}</span></td>
+      <td class="mono" style="font-size:11px;color:var(--t2)">${c.upi}</td>
+      <td style="font-weight:500">₹${c.limit.toLocaleString('en-IN')}</td>
+      <td>₹${c.upiOuts.toLocaleString('en-IN')}</td>
+      <td>${c.emiOuts>0?`<span class="emi-pill">₹${c.emiOuts.toLocaleString('en-IN')}</span>`:'—'}</td>
+      <td style="color:var(--teal);font-weight:500">₹${avail.toLocaleString('en-IN')}</td>
+      <td>${dpdBadge(c.dpd)}</td>
+      <td style="color:${c.dpd>0?'var(--rm)':'var(--t2)'}">${c.due}</td>
+      <td>${stB(c.status)}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ── TRANSACTIONS ──────────────────────────────────────────────────────────────
+const txns=[
+  {id:'UPI-884210',name:'Ritu Verma',prodIdx:0,type:'UPI Pay',detail:'Swiggy',mcc:'5812',mccAllowed:true,amt:'₹480',avail:'₹16,500',dt:'15 Apr, 10:02',status:'Success'},
+  {id:'EMI-884209',name:'Arjun Mehta',prodIdx:1,type:'EMI Deduction',detail:'Samsung TV · Inst 3/6',mcc:'5732',mccAllowed:true,amt:'₹2,000',avail:'₹8,240',dt:'15 Apr, 9:50',status:'EMI'},
+  {id:'UPI-884208',name:'Sneha Kumar',prodIdx:2,type:'UPI Pay',detail:'Zepto',mcc:'5411',mccAllowed:true,amt:'₹1,240',avail:'₹5,360',dt:'15 Apr, 9:30',status:'Flagged'},
+  {id:'BLK-884207',name:'Ramesh Patel',prodIdx:0,type:'UPI Pay',detail:'Betway Gaming',mcc:'7995',mccAllowed:false,amt:'₹2,000',avail:'₹400',dt:'15 Apr, 9:14',status:'MCC Blocked'},
+  {id:'EMI-884205',name:'Kavya Nair',prodIdx:0,type:'EMI Deduction',detail:'Laptop Asus · Inst 2/4',mcc:'5732',mccAllowed:true,amt:'₹2,000',avail:'₹8,040',dt:'15 Apr, 9:00',status:'EMI'},
+  {id:'CVT-884200',name:'Deepak Sharma',prodIdx:3,type:'EMI Conversion',detail:'₹24,000 flight → 6m EMI',mcc:'4511',mccAllowed:true,amt:'₹24,000',avail:'₹28,000',dt:'14 Apr, 8:00 PM',status:'Converted'},
+  {id:'BLK-884198',name:'Mohan Das',prodIdx:0,type:'UPI Pay',detail:'ATM Withdrawal',mcc:'6011',mccAllowed:false,amt:'₹5,000',avail:'₹0',dt:'14 Apr, 7:30 PM',status:'MCC Blocked'},
+  {id:'UPI-884190',name:'Vijay Rao',prodIdx:3,type:'UPI Pay',detail:'Unknown VPA',mcc:'5999',mccAllowed:true,amt:'₹48,000',avail:'₹79,500',dt:'14 Apr, 11:40 PM',status:'Flagged'},
+  {id:'UPI-884180',name:'Priya Malhotra',prodIdx:0,type:'UPI Pay',detail:'MakeMyTrip',mcc:'4722',mccAllowed:false,amt:'₹4,200',avail:'₹12,900',dt:'14 Apr, 3:00 PM',status:'MCC Blocked'},
+  {id:'REF-884165',name:'Ritu Verma',prodIdx:0,type:'Refund',detail:'Swiggy cancelled order',mcc:'5812',mccAllowed:true,amt:'+₹320',avail:'₹16,820',dt:'13 Apr, 7:30 PM',status:'Refunded'},
+];
+
+function txnBadge(s){const m={Success:'b-green',Declined:'b-red',Flagged:'b-amber',EMI:'b-purple',Converted:'b-purple',Refunded:'b-teal','MCC Blocked':'b-red'};return`<span class="badge ${m[s]||'b-gray'}">${s}</span>`;}
+function typePill(t){if(t==='EMI Deduction'||t==='EMI Conversion')return`<span class="emi-pill">${t}</span>`;return t;}
+
+function renderTxns(){
+  document.getElementById('txn-tbody').innerHTML=txns.map((t,i)=>{
+    const p=PRODUCTS[t.prodIdx]||{};
+    const mccInfo2=mccInfo(t.mcc);
+    const mccEl=t.mccAllowed
+      ?`<span class="mcc-chip" style="margin:0">${t.mcc} · ${mccInfo2.label.split(' ')[0]}</span>`
+      :`<span class="mcc-chip declined" style="margin:0">${t.mcc} · ${mccInfo2.label.split(' ')[0]}</span>`;
+    const actionEl=(t.status==='Success'&&t.type==='UPI Pay')
+      ?`<button class="btn-emi" onclick="openEmiModal(${i})"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 8h10M9 4l4 4-4 4"/><path d="M2 4v2a2 2 0 002 2"/></svg>Convert to EMI</button>`:'—';
+    return`<tr class="${t.mccAllowed?'':'blocked-row'}">
+      <td class="mono">${t.id}</td>
+      <td>${t.name}</td>
+      <td><span class="badge ${p.colorClass||'b-gray'}" style="font-size:10px">${p.badge||'—'}</span></td>
+      <td>${typePill(t.type)}</td>
+      <td style="color:var(--t2)">${t.detail}</td>
+      <td>${mccEl}</td>
+      <td style="font-weight:500;color:${t.type==='Refund'?'var(--teal)':'var(--text)'}">${t.amt}</td>
+      <td style="color:var(--t2)">${t.avail}</td>
+      <td style="color:var(--t2);font-size:12px;white-space:nowrap">${t.dt}</td>
+      <td>${txnBadge(t.status)}</td>
+      <td>${actionEl}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ── EMI CALC (flat rate) ──────────────────────────────────────────────────────
+// Flat rate: interest is charged on the full original principal every month.
+// EMI = (Principal / tenure) + (Principal × monthly rate)
+// principal: original purchase amount; ratePA: annual % from product; tenure: months
+function emiCalc(principal, ratePA, tenure){
+  const monthlyRate=ratePA/100/12;
+  const monthlyInterest=Math.round(principal*monthlyRate);
+  const monthlyPrincipal=Math.round(principal/tenure);
+  const emi=monthlyPrincipal+monthlyInterest;
+  const totalInterest=monthlyInterest*tenure;
+  const totalPayable=principal+totalInterest;
+  return{emi,totalPayable,totalInterest,principalPerInstalment:monthlyPrincipal,interestPerInstalment:monthlyInterest};
+}
+
+// ── EMI TABLE ─────────────────────────────────────────────────────────────────
+// `principal` = original purchase price. All EMI amounts derived via emiCalc().
+const emis=[
+  {id:'EMI-001',name:'Arjun Mehta',prodIdx:1,item:'Samsung 55" TV',principal:12000,tenure:6,paid:2,status:'Active'},
+  {id:'EMI-002',name:'Kavya Nair',prodIdx:0,item:'Asus Laptop',principal:8000,tenure:4,paid:1,status:'Active'},
+  {id:'EMI-003',name:'Sneha Kumar',prodIdx:2,item:'Apple iPhone 15',principal:12000,tenure:6,paid:0,status:'Active'},
+  {id:'EMI-004',name:'Deepak Sharma',prodIdx:3,item:'International Flight',principal:24000,tenure:6,paid:0,status:'Active'},
+  {id:'EMI-005',name:'Ramesh Patel',prodIdx:0,item:'OnePlus Phone',principal:5400,tenure:3,paid:1,status:'Defaulted'},
+];
+
+function renderEmis(){
+  document.getElementById('emi-tbody').innerHTML=emis.map(e=>{
+    const p=PRODUCTS[e.prodIdx]||{rate:24};
+    const calc=emiCalc(e.principal,p.rate,e.tenure);
+    const pct=Math.round(e.paid/e.tenure*100);
+    const paidAmt=calc.emi*e.paid;
+    const remaining=calc.totalPayable-paidAmt;
+    return`<tr>
+      <td class="mono">${e.id}</td>
+      <td>${e.name}</td>
+      <td><span class="badge ${p.colorClass||'b-gray'}" style="font-size:10px">${p.badge||'—'}</span></td>
+      <td style="color:var(--t2);font-size:12px">${e.item}</td>
+      <td title="Original purchase price">₹${e.principal.toLocaleString('en-IN')}</td>
+      <td>${e.tenure}m</td>
+      <td title="Interest rate from product">${p.rate}% p.a.</td>
+      <td>
+        <div style="font-weight:500">₹${calc.emi.toLocaleString('en-IN')}</div>
+        <div style="font-size:10px;color:var(--t3);margin-top:2px">
+          Principal: ₹${calc.principalPerInstalment.toLocaleString('en-IN')} &nbsp;+&nbsp; Interest: ₹${calc.interestPerInstalment.toLocaleString('en-IN')}
+        </div>
+      </td>
+      <td title="Principal + total interest over full tenure">
+        <div>₹${calc.totalPayable.toLocaleString('en-IN')}</div>
+        <div style="font-size:10px;color:var(--t3);margin-top:2px">Interest: ₹${calc.totalInterest.toLocaleString('en-IN')}</div>
+      </td>
+      <td>
+        <div class="uw"><div class="ut"><div class="uf" style="width:${pct}%;background:var(--tm)"></div></div><span class="uv">${e.paid}/${e.tenure}</span></div>
+        <div style="font-size:10px;color:var(--t3);margin-top:3px">₹${remaining.toLocaleString('en-IN')} remaining</div>
+      </td>
+      <td>${e.status==='Defaulted'?'<span class="badge b-red">Defaulted</span>':'<span class="badge b-purple">Active</span>'}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ── BILLING ───────────────────────────────────────────────────────────────────
+const bills=[
+  {id:'BILL-0481',custIdx:0,period:'1–30 Mar 2026',spend:8500,emiOuts:0,due:'18 Apr',dpd:0,status:'Unpaid'},
+  {id:'BILL-0482',custIdx:1,period:'1–30 Mar 2026',spend:7760,emiOuts:6000,due:'20 Apr',dpd:0,status:'Unpaid'},
+  {id:'BILL-0483',custIdx:2,period:'1–30 Mar 2026',spend:22400,emiOuts:4000,due:'16 Apr',dpd:5,status:'Unpaid'},
+  {id:'BILL-0484',custIdx:3,period:'1–30 Mar 2026',spend:2100,emiOuts:0,due:'22 Apr',dpd:0,status:'Paid'},
+  {id:'BILL-0485',custIdx:4,period:'1–30 Mar 2026',spend:10000,emiOuts:8000,due:'25 Apr',dpd:0,status:'Partially Paid'},
+  {id:'BILL-0486',custIdx:5,period:'1–30 Mar 2026',spend:9800,emiOuts:0,due:'14 Apr',dpd:32,status:'Overdue'},
+  {id:'BILL-0487',custIdx:6,period:'1–30 Mar 2026',spend:1960,emiOuts:6000,due:'22 Apr',dpd:0,status:'Unpaid'},
+  {id:'BILL-0488',custIdx:8,period:'1–30 Mar 2026',spend:22500,emiOuts:0,due:'28 Apr',dpd:0,status:'Paid'},
+];
+function billStatusBadge(s){const m={Paid:'b-teal',Unpaid:'b-blue','Partially Paid':'b-amber',Overdue:'b-red','EMI Converted':'b-purple'};return`<span class="badge ${m[s]||'b-gray'}">${s}</span>`;}
+function renderBills(){
+  document.getElementById('bill-tbody').innerHTML=bills.map((b,bi)=>{
+    const c=custs[b.custIdx];const p=PRODUCTS[c.prodIdx]||{};
+    const total=b.spend+b.emiOuts;
+    return`<tr>
+      <td class="mono">${b.id}</td>
+      <td><div class="cr"><div class="av" style="${c.bc}">${c.init}</div>${c.name}</div></td>
+      <td><span class="badge ${p.colorClass||'b-gray'}" style="font-size:10px">${p.badge||'—'}</span></td>
+      <td style="color:var(--t2);font-size:12px">${b.period}</td>
+      <td>₹${b.spend.toLocaleString('en-IN')}</td>
+      <td>${b.emiOuts>0?`<span class="emi-pill">₹${b.emiOuts.toLocaleString('en-IN')}</span>`:'—'}</td>
+      <td style="font-weight:500">₹${total.toLocaleString('en-IN')}</td>
+      <td style="color:${b.dpd>0?'var(--rm)':'var(--t2)'}">${b.due}</td>
+      <td>${dpdBadge(b.dpd)}</td>
+      <td>${billStatusBadge(b.status)}</td>
+      <td><div style="display:flex;gap:6px;align-items:center">
+        <button class="btn btn-sm" style="display:inline-flex;align-items:center;gap:5px;white-space:nowrap" onclick="openStmtModal(${bi})">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="1" width="12" height="14" rx="1.5"/><path d="M5 5h6M5 8h6M5 11h4"/></svg>
+          Statement
+        </button>
+        ${b.status==='Paid'
+          ? ''
+          : `<button class="btn-emi" onclick="openBillModal(${bi})"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 8h10M9 4l4 4-4 4"/><path d="M2 4v2a2 2 0 002 2"/></svg>Bill → EMI</button>`}
+      </div></td>
+    </tr>`;
+  }).join('');
+}
+
+// ── EMI CONVERSION MODAL (single txn) ─────────────────────────────────────────
+let emiTarget=null;
+function openEmiModal(idx){
+  const t=typeof idx==='object'?idx:txns[idx];
+  const amt=typeof t.amt==='string'?parseInt(t.amt.replace(/[₹,]/g,''))||500:t.amount||500;
+  emiTarget={...t,amtNum:amt,custIdx:t.custIdx??custs.findIndex(c=>c.name===t.name)};
+  const p=PRODUCTS[custs[emiTarget.custIdx]?.prodIdx??0]||PRODUCTS[0];
+  let opts='';
+  for(let m=3;m<=p.emiMax;m+=3){
+    const mo=Math.ceil(amt/m);
+    if(mo>=p.emiMin)opts+=`<option value="${m}">${m} months · ₹${mo.toLocaleString('en-IN')}/mo</option>`;
+  }
+  document.getElementById('emi-modal-title').textContent='Convert to EMI';
+  document.getElementById('emi-modal-body').innerHTML=`
+    <div style="background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:14px">
+      <div style="font-size:12px;color:var(--t2);margin-bottom:4px">Transaction</div>
+      <div style="font-size:15px;font-weight:500">${t.merchant||t.detail} · ₹${amt.toLocaleString('en-IN')}</div>
+      <div style="font-size:11px;color:var(--t3);margin-top:2px">${t.id||t.dt||''}</div>
+    </div>
+    <div class="field"><label>Select EMI Tenure</label><select id="emi-tenure">${opts}</select></div>
+    <div style="font-size:12px;color:var(--t3);margin-top:-6px">Based on product: <strong>${p.name}</strong> · Max ${p.emiMax} months · Min instalment ₹${p.emiMin.toLocaleString('en-IN')}</div>
+  `;
+  document.getElementById('emi-modal').classList.add('open');
+}
+function closeEmiModal(){document.getElementById('emi-modal').classList.remove('open');emiTarget=null;}
+document.getElementById('emi-modal').addEventListener('click',e=>{if(e.target===e.currentTarget)closeEmiModal();});
+function confirmEmiConversion(){
+  const tenure=document.getElementById('emi-tenure').value;
+  if(!tenure){alert('Please select a tenure.');return;}
+  alert(`EMI conversion confirmed!\n${emiTarget?.merchant||emiTarget?.detail} → ${tenure} months\nEMI plan created and limit block applied.`);
+  closeEmiModal();
+}
+
+// ── BILL-TO-EMI MODAL ─────────────────────────────────────────────────────────
+// Each bill carries its own transaction breakdown. Amounts sum exactly to bill.spend.
+bills[0].billTxns=[  // Ritu Verma · spend: 8500
+  {merchant:'Swiggy',mcc:'5812',amt:480},{merchant:'Amazon',mcc:'5999',amt:1299},
+  {merchant:'Uber',mcc:'4121',amt:340},{merchant:'Blinkit',mcc:'5411',amt:820},
+  {merchant:'Myntra',mcc:'5621',amt:1200},{merchant:'BookMyShow',mcc:'7922',amt:600},
+  {merchant:'MakeMyTrip',mcc:'4722',amt:3761},
+];
+bills[1].billTxns=[  // Arjun Mehta · spend: 7760
+  {merchant:'Amazon',mcc:'5999',amt:2199},{merchant:'Zepto',mcc:'5411',amt:480},
+  {merchant:'Zomato',mcc:'5812',amt:620},{merchant:'Myntra',mcc:'5621',amt:1800},
+  {merchant:'Rapido',mcc:'4121',amt:340},{merchant:'Nykaa',mcc:'5621',amt:1200},
+  {merchant:'Recharge',mcc:'5999',amt:1121},
+];
+bills[2].billTxns=[  // Sneha Kumar · spend: 22400
+  {merchant:'Flipkart',mcc:'5999',amt:3400},{merchant:'Swiggy',mcc:'5812',amt:1800},
+  {merchant:'Zomato',mcc:'5812',amt:900},{merchant:'Uber',mcc:'4121',amt:640},
+  {merchant:'Blinkit',mcc:'5411',amt:1200},{merchant:'IRCTC',mcc:'4722',amt:2460},
+  {merchant:'Apple Store',mcc:'5045',amt:12000},
+];
+bills[3].billTxns=[  // Priya Malhotra · spend: 2100 (Paid — button hidden, but data for completeness)
+  {merchant:'Zomato',mcc:'5812',amt:840},{merchant:'Rapido',mcc:'4121',amt:260},
+  {merchant:'Blinkit',mcc:'5411',amt:1000},
+];
+bills[4].billTxns=[  // Deepak Sharma · spend: 10000
+  {merchant:'MakeMyTrip',mcc:'4722',amt:4200},{merchant:'OYO Rooms',mcc:'7011',amt:3200},
+  {merchant:'Swiggy',mcc:'5812',amt:800},{merchant:'Uber',mcc:'4121',amt:480},
+  {merchant:'Amazon',mcc:'5999',amt:1320},
+];
+bills[5].billTxns=[  // Mohan Das · spend: 9800
+  {merchant:'Amazon',mcc:'5999',amt:4800},{merchant:'Flipkart',mcc:'5999',amt:2800},
+  {merchant:'Zomato',mcc:'5812',amt:1400},{merchant:'Blinkit',mcc:'5411',amt:800},
+];
+bills[6].billTxns=[  // Kavya Nair · spend: 1960
+  {merchant:'Swiggy',mcc:'5812',amt:480},{merchant:'Uber',mcc:'4121',amt:340},
+  {merchant:'Blinkit',mcc:'5411',amt:620},{merchant:'Myntra',mcc:'5621',amt:520},
+];
+bills[7].billTxns=[  // Vijay Rao · spend: 22500 (Paid — button hidden)
+  {merchant:'MakeMyTrip',mcc:'4722',amt:12400},{merchant:'Taj Hotels',mcc:'7011',amt:7600},
+  {merchant:'Swiggy',mcc:'5812',amt:1400},{merchant:'Uber',mcc:'4121',amt:1100},
+];
+
+let billTarget=null;
+
+function openBillModal(bi){
+  billTarget=bills[bi];
+  const c=custs[billTarget.custIdx];
+  const p=PRODUCTS[c.prodIdx]||PRODUCTS[0];
+  const billTxns=billTarget.billTxns||[];
+
+  // Verify sum matches spend (for dev confidence)
+  const txnSum=billTxns.reduce((s,t)=>s+t.amt,0);
+
+  document.getElementById('bill-modal-title').textContent=`Bill → EMI · ${c.name}`;
+  document.getElementById('bill-total-label').textContent=`Total bill: ₹${billTarget.spend.toLocaleString('en-IN')}`;
+
+  const tenureOptions=[3,6,9,12].filter(m=>m<=p.emiMax).map(m=>`<option>${m}m</option>`).join('');
+
+  const txRows=billTxns.map((t,i)=>`
+    <div class="bill-row">
+      <input type="checkbox" class="bill-check" data-amt="${t.amt}" id="bc${i}" onchange="updateSelectedTotal()">
+      <div style="flex:1">
+        <div style="font-size:13px;font-weight:500">${t.merchant} <span class="mcc-chip" style="margin:0;margin-left:4px">${t.mcc}</span></div>
+        <div style="font-size:11px;color:var(--t3)">₹${t.amt.toLocaleString('en-IN')}</div>
+      </div>
+      <select class="bill-emi-select"><option value="">Tenure</option>${tenureOptions}</select>
+    </div>
+  `).join('');
+
+  document.getElementById('bill-txn-list').innerHTML=`
+    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px">
+      <span style="font-size:12px;font-weight:500;color:var(--t2)">Transactions in this bill</span>
+      <span style="font-size:11px;color:var(--t3)">Sum: ₹${txnSum.toLocaleString('en-IN')}</span>
+    </div>
+    ${txRows}
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0 0;border-top:1px solid var(--border);margin-top:4px">
+      <span style="font-size:12px;color:var(--t2)">Selected total</span>
+      <span style="font-size:13px;font-weight:500;color:var(--purple)" id="selected-total">₹0</span>
+    </div>
+  `;
+
+  const tenureOpts=[3,6,9,12].filter(m=>m<=p.emiMax).map(m=>`<option value="${m}">${m} months</option>`).join('');
+  document.getElementById('bill-full-tenure').innerHTML=`<option value="">EMI Tenure</option>${tenureOpts}`;
+  document.getElementById('bill-modal').classList.add('open');
+}
+
+function updateSelectedTotal(){
+  const total=[...document.querySelectorAll('.bill-check:checked')]
+    .reduce((s,cb)=>s+parseInt(cb.dataset.amt||0),0);
+  const el=document.getElementById('selected-total');
+  if(el)el.textContent='₹'+total.toLocaleString('en-IN');
+}
+
+function closeBillModal(){document.getElementById('bill-modal').classList.remove('open');billTarget=null;}
+document.getElementById('bill-modal').addEventListener('click',e=>{if(e.target===e.currentTarget)closeBillModal();});
+
+function convertSelectedTxns(){
+  const checked=[...document.querySelectorAll('.bill-check:checked')];
+  if(checked.length===0){alert('Select at least one transaction.');return;}
+  const selectedAmt=checked.reduce((s,cb)=>s+parseInt(cb.dataset.amt||0),0);
+  alert(`${checked.length} transaction(s) · ₹${selectedAmt.toLocaleString('en-IN')} queued for EMI conversion.\nEMI plans will be created on confirmation.`);
+  closeBillModal();
+}
+
+function convertFullBill(){
+  const t=document.getElementById('bill-full-tenure').value;
+  if(!t){alert('Please select a tenure.');return;}
+  const c=custs[billTarget.custIdx];
+  alert(`Full bill EMI conversion:\n${c.name} · ₹${billTarget.spend.toLocaleString('en-IN')} → ${t} months\nEMI plan created and billing cycle closed.`);
+  closeBillModal();
+}
+
+// ── PROFILE ───────────────────────────────────────────────────────────────────
+function viewProfile(i){
+  const c=custs[i];const p=PRODUCTS[c.prodIdx]||{};
+  const av=document.getElementById('p-av');av.textContent=c.init;av.style=c.bc;
+  document.getElementById('p-name').textContent=c.name;
+  document.getElementById('p-sub').textContent=`${c.id} · UPI Credit Line`;
+  document.getElementById('p-upi').textContent=c.upi;
+  document.getElementById('p-risk').textContent=c.risk+' Risk';
+  document.getElementById('p-risk').className='badge '+riskB(c.risk).match(/b-\w+/)[0];
+  document.getElementById('p-cl-status').textContent=c.status;
+  document.getElementById('p-cl-status').className='badge '+stB(c.status).match(/b-\w+/)[0];
+  document.getElementById('p-product-name').textContent=p.name||'—';
+  document.getElementById('p-product-badge').textContent=p.badge||'—';
+  document.getElementById('p-product-badge').className='badge '+(p.colorClass||'b-gray');
+  const dpd1=document.getElementById('p-dpd-badge');dpd1.textContent=(c.dpd>0?c.dpd+' DPD':'0 DPD');dpd1.className='badge '+dpdCls(c.dpd);
+  const dpd2=document.getElementById('p-dpd-badge2');dpd2.textContent=(c.dpd>0?c.dpd+' DPD':'0 DPD');dpd2.className='badge '+dpdCls(c.dpd);
+  document.getElementById('p-limit').textContent='₹'+c.limit.toLocaleString('en-IN');
+  document.getElementById('p-outs').textContent='₹'+c.upiOuts.toLocaleString('en-IN');
+  document.getElementById('p-emi-block').textContent=c.emiOuts>0?'₹'+c.emiOuts.toLocaleString('en-IN'):'₹0';
+  const avail=Math.max(0,c.limit-c.upiOuts-c.emiOuts);
+  const bar=document.getElementById('p-bar');
+  bar.style.width=c.util+'%';bar.style.background=uc(c.util);
+  document.getElementById('p-util-label').textContent=c.util+'% utilised';
+  document.getElementById('p-avail-label').textContent='₹'+avail.toLocaleString('en-IN')+' available';
+  document.getElementById('p-due').textContent=c.due+' 2026';
+  document.getElementById('p-amt-due').textContent='₹'+(c.upiOuts+c.emiOuts).toLocaleString('en-IN');
+  document.getElementById('p-rate').textContent=(p.rate||24)+'% p.a.';
+  // MCC list
+  const mccWrap=document.getElementById('p-mcc-list');
+  mccWrap.innerHTML=(p.mccs||[]).map(code=>{const m=mccInfo(code);return`<span class="mcc-chip">${m.code} · ${m.label}</span>`;}).join('');
+  // EMI
+  const custEmis=emis.filter(e=>e.name===c.name);
+  const emiContent=document.getElementById('p-emi-content');
+  if(!custEmis.length){emiContent.innerHTML='<div style="text-align:center;padding:24px;color:var(--t3);font-size:13px">No active EMI plans.</div>';}
+  else{emiContent.innerHTML=`<table><thead><tr><th>Item</th><th>Principal</th><th>Rate</th><th>Monthly EMI</th><th>Total Payable</th><th>Interest</th><th>Progress</th><th>Status</th></tr></thead><tbody>${custEmis.map(e=>{
+    const ep=PRODUCTS[e.prodIdx]||{rate:24};
+    const calc=emiCalc(e.principal,ep.rate,e.tenure);
+    const pct=Math.round(e.paid/e.tenure*100);
+    const remaining=calc.totalPayable-calc.emi*e.paid;
+    return`<tr>
+      <td style="font-size:12px">${e.item}</td>
+      <td>₹${e.principal.toLocaleString('en-IN')}</td>
+      <td style="color:var(--t2)">${ep.rate}% p.a.</td>
+      <td style="font-weight:500">₹${calc.emi.toLocaleString('en-IN')}<div style="font-size:10px;color:var(--t3)">P:₹${calc.principalPerInstalment.toLocaleString('en-IN')} + I:₹${calc.interestPerInstalment.toLocaleString('en-IN')}</div></td>
+      <td>₹${calc.totalPayable.toLocaleString('en-IN')}</td>
+      <td style="color:var(--amber)">₹${calc.totalInterest.toLocaleString('en-IN')}</td>
+      <td><div class="uw"><div class="ut"><div class="uf" style="width:${pct}%;background:var(--tm)"></div></div><span class="uv">${e.paid}/${e.tenure}</span></div><div style="font-size:10px;color:var(--t3);margin-top:2px">₹${remaining.toLocaleString('en-IN')} left</div></td>
+      <td>${e.status==='Defaulted'?'<span class="badge b-red">Defaulted</span>':'<span class="badge b-purple">Active</span>'}</td>
+    </tr>`;}).join('')}</tbody></table>`;}
+  go(null,'profile');
+}
+
+function handleSearch(v){
+  if(!v||v.length<2){renderCusts(custs);return;}
+  const q=v.toLowerCase();
+  go(null,'customers');
+  renderCusts(custs.filter(c=>c.name.toLowerCase().includes(q)||c.id.toLowerCase().includes(q)||c.upi.toLowerCase().includes(q)));
+}
+
+// ── BILL STATEMENT MODAL ──────────────────────────────────────────────────────
+function feeForBill(b, prod){
+  const processingFee = prod.fee > 0 ? Math.round(b.spend * prod.fee / 100) : 0;
+  const lateFee = b.dpd === 0 ? 0 : b.dpd <= 7 ? 500 : b.dpd <= 30 ? 1000 : 1500;
+  return {processingFee, lateFee};
+}
+
+function openStmtModal(bi){
+  const b = bills[bi];
+  const c = custs[b.custIdx];
+  const prod = PRODUCTS[c.prodIdx] || PRODUCTS[0];
+  const billTxns = b.billTxns || [];
+
+  // Customer EMIs active this cycle
+  const custEmis = emis.filter(e => e.name === c.name && e.status !== 'Defaulted');
+
+  // Fee calculation
+  const {processingFee, lateFee} = feeForBill(b, prod);
+
+  // Interest from EMI instalments this cycle
+  const emiRows = custEmis.map(e => {
+    const calc = emiCalc(e.principal, prod.rate, e.tenure);
+    return {...e, calc};
+  });
+  const totalEmiPrincipal = emiRows.reduce((s,e)=> s + e.calc.principalPerInstalment, 0);
+  const totalEmiInterest  = emiRows.reduce((s,e)=> s + e.calc.interestPerInstalment,  0);
+  const totalEmi          = emiRows.reduce((s,e)=> s + e.calc.emi, 0);
+
+  // GST: 18% on interest + fees (excludes principal repayment)
+  const gstBase = totalEmiInterest + processingFee + lateFee;
+  const gst     = Math.round(gstBase * 0.18);
+
+  // Grand total
+  const grandTotal = b.spend + totalEmi + processingFee + lateFee + gst;
+  const minDue     = Math.round(grandTotal * 0.05);
+
+  const mcc = code => { const m = ALL_MCCS.find(x=>x.code===code); return m ? m.label : code; };
+
+  const txnRows = billTxns.map((t,i) => `
+    <tr>
+      <td style="color:var(--t2);font-size:11px">${['2 Mar','5 Mar','8 Mar','12 Mar','15 Mar','18 Mar','22 Mar'][i] || '28 Mar'}</td>
+      <td>${t.merchant}</td>
+      <td style="color:var(--t2);font-size:11px">${t.mcc} · ${mcc(t.mcc).split(' ')[0]}</td>
+      <td class="tar" style="font-weight:500">₹${t.amt.toLocaleString('en-IN')}</td>
+    </tr>`).join('');
+
+  const txnSubtotal = billTxns.reduce((s,t)=>s+t.amt,0);
+
+  const emiTableRows = emiRows.length > 0 ? emiRows.map(e => `
+    <tr>
+      <td style="font-size:11px;color:var(--t2)">${e.id}</td>
+      <td>${e.item}</td>
+      <td class="tar">${e.paid+1}/${e.tenure}</td>
+      <td class="tar">₹${e.calc.principalPerInstalment.toLocaleString('en-IN')}</td>
+      <td class="tar" style="color:var(--amber)">₹${e.calc.interestPerInstalment.toLocaleString('en-IN')}</td>
+      <td class="tar" style="font-weight:500">₹${e.calc.emi.toLocaleString('en-IN')}</td>
+    </tr>`).join('') : `<tr><td colspan="6" style="color:var(--t3);text-align:center;padding:12px">No active EMI deductions this cycle</td></tr>`;
+
+  const feesHtml = (processingFee > 0 || lateFee > 0 || gst > 0) ? `
+    <tr>
+      <td>Processing fee ${prod.fee > 0 ? `(${prod.fee}% of UPI spend)` : ''}</td>
+      <td class="tar">${processingFee > 0 ? `₹${processingFee.toLocaleString('en-IN')}` : '<span style="color:var(--t3)">Nil</span>'}</td>
+    </tr>
+    <tr>
+      <td>Late payment fee ${b.dpd > 0 ? `(${b.dpd} DPD)` : ''}</td>
+      <td class="tar">${lateFee > 0 ? `<span style="color:var(--rm)">₹${lateFee.toLocaleString('en-IN')}</span>` : '<span style="color:var(--t3)">Nil</span>'}</td>
+    </tr>
+    <tr>
+      <td>GST @ 18% <span style="font-size:10px;color:var(--t3)">(on interest + fees)</span></td>
+      <td class="tar">${gst > 0 ? `₹${gst.toLocaleString('en-IN')}` : '<span style="color:var(--t3)">Nil</span>'}</td>
+    </tr>` : `<tr><td colspan="2" style="color:var(--t3);text-align:center;padding:12px">No charges this cycle</td></tr>`;
+
+  document.getElementById('stmt-content').innerHTML = `
+    <div class="stmt-header">
+      <div class="stmt-bank">Nova Bank · Credit Line on UPI</div>
+      <div class="stmt-title">Account Statement</div>
+      <div class="stmt-meta">${b.id} &nbsp;·&nbsp; Billing Period: ${b.period} &nbsp;·&nbsp; Generated: 1 Apr 2026</div>
+    </div>
+
+    <div class="stmt-section">
+      <div class="stmt-section-title">Customer & Account Details</div>
+      <div class="stmt-info-grid">
+        <div class="stmt-info-item"><div class="sil">Customer Name</div><div class="siv">${c.name}</div></div>
+        <div class="stmt-info-item"><div class="sil">CIF</div><div class="siv mono">${c.id}</div></div>
+        <div class="stmt-info-item"><div class="sil">UPI ID</div><div class="siv mono">${c.upi}</div></div>
+        <div class="stmt-info-item"><div class="sil">Product</div><div class="siv">${prod.name}</div></div>
+        <div class="stmt-info-item"><div class="sil">Credit Limit</div><div class="siv">₹${c.limit.toLocaleString('en-IN')}</div></div>
+        <div class="stmt-info-item"><div class="sil">Interest Rate</div><div class="siv">${prod.rate}% p.a. (flat)</div></div>
+        <div class="stmt-info-item"><div class="sil">Payment Due Date</div><div class="siv" style="color:${b.dpd>0?'var(--rm)':'var(--text)'}"><strong>${b.due} 2026</strong></div></div>
+        <div class="stmt-info-item"><div class="sil">DPD Status</div><div class="siv">${dpdBadge(b.dpd)}</div></div>
+      </div>
+    </div>
+
+    <div class="stmt-section">
+      <div class="stmt-section-title">A · UPI Transactions (${billTxns.length} transactions)</div>
+      <table class="stmt-table">
+        <thead><tr><th>Date</th><th>Merchant</th><th>MCC Category</th><th class="tar">Amount</th></tr></thead>
+        <tbody>${txnRows}</tbody>
+      </table>
+      <div class="stmt-subtotal"><span style="font-weight:500">UPI Spend Subtotal</span><span style="font-weight:500">₹${txnSubtotal.toLocaleString('en-IN')}</span></div>
+    </div>
+
+    <div class="stmt-section">
+      <div class="stmt-section-title">B · EMI Deductions This Cycle</div>
+      <table class="stmt-table">
+        <thead><tr><th>EMI ID</th><th>Item</th><th class="tar">Instalment</th><th class="tar">Principal</th><th class="tar">Interest</th><th class="tar">Total EMI</th></tr></thead>
+        <tbody>${emiTableRows}</tbody>
+      </table>
+      ${emiRows.length > 0 ? `<div class="stmt-subtotal">
+        <span style="font-weight:500">EMI Subtotal</span>
+        <span>Principal: ₹${totalEmiPrincipal.toLocaleString('en-IN')} &nbsp;+&nbsp; Interest: <span style="color:var(--amber)">₹${totalEmiInterest.toLocaleString('en-IN')}</span> &nbsp;= <strong>₹${totalEmi.toLocaleString('en-IN')}</strong></span>
+      </div>` : ''}
+    </div>
+
+    <div class="stmt-section">
+      <div class="stmt-section-title">C · Charges & Fees</div>
+      <table class="stmt-table">
+        <thead><tr><th>Description</th><th class="tar">Amount</th></tr></thead>
+        <tbody>${feesHtml}</tbody>
+      </table>
+      <div class="stmt-fee-note">* GST @ 18% is applicable on interest charges, processing fees, and late payment fees as per RBI guidelines.</div>
+    </div>
+
+    <div class="stmt-section">
+      <div class="stmt-section-title">Payment Summary</div>
+      <div class="stmt-summary">
+        <div class="stmt-sum-row"><span>UPI Spend (A)</span><span>₹${txnSubtotal.toLocaleString('en-IN')}</span></div>
+        <div class="stmt-sum-row"><span>EMI Principal (B)</span><span>₹${totalEmiPrincipal.toLocaleString('en-IN')}</span></div>
+        <div class="stmt-sum-row"><span style="color:var(--amber)">EMI Interest (B)</span><span style="color:var(--amber)">₹${totalEmiInterest.toLocaleString('en-IN')}</span></div>
+        <div class="stmt-sum-row"><span>Processing Fee (C)</span><span>${processingFee > 0 ? `₹${processingFee.toLocaleString('en-IN')}` : 'Nil'}</span></div>
+        ${lateFee > 0 ? `<div class="stmt-sum-row"><span style="color:var(--rm)">Late Payment Fee (C)</span><span style="color:var(--rm)">₹${lateFee.toLocaleString('en-IN')}</span></div>` : ''}
+        <div class="stmt-sum-row"><span>GST @ 18% (C)</span><span>${gst > 0 ? `₹${gst.toLocaleString('en-IN')}` : 'Nil'}</span></div>
+        <div class="stmt-sum-row total"><span>Total Amount Due</span><span class="amount">₹${grandTotal.toLocaleString('en-IN')}</span></div>
+      </div>
+      <div class="stmt-min-due">
+        <div><div style="font-size:10px;color:var(--teal);font-weight:500;text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px">Minimum Amount Due</div><div style="font-size:18px;font-weight:500;color:var(--teal)">₹${minDue.toLocaleString('en-IN')}</div><div style="font-size:11px;color:var(--teal);opacity:.8">5% of total due</div></div>
+        <div style="text-align:right"><div style="font-size:10px;color:var(--teal);font-weight:500;text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px">Due By</div><div style="font-size:15px;font-weight:500;color:var(--teal)">${b.due} 2026</div></div>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('stmt-modal').classList.add('open');
+}
+
+function closeStmtModal(){ document.getElementById('stmt-modal').classList.remove('open'); }
+document.getElementById('stmt-modal').addEventListener('click', e=>{ if(e.target===e.currentTarget) closeStmtModal(); });
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+renderProducts();renderCusts(custs);renderCreditLines();renderTxns();renderEmis();renderBills();
+</script>
+</body>
+</html>
